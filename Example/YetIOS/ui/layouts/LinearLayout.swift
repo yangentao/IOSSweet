@@ -6,6 +6,141 @@ import Foundation
 import UIKit
 
 
+public extension UIView {
+    //minWidth, maxWidth, minHeight, maxHeight
+    var linearParam: LinearParam? {
+        get {
+            return getAttr("__linearParam__") as? LinearParam
+        }
+        set {
+            setAttr("__linearParam__", newValue)
+        }
+    }
+
+    var linearParamEnsure: LinearParam {
+        if let L = self.linearParam {
+            return L
+        } else {
+            let a = LinearParam()
+            self.linearParam = a
+            return a
+        }
+    }
+
+    @discardableResult
+    func lp(_ width: CGFloat, _ height: CGFloat) -> LinearParam {
+        return linearParamEnsure.width(width).height(height)
+    }
+
+    @discardableResult
+    func linearParam(_ block: (LinearParam) -> Void) -> Self {
+        block(linearParamEnsure)
+        return self
+    }
+}
+
+public class LinearParam {
+
+    public var width: CGFloat = 0
+    public var height: CGFloat = 0
+    @LimitGE(0)
+    public var weight: CGFloat = 0
+    public var gravityX: GravityX = .none
+    public var gravityY: GravityY = .none
+
+    @LimitGE(0)
+    public var minWidth: CGFloat = 0
+    @LimitGE(0)
+    public var minHeight: CGFloat = 0
+
+    @LimitGE(0)
+    public var maxWidth: CGFloat = 0
+    @LimitGE(0)
+    public var maxHeight: CGFloat = 0
+}
+
+public extension LinearParam {
+
+    @discardableResult
+    func minWidth(_ n: CGFloat) -> Self {
+        self.minWidth = n
+        return self
+    }
+
+    @discardableResult
+    func maxWidth(_ n: CGFloat) -> Self {
+        self.maxWidth = n
+        return self
+    }
+
+    @discardableResult
+    func minHeight(_ n: CGFloat) -> Self {
+        self.minHeight = n
+        return self
+    }
+
+    @discardableResult
+    func maxHeight(_ n: CGFloat) -> Self {
+        self.maxHeight = n
+        return self
+    }
+
+    @discardableResult
+    func widthFill() -> Self {
+        self.width = MatchParent
+        return self
+    }
+
+    @discardableResult
+    func widthWrap() -> Self {
+        self.width = WrapContent
+        return self
+    }
+
+    @discardableResult
+    func heightFill() -> Self {
+        self.height = MatchParent
+        return self
+    }
+
+    @discardableResult
+    func heightWrap() -> Self {
+        self.height = WrapContent
+        return self
+    }
+
+    @discardableResult
+    func width(_ w: CGFloat) -> Self {
+        self.width = w
+        return self
+    }
+
+    @discardableResult
+    func height(_ h: CGFloat) -> Self {
+        self.height = h
+        return self
+    }
+
+    @discardableResult
+    func weight(_ w: CGFloat) -> Self {
+        self.weight = w
+        return self
+    }
+
+    @discardableResult
+    func gravityX(_ g: GravityX) -> Self {
+        self.gravityX = g
+        return self
+    }
+
+    @discardableResult
+    func gravityY(_ g: GravityY) -> Self {
+        self.gravityY = g
+        return self
+    }
+
+}
+
 public var VerticalLinear: LinearLayout {
     LinearLayout(frame: .zero).axis(.vertical)
 }
@@ -25,6 +160,13 @@ public extension LinearLayout {
         }
         return self
     }
+
+    @discardableResult
+    func addView<T: UIView>(_ view: T, _ width: CGFloat, _ height: CGFloat) -> T {
+        view.linearParamEnsure.width(width).height(height)
+        addSubview(view)
+        return view
+    }
 }
 
 public class LinearLayout: UIView {
@@ -40,6 +182,21 @@ public class LinearLayout: UIView {
     public func paddings(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) -> Self {
         padding = Edge(l: left, t: top, r: right, b: bottom)
         return self
+    }
+
+    public var heightSumFixed: CGFloat {
+        let ls = self.subviews
+        var total: CGFloat = 0
+        for v in ls {
+            if let p = v.linearParam {
+                if p.height > 0 {
+                    total += p.height
+                } else if p.minHeight > 0 {
+                    total += p.minHeight
+                }
+            }
+        }
+        return total
     }
 
     public override func layoutSubviews() {

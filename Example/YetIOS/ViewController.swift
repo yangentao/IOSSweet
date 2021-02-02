@@ -32,6 +32,11 @@ class ViewController: UIViewController {
                 }
                 UILabel.Primary.text("CCC").align(.right).backColor(.blue).linearParam { param in
                     param.weight(10).widthFill()
+                }.apply { lb in
+                    lb.clickView { v in
+                        logd("Hello")
+                        self.dialog.showAlert(title: "Title", msg: "Message Is Null")
+                    }
                 }
             }
 
