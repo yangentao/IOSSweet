@@ -20,16 +20,20 @@ public enum RelativeRelation: Int {
 
 
 public class RelativeCondition {
-    var me: String = MineViewName
-    var prop: RelativeProp
-    var relation: RelativeRelation = .eq
-    var other: String? = nil
-    var propOther: RelativeProp? = nil
-    var multiplier: CGFloat = 1
-    var constant: CGFloat = 0
+    public var prop: RelativeProp
+    public var relation: RelativeRelation
+    public var other: String?
+    public var propOther: RelativeProp?
+    public var multiplier: CGFloat
+    public var constant: CGFloat
 
-    init(_ prop: RelativeProp) {
+    public init(prop: RelativeProp, relation: RelativeRelation = .eq, other: String? = nil, propOther: RelativeProp? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) {
         self.prop = prop
+        self.relation = relation
+        self.other = other
+        self.propOther = propOther
+        self.multiplier = multiplier
+        self.constant = constant
     }
 }
 
@@ -38,6 +42,34 @@ public class RelativeParams {
 
 }
 
+public extension UIView {
+    var relativeParams: RelativeParams? {
+        get {
+            return getAttr("__relativeParam__") as? RelativeParams
+        }
+        set {
+            setAttr("__relativeParam__", newValue)
+        }
+    }
+
+    var relativeParamsEnsure: RelativeParams {
+        if let L = self.relativeParams {
+            return L
+        } else {
+            let a = RelativeParams()
+            self.relativeParams = a
+            return a
+        }
+    }
+
+    func relativeParams(@AnyBuilder _ block: AnyBuildBlock) -> Self {
+        let ls: [RelativeCondition] = block().itemsTyped()
+        self.relativeParamsEnsure.condList.append(contentsOf: ls)
+        return self
+    }
+
+
+}
 
 public class RelativeLayout: UIView {
 
