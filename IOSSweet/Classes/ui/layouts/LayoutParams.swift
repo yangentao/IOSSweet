@@ -58,62 +58,98 @@ public let MatchParent: CGFloat = -1
 public let WrapContent: CGFloat = -2
 
 public class LinearParam {
+
     public var width: CGFloat = 0
     public var height: CGFloat = 0
+    @LimitGE(0)
     public var weight: CGFloat = 0
     public var gravityX: GravityX = .none
     public var gravityY: GravityY = .none
 
+    @LimitGE(0)
+    public var minWidth: CGFloat = 0
+    @LimitGE(0)
+    public var minHeight: CGFloat = 0
+
+    @LimitGE(0)
+    public var maxWidth: CGFloat = 0
+    @LimitGE(0)
+    public var maxHeight: CGFloat = 0
+
     @discardableResult
-    public func widthFill() -> LinearParam {
+    public func minWidth(_ n: CGFloat) -> Self {
+        self.minWidth = n
+        return self
+    }
+
+    @discardableResult
+    public func maxWidth(_ n: CGFloat) -> Self {
+        self.maxWidth = n
+        return self
+    }
+
+    @discardableResult
+    public func minHeight(_ n: CGFloat) -> Self {
+        self.minHeight = n
+        return self
+    }
+
+    @discardableResult
+    public func maxHeight(_ n: CGFloat) -> Self {
+        self.maxHeight = n
+        return self
+    }
+
+    @discardableResult
+    public func widthFill() -> Self {
         self.width = MatchParent
         return self
     }
 
     @discardableResult
-    public func widthWrap() -> LinearParam {
+    public func widthWrap() -> Self {
         self.width = WrapContent
         return self
     }
 
     @discardableResult
-    public func heightFill() -> LinearParam {
+    public func heightFill() -> Self {
         self.height = MatchParent
         return self
     }
 
     @discardableResult
-    public func heightWrap() -> LinearParam {
+    public func heightWrap() -> Self {
         self.height = WrapContent
         return self
     }
 
     @discardableResult
-    public func width(_ w: CGFloat) -> LinearParam {
+    public func width(_ w: CGFloat) -> Self {
         self.width = w
         return self
     }
 
     @discardableResult
-    public func height(_ h: CGFloat) -> LinearParam {
+    public func height(_ h: CGFloat) -> Self {
         self.height = h
         return self
     }
 
     @discardableResult
-    public func weight(_ w: CGFloat) -> LinearParam {
+    public func weight(_ w: CGFloat) -> Self {
         self.weight = w
         return self
     }
 
     @discardableResult
-    public func gravityX(_ g: GravityX) -> LinearParam {
+    public func gravityX(_ g: GravityX) -> Self {
         self.gravityX = g
         return self
     }
 
     @discardableResult
-    public func gravityY(_ g: GravityY) -> LinearParam {
+    public func gravityY(_ g: GravityY) -> Self {
         self.gravityY = g
         return self
     }
@@ -217,7 +253,7 @@ public extension UIView {
         self.marginRight = m
     }
 
-    func marginY(_  m: CGFloat) -> Self  {
+    func marginY(_  m: CGFloat) -> Self {
         self.marginTop = m
         self.marginBottom = m
         return self

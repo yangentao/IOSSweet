@@ -13,23 +13,24 @@ import IOSSweet
 class ViewController: UIViewController {
 //    lazy var label: UILabel = NamedView(self, "a")
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
 
         self.view.layoutConstraint {
 
-            VerticalLinear.paddings(left: 20, top: 25 + 20, right: 20, bottom: 20).constraints {
+            HorizontalLinear.paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
                 $0.fill()
             }.buildChildren {
                 UILabel.Primary.text("AAA").align(.left).backColor(.cyan).linearParam { param in
-                    param.widthFill().weight(1) //.height(60)
+                    param.widthFill().heightFill().minWidth(30).maxWidth(50)
                 }
                 UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(20).linearParam { param in
-                    param.widthFill().height(60)
+                    param.widthFill().height(60).maxWidth(50)
                 }
                 UILabel.Primary.text("CCC").align(.right).backColor(.blue).linearParam { param in
-                    param.widthFill().weight(2)//.height(60)
+                    param.widthFill().height(60)
                 }
             }
 

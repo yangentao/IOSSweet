@@ -123,12 +123,5 @@ public extension UIView {
         return VerticalLayout(self)
     }
 
-    @discardableResult
-    func layoutVertical(_ block: (VerticalLayout) -> Void) -> CGFloat {
-        let L = self.layoutVertical
-        block(L)
-        L.install()
-        return L.totalHeight
-    }
 
 }
