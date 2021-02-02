@@ -155,7 +155,7 @@ open class ItemPage: TitlePage, UITableViewDataSource, UITableViewDelegate {
 			cell.accessoryType = .none
 		}
 
-		let lp = item.linearParam
+		let lp = item.linearParams
 		let w = lp?.width ?? MatchParent
 		let h = lp?.height ?? rowHeight
 
@@ -207,7 +207,7 @@ open class ItemPage: TitlePage, UITableViewDataSource, UITableViewDelegate {
 
 	open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let v = getItem(indexPath.row)
-		let h = v.linearParam?.height ?? rowHeight
+		let h = v.linearParams?.height ?? rowHeight
 		return h + v.marginTop + v.marginBottom
 	}
 

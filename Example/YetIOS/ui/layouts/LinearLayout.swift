@@ -8,38 +8,38 @@ import UIKit
 
 public extension UIView {
     //minWidth, maxWidth, minHeight, maxHeight
-    var linearParam: LinearParam? {
+    var linearParams: LinearParams? {
         get {
-            return getAttr("__linearParam__") as? LinearParam
+            return getAttr("__linearParam__") as? LinearParams
         }
         set {
             setAttr("__linearParam__", newValue)
         }
     }
 
-    var linearParamEnsure: LinearParam {
-        if let L = self.linearParam {
+    var linearParamEnsure: LinearParams {
+        if let L = self.linearParams {
             return L
         } else {
-            let a = LinearParam()
-            self.linearParam = a
+            let a = LinearParams()
+            self.linearParams = a
             return a
         }
     }
 
     @discardableResult
-    func lp(_ width: CGFloat, _ height: CGFloat) -> LinearParam {
+    func lp(_ width: CGFloat, _ height: CGFloat) -> LinearParams {
         return linearParamEnsure.width(width).height(height)
     }
 
     @discardableResult
-    func linearParam(_ block: (LinearParam) -> Void) -> Self {
+    func linearParams(_ block: (LinearParams) -> Void) -> Self {
         block(linearParamEnsure)
         return self
     }
 }
 
-public class LinearParam {
+public class LinearParams {
 
     public var width: CGFloat = 0
     public var height: CGFloat = 0
@@ -59,7 +59,7 @@ public class LinearParam {
     public var maxHeight: CGFloat = 0
 }
 
-public extension LinearParam {
+public extension LinearParams {
 
     @discardableResult
     func minWidth(_ n: CGFloat) -> Self {
@@ -188,7 +188,7 @@ public class LinearLayout: UIView {
         let ls = self.subviews
         var total: CGFloat = 0
         for v in ls {
-            if let p = v.linearParam {
+            if let p = v.linearParams {
                 if p.height > 0 {
                     total += p.height
                 } else if p.minHeight > 0 {

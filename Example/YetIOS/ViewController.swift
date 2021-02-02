@@ -24,13 +24,13 @@ class ViewController: UIViewController {
             LinearLayout(.vertical).paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
                 $0.fill()
             }.buildChildren {
-                UILabel.Primary.text("AAA").align(.left).backColor(.cyan).linearParam { param in
+                UILabel.Primary.text("AAA").align(.left).backColor(.cyan).linearParams { param in
                     param.weight(10).widthFill()
                 }
-                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(0).linearParam { param in
+                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(0).linearParams { param in
                     param.weight(10).widthFill().maxHeight(200).minHeight(60)
                 }
-                UILabel.Primary.text("CCC").align(.right).backColor(.blue).linearParam { param in
+                UILabel.Primary.text("CCC").align(.right).backColor(.blue).linearParams { param in
                     param.weight(10).widthFill()
                 }.apply { lb in
                     lb.clickView { v in
