@@ -26,23 +26,23 @@ public class RelativeCondition {
     fileprivate let id: Int = nextId()
     fileprivate unowned var view: UIView!
     fileprivate unowned var viewOther: UIView? = nil
-    public var prop: RelativeProp
-    public var relation: RelativeRelation
-    public var other: String?
-    public var propOther: RelativeProp?
-    public var multiplier: CGFloat
-    public var constant: CGFloat
+    fileprivate var prop: RelativeProp
+    fileprivate var relation: RelativeRelation = .eq
+    fileprivate var otherViewName: String? = nil
+    fileprivate var otherProp: RelativeProp? = nil
+    fileprivate var multiplier: CGFloat = 1
+    fileprivate var constant: CGFloat = 0
 
     fileprivate var tempValue: CGFloat = UNSPEC
     fileprivate var OK: Bool {
         tempValue != UNSPEC
     }
 
-    public init(prop: RelativeProp, relation: RelativeRelation = .eq, other: String? = nil, propOther: RelativeProp? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) {
+    public init(prop: RelativeProp, relation: RelativeRelation = .eq, otherViewName: String? = nil, propOther: RelativeProp? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) {
         self.prop = prop
         self.relation = relation
-        self.other = other
-        self.propOther = propOther
+        self.otherViewName = otherViewName
+        self.otherProp = propOther
         self.multiplier = multiplier
         self.constant = constant
     }
@@ -54,14 +54,79 @@ public class RelativeCondition {
         return _lastId
     }
 
-    static func width(_ w: CGFloat) -> RelativeCondition {
-        return RC(prop: .width, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: w)
-    }
 
 }
 
+public extension RelativeCondition {
+    func multi(_ n: CGFloat) -> Self {
+        self.multiplier = n
+        return self
+    }
+
+    func constant(_ n: CGFloat) -> Self {
+        self.constant = n
+        return self
+    }
+
+    func eq(_ otherView: String, _ otherProp: RelativeProp) -> Self {
+        self.otherViewName = otherView
+        self.otherProp = otherProp
+        return self
+    }
+
+    func eq(_ otherView: String) -> Self {
+        self.otherViewName = otherView
+        self.otherProp = self.prop
+        return self
+    }
+
+    func eq(_ value: CGFloat) -> Self {
+        self.constant = value
+        return self
+    }
+
+    var eqParent: RelativeCondition {
+        self.otherViewName = ParentViewName
+        self.otherProp = self.prop
+        return self
+    }
+
+    static var width: RelativeCondition {
+        RC(prop: .width)
+    }
+    static var height: RelativeCondition {
+        RC(prop: .height)
+    }
+    static var left: RelativeCondition {
+        RC(prop: .left)
+    }
+    static var top: RelativeCondition {
+        RC(prop: .top)
+    }
+    static var right: RelativeCondition {
+        RC(prop: .right)
+    }
+    static var bottom: RelativeCondition {
+        RC(prop: .bottom)
+    }
+    static var centerX: RelativeCondition {
+        RC(prop: .centerX)
+    }
+    static var centerY: RelativeCondition {
+        RC(prop: .centerY)
+    }
+
+    static func width(_ w: CGFloat) -> RelativeCondition {
+        width.constant(w)
+    }
+
+    static func height(_ h: CGFloat) -> RelativeCondition {
+        height.constant(h)
+    }
+}
+
 public class RelativeParams {
-    var condList: [RelativeCondition] = []
+    public var conditions: [RelativeCondition] = []
 
 }
 
@@ -85,9 +150,9 @@ public extension UIView {
         }
     }
 
-    func relativeParams(@AnyBuilder _ block: AnyBuildBlock) -> Self {
+    func relativeConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
         let ls: [RelativeCondition] = block().itemsTyped()
-        self.relativeParamsEnsure.condList.append(contentsOf: ls)
+        self.relativeParamsEnsure.conditions.append(contentsOf: ls)
         return self
     }
 
@@ -372,9 +437,9 @@ public class RelativeLayout: UIView {
             guard  let param = child.relativeParams else {
                 continue
             }
-            for cond in param.condList {
+            for cond in param.conditions {
                 cond.view = child
-                if let otherName = cond.other {
+                if let otherName = cond.otherViewName {
                     if otherName == ParentViewName {
                         cond.viewOther = self
                     } else if otherName == MineViewName {
@@ -408,7 +473,7 @@ public class RelativeLayout: UIView {
                 c.tempValue = c.constant
                 vrList.assignProp(c.view, c.prop, c.tempValue)
             } else if c.viewOther == self {
-                guard let otherProp = c.propOther else {
+                guard let otherProp = c.otherProp else {
                     fatalError("RelativeLayout Error: property \(c.prop) depend superview's property is NOT point out.")
                 }
                 c.tempValue = queryParentProp(otherProp) * c.multiplier + c.constant
@@ -429,7 +494,7 @@ public class RelativeLayout: UIView {
                 guard  let otherView = c.viewOther else {
                     continue
                 }
-                guard  let otherProp = c.propOther else {
+                guard  let otherProp = c.otherProp else {
                     fatalError("NOT point out relative property name: \(c.view) \(c.relation) \(otherView)")
                 }
                 let otherVal = vrList.queryProp(otherView, otherProp)

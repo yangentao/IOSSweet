@@ -25,11 +25,16 @@ class ViewController: UIViewController {
             RelativeLayout(frame: .zero).paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
                 $0.fill()
             }.buildChildren {
-                UILabel.Primary.text("AAA").align(.center).backColor(.green).relativeParams {
-                    RelativeCondition(prop: .centerX, relation: .eq, other: ParentViewName, propOther: .centerX, multiplier: 1, constant: 0)
-                    RelativeCondition(prop: .width, relation: .eq, other: ParentViewName, propOther: .width, multiplier: 0.5, constant: 0)
-                    RelativeCondition(prop: .centerY, relation: .eq, other: ParentViewName, propOther: .centerY, multiplier: 1, constant: 0)
-                    RelativeCondition(prop: .height, relation: .eq, other: ParentViewName, propOther: .height, multiplier: 0.5, constant: 0)
+                UILabel.Primary.text("AAA").align(.center).backColor(.green).relativeConditions {
+//                    RC.centerX.eqParent()
+                    RC.right.eqParent.constant(-20)
+                    RC.width.eqParent.multi(0.5)
+                    RC.centerY.eqParent
+                    RC.height.eqParent.multi(0.3)
+//                    RC(prop: .centerX, relation: .eq, otherViewName: ParentViewName, propOther: .centerX, multiplier: 1, constant: 0)
+//                    RC(prop: .width, relation: .eq, otherViewName: ParentViewName, propOther: .width, multiplier: 0.5, constant: 0)
+//                    RC(prop: .centerY, relation: .eq, otherViewName: ParentViewName, propOther: .centerY, multiplier: 1, constant: 0)
+//                    RC(prop: .height, relation: .eq, otherViewName: ParentViewName, propOther: .height, multiplier: 0.5, constant: 0)
                 }
 //                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(0).linearParams { param in
 //                    param.weight(10).widthFill().maxHeight(200).minHeight(60)
