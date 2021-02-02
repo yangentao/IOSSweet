@@ -22,31 +22,22 @@ class ViewController: UIViewController {
         self.view.layoutConstraint {
 
 
-            RelativeLayout(frame: .zero).paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
+            RelativeLayout(frame: .zero).constraints {
                 $0.fill()
             }.buildChildren {
-                UILabel.Primary.text("AAA").align(.center).backColor(.green).relativeConditions {
-//                    RC.centerX.eqParent()
-                    RC.right.eqParent.constant(-20)
-                    RC.width.eqParent.multi(0.5)
+                UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).relativeConditions {
+                    RC.centerX.eqParent
                     RC.centerY.eqParent
+                    RC.width.eqParent.multi(0.5)
                     RC.height.eqParent.multi(0.3)
-//                    RC(prop: .centerX, relation: .eq, otherViewName: ParentViewName, propOther: .centerX, multiplier: 1, constant: 0)
-//                    RC(prop: .width, relation: .eq, otherViewName: ParentViewName, propOther: .width, multiplier: 0.5, constant: 0)
-//                    RC(prop: .centerY, relation: .eq, otherViewName: ParentViewName, propOther: .centerY, multiplier: 1, constant: 0)
-//                    RC(prop: .height, relation: .eq, otherViewName: ParentViewName, propOther: .height, multiplier: 0.5, constant: 0)
                 }
-//                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(0).linearParams { param in
-//                    param.weight(10).widthFill().maxHeight(200).minHeight(60)
-//                }
-//                UILabel.Primary.text("CCC").align(.right).backColor(.blue).linearParams { param in
-//                    param.weight(10).widthFill()
-//                }.apply { lb in
-//                    lb.clickView { v in
-//                        logd("Hello")
-//                        self.dialog.showAlert(title: "Title", msg: "Message Is Null")
-//                    }
-//                }
+                UILabel.Primary.named("b").text("BBB").align(.center).backColor(.blue).relativeConditions {
+//                    RC.centerX.eqParent
+                    RC.left.eq("a")
+                    RC.top.eq("a", .bottom).constant(20)
+                    RC.width.eqParent.multi(0.5)
+                    RC.height.eqParent.multi(0.3)
+                }
             }
 
 

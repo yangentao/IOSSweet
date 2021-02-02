@@ -419,12 +419,7 @@ public extension RelativeLayout {
 }
 
 public class RelativeLayout: UIView {
-    public var padding: Edge = Edge()
 
-    public func paddings(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) -> Self {
-        padding = Edge(l: left, t: top, r: right, b: bottom)
-        return self
-    }
 
     public override func layoutSubviews() {
         let childList = self.subviews
