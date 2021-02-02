@@ -5,6 +5,9 @@
 
 import Foundation
 
+//append(contentsOf:)
+infix operator ++=: ComparisonPrecedence
+
 infix operator =*: ComparisonPrecedence
 infix operator !=*: ComparisonPrecedence
 
@@ -117,7 +120,6 @@ public extension Array {
         }
     }
 
-    @discardableResult
     mutating func removeAll(_ other: [Element]) where Element: Equatable {
         for e in other {
             self.removeElement(e)
@@ -142,9 +144,6 @@ public extension Array {
         return arr
     }
 
-    static func +=(lhs: inout Array, rhs: Element) {
-        lhs.append(rhs)
-    }
 
     mutating func sortAsc<T>(_ block: (Element) -> T) where T: Comparable {
         self.sort(by: { block($0) < block($1) })
@@ -154,21 +153,29 @@ public extension Array {
         self.sort(by: { block($1) < block($0) })
     }
 
-}
-
-public extension Array where Element == Any {
-
-    mutating func addAll<C>(_ c: C) where C: Sequence {
-        for a in c {
-            self.append(a)
-        }
+    static func +=(lhs: inout Array, rhs: Element) {
+        lhs.append(rhs)
     }
 
-    static func +=<C>(lhs: inout Array<Any>, rhs: C) where C: Sequence {
-        lhs.addAll(rhs)
+    static func ++=(lhs: inout Array, rhs: [Element]) {
+        lhs.append(contentsOf: rhs)
     }
 
 }
+
+//public extension Array where Element == Any {
+//
+//    mutating func addAll<C>(_ c: C) where C: Sequence {
+//        for a in c {
+//            self.append(a)
+//        }
+//    }
+//
+//    static func +=<C>(lhs: inout Array<Any>, rhs: C) where C: Sequence {
+//        lhs.addAll(rhs)
+//    }
+//
+//}
 
 public extension Set {
     mutating func clear() {

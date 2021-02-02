@@ -25,23 +25,14 @@ class ViewController: UIViewController {
             RelativeLayout(frame: .zero).constraints {
                 $0.fill()
             }.buildChildren {
-                UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).relativeConditions {
-                    RC.centerX.eqParent
-                    RC.centerY.eqParent
-                    RC.width.eqParent.multi(0.5)
-                    RC.height.eqParent.multi(0.3)
+                UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).relativeParams {
+                    $0.center().widthEQParent(multi: 0.5).heightEQSelf(.width)
                 }
-                UILabel.Primary.named("b").text("BBB").align(.center).backColor(.blue).relativeConditions {
-                    RC.left.eq("a")
-                    RC.top.eq("a", .bottom).constant(20)
-                    RC.width.eqParent.multi(0.5)
-                    RC.height.eqParent.multi(0.3)
+                UILabel.Primary.named("b").text("BBB").align(.center).backColor(.blue).relativeParams {
+                    $0.leftEQ("a").below("a", 20).widthEQParent(multi: 0.5).heightEQParent(multi: 0.3)
                 }
-                UILabel.Primary.named("c").text("CCC").align(.center).backColor(.cyan).relativeConditions {
-                    RC.left.eq("b")
-                    RC.bottom.eq("a", .top).constant(20)
-                    [RC.width.eqParent.multi(0.5),
-                     RC.height.eqParent.multi(0.3)]
+                UILabel.Primary.named("c").text("CCC").align(.center).backColor(.cyan).relativeParams {
+                    $0.leftEQ("b").above("a", 20).widthEQParent(multi: 0.5).heightEQParent(multi: 0.3)
                 }
             }
 

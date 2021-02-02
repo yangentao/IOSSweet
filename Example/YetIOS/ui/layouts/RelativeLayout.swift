@@ -24,15 +24,15 @@ fileprivate let UNSPEC: CGFloat = -10000
 public typealias RC = RelativeCondition
 
 public class RelativeCondition {
-    fileprivate let id: Int = nextId()
     fileprivate unowned var view: UIView!
     fileprivate unowned var viewOther: UIView? = nil
-    fileprivate var prop: RelativeProp
-    fileprivate var relation: RelativeRelation = .eq
-    fileprivate var otherViewName: String? = nil
-    fileprivate var otherProp: RelativeProp? = nil
-    fileprivate var multiplier: CGFloat = 1
-    fileprivate var constant: CGFloat = 0
+    public let id: Int = nextId()
+    public var prop: RelativeProp
+    public var relation: RelativeRelation = .eq
+    public var otherViewName: String? = nil
+    public var otherProp: RelativeProp? = nil
+    public var multiplier: CGFloat = 1
+    public var constant: CGFloat = 0
 
     fileprivate var tempValue: CGFloat = UNSPEC
     fileprivate var OK: Bool {
@@ -76,9 +76,7 @@ public extension RelativeCondition {
     }
 
     func eq(_ otherView: String) -> Self {
-        self.otherViewName = otherView
-        self.otherProp = self.prop
-        return self
+        eq(otherView, self.prop)
     }
 
     func eq(_ value: CGFloat) -> Self {
@@ -87,10 +85,16 @@ public extension RelativeCondition {
     }
 
     var eqParent: RelativeCondition {
-        self.otherViewName = ParentViewName
-        self.otherProp = self.prop
-        return self
+        eqParent(self.prop)
     }
+
+    func eqParent(_ otherProp: RelativeProp) -> Self {
+        eq(ParentViewName, otherProp)
+    }
+}
+
+
+public extension RelativeCondition {
 
     static var width: RelativeCondition {
         RC(prop: .width)
@@ -151,13 +155,200 @@ public extension UIView {
         }
     }
 
-    func relativeConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
+    func relativeParamsConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
         let ls: [RelativeCondition] = block().itemsTyped(true)
         self.relativeParamsEnsure.conditions.append(contentsOf: ls)
         return self
     }
 
+    func relativeParams(_ block: (RelativeParamsBuilder) -> Void) -> Self {
+        let b = RelativeParamsBuilder()
+        block(b)
+        self.relativeParamsEnsure.conditions.append(contentsOf: b.items)
+        return self
+    }
+}
 
+public class RelativeParamsBuilder {
+    var items = [RelativeCondition]()
+}
+
+public extension RelativeParamsBuilder {
+
+    @discardableResult
+    func center(_ xConst: CGFloat = 0, _ yConst: CGFloat = 0) -> Self {
+        centerX(xConst).centerY(yConst)
+    }
+
+    @discardableResult
+    func centerX(_ xConst: CGFloat = 0) -> Self {
+        items += RC.centerX.eqParent.constant(xConst)
+        return self
+    }
+
+    @discardableResult
+    func centerY(_ yConst: CGFloat = 0) -> Self {
+        items += RC.centerY.eqParent.constant(yConst)
+        return self
+    }
+
+    @discardableResult
+    func centerXOf(_ viewName: String, _ xConst: CGFloat = 0) -> Self {
+        items += RC.centerX.eq(viewName).constant(xConst)
+        return self
+    }
+
+    @discardableResult
+    func centerYOf(_ viewName: String, _ yConst: CGFloat = 0) -> Self {
+        items += RC.centerY.eq(viewName).constant(yConst)
+        return self
+    }
+
+    @discardableResult
+    func fillX(_ leftConst: CGFloat = 0, _ rightConst: CGFloat = 0) -> Self {
+        items += RC.left.eqParent.constant(leftConst)
+        items += RC.right.eqParent.constant(rightConst)
+        return self
+    }
+
+    @discardableResult
+    func fillY(_ topConst: CGFloat = 0, _ bottomConst: CGFloat = 0) -> Self {
+        items += RC.top.eqParent.constant(topConst)
+        items += RC.bottom.eqParent.constant(bottomConst)
+        return self
+    }
+
+    @discardableResult
+    func left(_ c: CGFloat) -> Self {
+        items += RC.left.eq(c)
+        return self
+    }
+
+    @discardableResult
+    func right(_ c: CGFloat) -> Self {
+        items += RC.right.eq(c)
+        return self
+    }
+
+    @discardableResult
+    func top(_ c: CGFloat) -> Self {
+        items += RC.top.eq(c)
+        return self
+    }
+
+    @discardableResult
+    func bottom(_ c: CGFloat) -> Self {
+        items += RC.bottom.eq(c)
+        return self
+    }
+
+    @discardableResult
+    func leftEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {
+        items += RC.left.eq(viewName).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func rightEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {
+        items += RC.right.eq(viewName).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func topEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {
+        items += RC.top.eq(viewName).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func bottomEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {
+        items += RC.bottom.eq(viewName).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func toLeftOf(_ viewName: String, _ c: CGFloat = 0) -> Self {
+        items += RC.right.eq(viewName, .left).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func toRightOf(_ viewName: String, _ c: CGFloat = 0) -> Self {
+        items += RC.left.eq(viewName, .right).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func above(_ viewName: String, _ c: CGFloat = 0) -> Self {
+        items += RC.bottom.eq(viewName, .top).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func below(_ viewName: String, _ c: CGFloat = 0) -> Self {
+        items += RC.top.eq(viewName, .bottom).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func width(_ c: CGFloat) -> Self {
+        items += RC.width.eq(c)
+        return self
+    }
+
+    @discardableResult
+    func height(_ c: CGFloat) -> Self {
+        items += RC.height.eq(c)
+        return self
+    }
+
+    @discardableResult
+    func widthEQ(_ viewName: String, _ prop2: RelativeProp, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
+        items += RC.width.eq(viewName, prop2).multi(multi).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func heightEQ(_ viewName: String, _ prop2: RelativeProp, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
+        items += RC.height.eq(viewName, prop2).multi(multi).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func widthEQ(_ viewName: String, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
+        items += RC.width.eq(viewName).multi(multi).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func heightEQ(_ viewName: String, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
+        items += RC.height.eq(viewName).multi(multi).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func widthEQParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC.width.eqParent.multi(multi).constant(constant)
+        return self
+    }
+
+    @discardableResult
+    func heightEQParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC.height.eqParent.multi(multi).constant(constant)
+        return self
+    }
+
+    @discardableResult
+    func widthEQSelf(_ prop2: RelativeProp, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
+        items += RC.width.eq(SelfViewName, prop2).multi(multi).constant(c)
+        return self
+    }
+
+    @discardableResult
+    func heightEQSelf(_ prop2: RelativeProp, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
+        items += RC.height.eq(SelfViewName, prop2).multi(multi).constant(c)
+        return self
+    }
 }
 
 fileprivate class ViewRect {
@@ -438,7 +629,7 @@ public class RelativeLayout: UIView {
                 if let otherName = cond.otherViewName {
                     if otherName == ParentViewName {
                         cond.viewOther = self
-                    } else if otherName == MineViewName {
+                    } else if otherName == SelfViewName {
                         cond.viewOther = child
                     } else {
                         guard  let vOther = self.findByName(otherName) else {

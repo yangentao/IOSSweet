@@ -6,8 +6,6 @@ import Foundation
 import UIKit
 
 
-
-
 private var _constraint_list_key = "_conkey_"
 
 public class NSLayoutConstraintStore {
@@ -26,7 +24,7 @@ public extension UIView {
 
     @discardableResult
     func updateConstraint(ident: String, constant: CGFloat) -> Self {
-        if let a = layoutConstraintItems.items.first ({ $0.identifier == ident } ) {
+        if let a = layoutConstraintItems.items.first({ $0.identifier == ident }) {
             a.constant = constant
             setNeedsUpdateConstraints()
             superview?.setNeedsUpdateConstraints()
@@ -200,6 +198,14 @@ public extension ConstraintItemRelation {
 
     func geParent(_ attr2: NSLayoutConstraint.Attribute) -> ConstraintItem {
         ge(ParentViewName, attr2)
+    }
+}
+
+public typealias CI = ConstraintItemRelation
+
+public extension CI {
+    static var left: CI {
+        return CI(.left)
     }
 }
 

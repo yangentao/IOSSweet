@@ -8,7 +8,7 @@ import UIKit
 
 public class ConstraintsBuilder {
     unowned var view: UIView
-    var items:[ConstraintItem] = []
+    var items: [ConstraintItem] = []
 
     init(_ view: UIView) {
         self.view = view

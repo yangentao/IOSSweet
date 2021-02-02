@@ -6,7 +6,7 @@
 import Foundation
 import UIKit
 
-let MineViewName = "__.__"
+let SelfViewName = "__.__"
 let ParentViewName = "__..__"
 
 public enum GravityX: Int {
