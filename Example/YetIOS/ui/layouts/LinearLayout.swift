@@ -141,14 +141,9 @@ public extension LinearParam {
 
 }
 
-public var VerticalLinear: LinearLayout {
-    LinearLayout(frame: .zero).axis(.vertical)
-}
-public var HorizontalLinear: LinearLayout {
-    LinearLayout(frame: .zero).axis(.horizontal)
-}
 
 public extension LinearLayout {
+
     func buildChildren(@AnyBuilder _ block: AnyBuildBlock) -> Self {
         let b = block()
         let viewList: [UIView] = b.itemsTyped()
@@ -172,6 +167,11 @@ public extension LinearLayout {
 public class LinearLayout: UIView {
     public var axis: NSLayoutConstraint.Axis = .vertical
     public var padding: Edge = Edge()
+
+    convenience init(_ axis: NSLayoutConstraint.Axis) {
+        self.init(frame: .zero)
+        self.axis = axis
+    }
 
     @discardableResult
     public func axis(_ ax: NSLayoutConstraint.Axis) -> Self {

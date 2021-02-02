@@ -21,7 +21,7 @@ class ViewController: UIViewController {
 
         self.view.layoutConstraint {
 
-            VerticalLinear.paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
+            LinearLayout(.vertical).paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
                 $0.fill()
             }.buildChildren {
                 UILabel.Primary.text("AAA").align(.left).backColor(.cyan).linearParam { param in

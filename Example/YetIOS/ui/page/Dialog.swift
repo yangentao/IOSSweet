@@ -35,7 +35,7 @@ public class Dialog: UIViewController {
     fileprivate var marginX: CGFloat = 30
     fileprivate var corner: CGFloat = 16
     fileprivate var gravityY: GravityY = .center
-    fileprivate let linearView = VerticalLinear
+    fileprivate let linearView = LinearLayout(.vertical)
 
     fileprivate var titleText: String = ""
     fileprivate var buttons = [DialogAction]()
@@ -486,7 +486,7 @@ public class DialogList<T> {
 
     public func show(_ callback: @escaping (T) -> Void) {
 
-        let panel = VerticalLinear
+        let panel = LinearLayout(.vertical)
         var first = true
         for item in items {
             if !first {
