@@ -6,10 +6,26 @@
 import Foundation
 import UIKit
 
-let SelfViewName = "__.__"
-let ParentViewName = "__..__"
+public let SelfViewName = "__.__"
+public let ParentViewName = "__..__"
+public let MatchParent: CGFloat = -1
+public let WrapContent: CGFloat = -2
 
 public typealias LayoutRelation = NSLayoutConstraint.Relation
+
+public extension UIView {
+    func appendChildren(@AnyBuilder _ block: AnyBuildBlock) -> Self {
+        let b = block()
+        let viewList: [UIView] = b.itemsTyped()
+        for childView in viewList {
+            if childView !== self {
+                addSubview(childView)
+            }
+        }
+        return self
+    }
+}
+
 
 public enum GravityX: Int {
     case none = 0
@@ -58,9 +74,6 @@ public class Edge: Equatable {
     }
 
 }
-
-public let MatchParent: CGFloat = -1
-public let WrapContent: CGFloat = -2
 
 
 public extension UIView {
@@ -134,16 +147,5 @@ public extension UIView {
     }
 }
 
-public extension UIView {
-    func appendChildren(@AnyBuilder _ block: AnyBuildBlock) -> Self {
-        let b = block()
-        let viewList: [UIView] = b.itemsTyped()
-        for childView in viewList {
-            if childView !== self {
-                addSubview(childView)
-            }
-        }
-        return self
-    }
-}
+
 
