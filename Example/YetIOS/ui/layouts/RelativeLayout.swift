@@ -20,6 +20,8 @@ public enum RelativeRelation: Int {
 
 fileprivate let UNSPEC: CGFloat = -10000
 
+public typealias RC = RelativeCondition
+
 public class RelativeCondition {
     fileprivate let id: Int = nextId()
     fileprivate unowned var view: UIView!
@@ -50,6 +52,10 @@ public class RelativeCondition {
     private static func nextId() -> Int {
         _lastId += 1
         return _lastId
+    }
+
+    static func width(_ w: CGFloat) -> RelativeCondition {
+        return RC(prop: .width, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: w)
     }
 
 }

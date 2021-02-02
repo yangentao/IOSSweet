@@ -26,11 +26,10 @@ class ViewController: UIViewController {
                 $0.fill()
             }.buildChildren {
                 UILabel.Primary.text("AAA").align(.center).backColor(.green).relativeParams {
-                    RelativeCondition(prop: .centerX, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 200)
-                    RelativeCondition(prop: .width, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 100)
-//                    RelativeCondition(prop: .top, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 150)
-                    RelativeCondition(prop: .centerY, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 150)
-                    RelativeCondition(prop: .height, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 200)
+                    RelativeCondition(prop: .centerX, relation: .eq, other: ParentViewName, propOther: .centerX, multiplier: 1, constant: 0)
+                    RelativeCondition(prop: .width, relation: .eq, other: ParentViewName, propOther: .width, multiplier: 0.5, constant: 0)
+                    RelativeCondition(prop: .centerY, relation: .eq, other: ParentViewName, propOther: .centerY, multiplier: 1, constant: 0)
+                    RelativeCondition(prop: .height, relation: .eq, other: ParentViewName, propOther: .height, multiplier: 0.5, constant: 0)
                 }
 //                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(0).linearParams { param in
 //                    param.weight(10).widthFill().maxHeight(200).minHeight(60)
