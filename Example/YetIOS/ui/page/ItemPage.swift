@@ -47,14 +47,14 @@ public extension UIView {
 	}
 
 	func itemStyle(_ height: CGFloat = Dim.itemHeightNormal) {
-		self.lp(MatchParent, height)
+		self.linearParams(MatchParent, height)
 		self.marginX(Dim.edge)
 		self.ivBottomLine = true
 		self.ivBottomLineOffsetLeft = Dim.edge
 	}
 
 	func itemStyleInput(_ height: CGFloat = Dim.itemHeightNormal) {
-		self.lp(MatchParent, height)
+		self.linearParams(MatchParent, height)
 		self.marginX(Dim.edgeInput)
 		self.ivBottomLine = false
 		if self is TextDetailView {
@@ -245,7 +245,7 @@ public extension ItemPage {
 	func makeButtonRed(_ text: String) -> UIButton {
 		let b = UIButton.RedRound
 		b.title = text
-		b.lp(MatchParent, Theme.Button.heightLarge).gravityX(.center)
+		b.linearParams(MatchParent, Theme.Button.heightLarge).gravityX(.center)
 		b.marginTop = 20
 		b.marginBottom = 20
 		b.marginX(Dim.edgeInput)
@@ -257,7 +257,7 @@ public extension ItemPage {
 	func makeButtonGreen(_ text: String) -> UIButton {
 		let b = UIButton.GreenRound
 		b.title = text
-		b.lp(MatchParent, Theme.Button.heightLarge).gravityX(.center)
+		b.linearParams(MatchParent, Theme.Button.heightLarge).gravityX(.center)
 		b.marginTop = 20
 		b.marginBottom = 20
 		b.marginX(Dim.edgeInput)

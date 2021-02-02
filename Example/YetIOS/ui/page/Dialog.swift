@@ -164,7 +164,7 @@ public class Dialog: UIViewController {
             lb.numberOfLines = 1
             lb.alignCenter()
             lb.font = Fonts.title
-            linearView.addView(lb, MatchParent, 46)
+            linearView.appendChild(lb, MatchParent, 46)
         }
 
         if let bv = bodyView {
@@ -179,16 +179,16 @@ public class Dialog: UIViewController {
             if bdHeight <= 0 {
                 bdHeight = 80
             }
-            linearView.addView(bv, MatchParent, bdHeight)
+            linearView.appendChild(bv, MatchParent, bdHeight)
         }
         if !buttons.isEmpty {
             if bodyView != nil {
                 let v = UIView(frame: Rect.zero)
                 v.backgroundColor = Colors.seprator
-                linearView.addView(v, MatchParent, 1)
+                linearView.appendChild(v, MatchParent, 1)
             }
             let btnPanel = UIView(frame: Rect.zero)
-            linearView.addView(btnPanel, MatchParent, 46)
+            linearView.appendChild(btnPanel, MatchParent, 46)
 
             var preV: UIView? = nil
             for n in buttons.indices {
@@ -490,14 +490,14 @@ public class DialogList<T> {
         var first = true
         for item in items {
             if !first {
-                panel.addView(UIView.SepratorLine, MatchParent, 1)
+                panel.appendChild(UIView.SepratorLine, MatchParent, 1)
             }
             let v = self.binder(item)
             v.clickView { a in
                 a.findMyController()?.close()
                 callback(item)
             }
-            panel.addView(v, MatchParent, itemHeight - 1)
+            panel.appendChild(v, MatchParent, itemHeight - 1)
             first = false
         }
 

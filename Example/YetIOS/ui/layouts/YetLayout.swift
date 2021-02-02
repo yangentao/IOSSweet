@@ -120,32 +120,32 @@ public extension YetLayout {
 }
 
 public class YetLayoutAttr {
-    let conItem: ConstraintItem = ConstraintItem()
+    let conItem: ConstraintCondition
 
     init(_ view: UIView, _ attr: NSLayoutConstraint.Attribute) {
+        conItem = ConstraintCondition(attr)
         conItem.itemView = view
-        conItem.attr = attr
         conItem.attr2 = .notAnAttribute
     }
 }
 
 public class YetLayoutEndNode {
-    var conItem: ConstraintItem
+    var conItem: ConstraintCondition
 
-    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ constant: CGFloat) {
+    init(_ item: ConstraintCondition, _ relation: NSLayoutConstraint.Relation, _ constant: CGFloat) {
         self.conItem = item
         self.conItem.relation = relation
         self.conItem.constant = constant
     }
 
-    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ view2: UIView) {
+    init(_ item: ConstraintCondition, _ relation: NSLayoutConstraint.Relation, _ view2: UIView) {
         self.conItem = item
         self.conItem.relation = relation
         self.conItem.toItemView = view2
         self.conItem.attr2 = self.conItem.attr
     }
 
-    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ view2: UIView, _ attr2: NSLayoutConstraint.Attribute) {
+    init(_ item: ConstraintCondition, _ relation: NSLayoutConstraint.Relation, _ view2: UIView, _ attr2: NSLayoutConstraint.Attribute) {
         self.conItem = item
         self.conItem.relation = relation
         self.conItem.toItemView = view2
@@ -278,7 +278,7 @@ public extension YetLayoutEndNode {
 
     private func findOld() -> NSLayoutConstraint? {
         let view: UIView = self.conItem.itemView
-        let ls = view.layoutConstraintItems.items.filter { n in
+        let ls = view.constraintParams.items.filter { n in
             n.isActive && n.firstItem === view && n.firstAttribute == self.conItem.attr && n.relation == self.conItem.relation
         }
         if !ls.isEmpty {
@@ -299,7 +299,7 @@ public extension YetLayoutEndNode {
 
     func remove() {
         let view: UIView = self.conItem.itemView
-        let c = view.layoutConstraintItems.items.removeFirstIf { n in
+        let c = view.constraintParams.items.removeFirstIf { n in
             n.firstItem === view && n.firstAttribute == conItem.attr && n.relation == conItem.relation
         }
         c?.isActive = false
@@ -311,7 +311,7 @@ public extension YetLayoutEndNode {
         n.priority = conItem.priority
         n.identifier = conItem.ident
         n.isActive = true
-        conItem.itemView.layoutConstraintItems.items.append(n)
+        conItem.itemView.constraintParams.items.append(n)
         return n
     }
 

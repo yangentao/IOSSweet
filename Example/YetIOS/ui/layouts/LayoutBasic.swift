@@ -12,6 +12,7 @@ public let MatchParent: CGFloat = -1
 public let WrapContent: CGFloat = -2
 
 public typealias LayoutRelation = NSLayoutConstraint.Relation
+public typealias LayoutAxis = NSLayoutConstraint.Axis
 
 public extension UIView {
     func appendChildren(@AnyBuilder _ block: AnyBuildBlock) -> Self {

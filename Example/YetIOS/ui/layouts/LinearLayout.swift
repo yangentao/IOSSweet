@@ -7,7 +7,6 @@ import UIKit
 
 
 public extension UIView {
-    //minWidth, maxWidth, minHeight, maxHeight
     var linearParams: LinearParams? {
         get {
             return getAttr("__linearParam__") as? LinearParams
@@ -28,7 +27,7 @@ public extension UIView {
     }
 
     @discardableResult
-    func lp(_ width: CGFloat, _ height: CGFloat) -> LinearParams {
+    func linearParams(_ width: CGFloat, _ height: CGFloat) -> LinearParams {
         return linearParamEnsure.width(width).height(height)
     }
 
@@ -39,12 +38,23 @@ public extension UIView {
     }
 }
 
+public extension LinearLayout {
+    @discardableResult
+    func appendChild<T: UIView>(_ view: T, _ width: CGFloat, _ height: CGFloat) -> T {
+        view.linearParamEnsure.width(width).height(height)
+        addSubview(view)
+        return view
+    }
+}
+
 public class LinearParams {
 
     public var width: CGFloat = 0
     public var height: CGFloat = 0
+
     @LimitGE(0)
     public var weight: CGFloat = 0
+
     public var gravityX: GravityX = .none
     public var gravityY: GravityY = .none
 
@@ -142,28 +152,17 @@ public extension LinearParams {
 }
 
 
-public extension LinearLayout {
-
-
-    @discardableResult
-    func addView<T: UIView>(_ view: T, _ width: CGFloat, _ height: CGFloat) -> T {
-        view.linearParamEnsure.width(width).height(height)
-        addSubview(view)
-        return view
-    }
-}
-
 public class LinearLayout: UIView {
-    public var axis: NSLayoutConstraint.Axis = .vertical
+    public var axis: LayoutAxis = .vertical
     public var padding: Edge = Edge()
 
-    convenience init(_ axis: NSLayoutConstraint.Axis) {
+    convenience init(_ axis: LayoutAxis) {
         self.init(frame: .zero)
         self.axis = axis
     }
 
     @discardableResult
-    public func axis(_ ax: NSLayoutConstraint.Axis) -> Self {
+    public func axis(_ ax: LayoutAxis) -> Self {
         self.axis = ax
         return self
     }

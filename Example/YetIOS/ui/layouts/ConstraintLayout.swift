@@ -22,22 +22,20 @@ import UIKit
 //}
 
 
-private var _constraint_param_list_key = "_constraint_param_list_"
-
 public extension UIView {
 
     fileprivate var tempConstraintItemsStore: ConstraintItemStore {
-        if let a = getAttr(_constraint_param_list_key) as? ConstraintItemStore {
+        if let a = getAttr("_constraint_param_list_") as? ConstraintItemStore {
             return a
         }
         let ls = ConstraintItemStore()
-        setAttr(_constraint_param_list_key, ls)
+        setAttr("_constraint_param_list_", ls)
         return ls
     }
 
     @discardableResult
     func constraintsBuild(@AnyBuilder _ block: AnyBuildBlock) -> Self {
-        let ls: [ConstraintItem] = block().itemsTyped()
+        let ls: [ConstraintCondition] = block().itemsTyped()
         for c in ls {
             c.itemView = self
         }
@@ -86,7 +84,7 @@ public extension UIView {
             let cp = NSLayoutConstraint(item: c.itemView as Any, attribute: c.attr, relatedBy: c.relation, toItem: toItemView, attribute: c.attr2, multiplier: c.multiplier, constant: c.constant)
             cp.priority = c.priority
             cp.identifier = c.ident
-            layoutConstraintItems.items.append(cp)
+            constraintParams.items.append(cp)
             cp.isActive = true
         }
 
@@ -96,7 +94,7 @@ public extension UIView {
 }
 
 class ConstraintItemStore {
-    var items: [ConstraintItem] = []
+    var items: [ConstraintCondition] = []
 }
 
 
