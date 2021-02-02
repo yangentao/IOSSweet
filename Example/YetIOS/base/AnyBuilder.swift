@@ -28,8 +28,19 @@ public class AnyGroup {
 }
 
 public extension AnyGroup {
-    func itemsTyped<T: Any>() -> [T] {
-        self.items.filter {
+    func itemsTyped<T: Any>(_ unpackArray: Bool = false) -> [T] {
+        if unpackArray {
+            var ls = [T]()
+            for e in items {
+                if let a = e as? T {
+                    ls.append(a)
+                } else if let aa = e as? [T] {
+                    ls.append(contentsOf: aa)
+                }
+            }
+            return ls
+        }
+        return items.filter {
             $0 is T
         }.map {
             $0 as! T

@@ -15,7 +15,8 @@ public enum RelativeProp: Int {
 }
 
 public enum RelativeRelation: Int {
-    case eq, ge, le
+    case eq
+    case ge, le
 }
 
 fileprivate let UNSPEC: CGFloat = -10000
@@ -151,7 +152,7 @@ public extension UIView {
     }
 
     func relativeConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
-        let ls: [RelativeCondition] = block().itemsTyped()
+        let ls: [RelativeCondition] = block().itemsTyped(true)
         self.relativeParamsEnsure.conditions.append(contentsOf: ls)
         return self
     }

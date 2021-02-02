@@ -32,11 +32,16 @@ class ViewController: UIViewController {
                     RC.height.eqParent.multi(0.3)
                 }
                 UILabel.Primary.named("b").text("BBB").align(.center).backColor(.blue).relativeConditions {
-//                    RC.centerX.eqParent
                     RC.left.eq("a")
                     RC.top.eq("a", .bottom).constant(20)
                     RC.width.eqParent.multi(0.5)
                     RC.height.eqParent.multi(0.3)
+                }
+                UILabel.Primary.named("c").text("CCC").align(.center).backColor(.cyan).relativeConditions {
+                    RC.left.eq("b")
+                    RC.bottom.eq("a", .top).constant(20)
+                    [RC.width.eqParent.multi(0.5),
+                     RC.height.eqParent.multi(0.3)]
                 }
             }
 
