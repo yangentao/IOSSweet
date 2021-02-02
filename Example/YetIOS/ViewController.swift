@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         self.view.layoutConstraint {
 
 
-            RelativeLayout(frame: .zero).constraints {
+            RelativeLayout(frame: .zero).constraintParams {
                 $0.fill()
             }.appendChildren {
                 UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).relativeParams {

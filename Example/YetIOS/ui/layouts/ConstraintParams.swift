@@ -6,7 +6,98 @@ import Foundation
 import UIKit
 
 
-private var _constraint_list_key = "_conkey_"
+//as parent view
+public extension UIView {
+    func layoutConstraint(@AnyBuilder _ block: AnyBuildBlock) {
+        let b = block()
+        let viewList: [UIView] = b.itemsTyped()
+        let ls = viewList.filter {
+            $0 !== self
+        }
+        for childView in ls {
+            addSubview(childView)
+        }
+        for v in ls {
+            v.installMyConstraints()
+        }
+    }
+}
+
+//as subview
+public extension UIView {
+    @discardableResult
+    func constraintConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
+        let ls: [ConstraintCondition] = block().itemsTyped()
+        for c in ls {
+            c.itemView = self
+        }
+        constraintConditionItems.items.append(contentsOf: ls)
+        return self
+    }
+
+
+    @discardableResult
+    func constraintParams(_ block: (ConstraintsBuilder) -> Void) -> Self {
+        let cb = ConstraintsBuilder(self)
+        block(cb)
+        constraintConditionItems.items.append(contentsOf: cb.items)
+        return self
+    }
+
+    fileprivate var constraintConditionItems: ConstraintConditionItems {
+        if let a = getAttr("_constraint_param_list_") as? ConstraintConditionItems {
+            return a
+        }
+        let ls = ConstraintConditionItems()
+        setAttr("_constraint_param_list_", ls)
+        return ls
+    }
+
+
+    @discardableResult
+    internal func installMyConstraints() -> Self {
+        guard let superView = superview else {
+            fatalError("installonstraints() error: superview is nil!")
+        }
+        let viewList = superView.subviews
+        let condList = constraintConditionItems.items
+        if condList.isEmpty {
+            return self
+        }
+        constraintConditionItems.items = []
+        translatesAutoresizingMaskIntoConstraints = false
+        for c in condList {
+            if c.itemView == nil {
+                c.itemView = self
+            }
+            var toItemView: UIView? = nil
+            if c.toItemView != nil {
+                toItemView = c.toItemView
+            } else if let viewName = c.toItemName {
+                if viewName == superView.name || viewName == ParentViewName {
+                    toItemView = superView
+                } else if let toV = viewList.first({ $0.name == viewName }) {
+                    toItemView = toV
+                } else {
+                    fatalError("UIView.constraintLayout, No view name found: \(viewName)")
+                }
+            }
+
+            let cp = NSLayoutConstraint(item: c.itemView as Any, attribute: c.attr, relatedBy: c.relation, toItem: toItemView, attribute: c.attr2, multiplier: c.multiplier, constant: c.constant)
+            cp.priority = c.priority
+            cp.identifier = c.ident
+            constraintParams.items.append(cp)
+            cp.isActive = true
+        }
+        return self
+    }
+
+}
+
+class ConstraintConditionItems {
+    var items: [ConstraintCondition] = []
+}
+
 
 public class ConstraintParams {
     var items = [NSLayoutConstraint]()
@@ -14,11 +105,11 @@ public class ConstraintParams {
 
 public extension UIView {
     var constraintParams: ConstraintParams {
-        if let ls = getAttr(_constraint_list_key) as? ConstraintParams {
+        if let ls = getAttr("_conkey_") as? ConstraintParams {
             return ls
         }
         let c = ConstraintParams()
-        setAttr(_constraint_list_key, c)
+        setAttr("_conkey_", c)
         return c
     }
 

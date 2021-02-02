@@ -29,7 +29,7 @@ public extension UIView {
         }
     }
 
-    func relativeParamsConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
+    func relativeConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
         let ls: [RelativeCondition] = block().itemsTyped(true)
         self.relativeParamsEnsure.conditions.append(contentsOf: ls)
         return self
