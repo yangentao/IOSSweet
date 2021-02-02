@@ -7,9 +7,41 @@ import Foundation
 import UIKit
 
 
-fileprivate let UNSPEC: CGFloat = -10000
-
 public typealias RC = RelativeCondition
+
+public extension UIView {
+    var relativeParams: RelativeParams? {
+        get {
+            return getAttr("__relativeParam__") as? RelativeParams
+        }
+        set {
+            setAttr("__relativeParam__", newValue)
+        }
+    }
+
+    var relativeParamsEnsure: RelativeParams {
+        if let L = self.relativeParams {
+            return L
+        } else {
+            let a = RelativeParams()
+            self.relativeParams = a
+            return a
+        }
+    }
+
+    func relativeParamsConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
+        let ls: [RelativeCondition] = block().itemsTyped(true)
+        self.relativeParamsEnsure.conditions.append(contentsOf: ls)
+        return self
+    }
+
+    func relativeParams(_ block: (RelativeParamsBuilder) -> Void) -> Self {
+        let b = RelativeParamsBuilder()
+        block(b)
+        self.relativeParamsEnsure.conditions.append(contentsOf: b.items)
+        return self
+    }
+}
 
 public enum RelativeProp: Int {
     case width, height
@@ -18,6 +50,7 @@ public enum RelativeProp: Int {
 
 }
 
+fileprivate let UNSPEC: CGFloat = -10000
 
 public class RelativeCondition {
     fileprivate unowned var view: UIView!
@@ -122,39 +155,6 @@ public class RelativeParams {
 
 }
 
-public extension UIView {
-    var relativeParams: RelativeParams? {
-        get {
-            return getAttr("__relativeParam__") as? RelativeParams
-        }
-        set {
-            setAttr("__relativeParam__", newValue)
-        }
-    }
-
-    var relativeParamsEnsure: RelativeParams {
-        if let L = self.relativeParams {
-            return L
-        } else {
-            let a = RelativeParams()
-            self.relativeParams = a
-            return a
-        }
-    }
-
-    func relativeParamsConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
-        let ls: [RelativeCondition] = block().itemsTyped(true)
-        self.relativeParamsEnsure.conditions.append(contentsOf: ls)
-        return self
-    }
-
-    func relativeParams(_ block: (RelativeParamsBuilder) -> Void) -> Self {
-        let b = RelativeParamsBuilder()
-        block(b)
-        self.relativeParamsEnsure.conditions.append(contentsOf: b.items)
-        return self
-    }
-}
 
 public class RelativeParamsBuilder {
     var items = [RelativeCondition]()
@@ -411,7 +411,7 @@ public class RelativeLayout: UIView {
                     continue
                 }
                 guard  let otherProp = c.otherProp else {
-                    fatalError("NOT point out relative property name: \(c.view) \(c.relation) \(otherView)")
+                    fatalError("NOT point out relative property name: \(c.view!) \(c.relation) \(otherView)")
                 }
                 let otherVal = vrList.queryProp(otherView, otherProp)
                 if otherVal != UNSPEC {

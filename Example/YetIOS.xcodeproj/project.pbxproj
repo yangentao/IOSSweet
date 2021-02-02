@@ -142,7 +142,6 @@
 		E11E1EA43655765C4F1CDEB2 /* YsonDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E163D7D64B26435CD8338 /* YsonDecode.swift */; };
 		E11E1EAE1BF16306584C3119 /* StringUIEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E18E38159147AABA46704 /* StringUIEx.swift */; };
 		E11E1EBD32950B5B99CAF026 /* ConstraintBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FACE23A229153D69A40 /* ConstraintBuilder.swift */; };
-		E11E1EF246EBE983A9845604 /* RelativeParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E11697753DD2A62D10278 /* RelativeParams.swift */; };
 		E11E1F078159507ECB31D17D /* YsonNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E142E04E9D636B84F95FE /* YsonNum.swift */; };
 		E11E1F0C9D90374B5E072DAE /* ImageText4Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E178B49F03351EC477862 /* ImageText4Cell.swift */; };
 		E11E1F202B5D2D3CAB23FA70 /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FC6CE20F285CFE5885D /* Files.swift */; };
@@ -180,7 +179,6 @@
 		E11E11139967C28A33C05063 /* QR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QR.swift; sourceTree = "<group>"; };
 		E11E113464E40D40892D0CFE /* FileArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileArray.swift; sourceTree = "<group>"; };
 		E11E1161D33446F738AFDE64 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
-		E11E11697753DD2A62D10278 /* RelativeParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelativeParams.swift; sourceTree = "<group>"; };
 		E11E11B12A3EDCD5594A8D67 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		E11E11C328BEC99F75E04338 /* ProtoResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtoResult.swift; sourceTree = "<group>"; };
 		E11E11E4E4C5294FFA9DD697 /* Windows.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Windows.swift; sourceTree = "<group>"; };
@@ -459,7 +457,6 @@
 				E11E1F830B123C705C4D0356 /* ConstraintLayout.swift */,
 				E11E1FACE23A229153D69A40 /* ConstraintBuilder.swift */,
 				E11E1C28CDB09FD4FD8004A1 /* RelativeLayout.swift */,
-				E11E11697753DD2A62D10278 /* RelativeParams.swift */,
 			);
 			path = layouts;
 			sourceTree = "<group>";
@@ -925,7 +922,6 @@
 				E11E16B40A95538788F93A89 /* YsonString.swift in Sources */,
 				E11E1B88B4B72B5D9CC157E9 /* YsonCodable.swift in Sources */,
 				E11E1C3E0644E270ECCED553 /* RelativeLayout.swift in Sources */,
-				E11E1EF246EBE983A9845604 /* RelativeParams.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
