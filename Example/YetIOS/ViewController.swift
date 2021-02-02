@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import IOSSweet
+//import IOSSweet
 
 
 class ViewController: UIViewController {

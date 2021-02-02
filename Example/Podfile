@@ -3,6 +3,6 @@ use_frameworks!
 platform :ios, '12.0'
 
 target 'YetIOS_Example' do
-  pod 'IOSSweet', :path => '../'
+  #pod 'IOSSweet', :path => '../'
 
 end
