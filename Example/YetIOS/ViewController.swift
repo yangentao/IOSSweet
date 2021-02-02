@@ -24,7 +24,7 @@ class ViewController: UIViewController {
 
             RelativeLayout(frame: .zero).constraints {
                 $0.fill()
-            }.buildChildren {
+            }.appendChildren {
                 UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).relativeParams {
                     $0.center().widthEQParent(multi: 0.5).heightEQSelf(.width)
                 }

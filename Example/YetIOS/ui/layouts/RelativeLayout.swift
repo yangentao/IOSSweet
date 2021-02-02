@@ -7,6 +7,10 @@ import Foundation
 import UIKit
 
 
+fileprivate let UNSPEC: CGFloat = -10000
+
+public typealias RC = RelativeCondition
+
 public enum RelativeProp: Int {
     case width, height
     case left, right, top, bottom
@@ -14,21 +18,13 @@ public enum RelativeProp: Int {
 
 }
 
-public enum RelativeRelation: Int {
-    case eq
-    case ge, le
-}
-
-fileprivate let UNSPEC: CGFloat = -10000
-
-public typealias RC = RelativeCondition
 
 public class RelativeCondition {
     fileprivate unowned var view: UIView!
     fileprivate unowned var viewOther: UIView? = nil
     public let id: Int = nextId()
     public var prop: RelativeProp
-    public var relation: RelativeRelation = .eq
+    public var relation: LayoutRelation = .equal
     public var otherViewName: String? = nil
     public var otherProp: RelativeProp? = nil
     public var multiplier: CGFloat = 1
@@ -39,13 +35,8 @@ public class RelativeCondition {
         tempValue != UNSPEC
     }
 
-    public init(prop: RelativeProp, relation: RelativeRelation = .eq, otherViewName: String? = nil, propOther: RelativeProp? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) {
+    public init(prop: RelativeProp) {
         self.prop = prop
-        self.relation = relation
-        self.otherViewName = otherViewName
-        self.otherProp = propOther
-        self.multiplier = multiplier
-        self.constant = constant
     }
 
     private static var _lastId: Int = 0
@@ -91,6 +82,10 @@ public extension RelativeCondition {
     func eqParent(_ otherProp: RelativeProp) -> Self {
         eq(ParentViewName, otherProp)
     }
+
+    func eqSelf(_ otherProp: RelativeProp) -> Self {
+        eq(SelfViewName, otherProp)
+    }
 }
 
 
@@ -119,14 +114,6 @@ public extension RelativeCondition {
     }
     static var centerY: RelativeCondition {
         RC(prop: .centerY)
-    }
-
-    static func width(_ w: CGFloat) -> RelativeCondition {
-        width.constant(w)
-    }
-
-    static func height(_ h: CGFloat) -> RelativeCondition {
-        height.constant(h)
     }
 }
 
@@ -303,26 +290,26 @@ public extension RelativeParamsBuilder {
     }
 
     @discardableResult
-    func widthEQ(_ viewName: String, _ prop2: RelativeProp, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
-        items += RC.width.eq(viewName, prop2).multi(multi).constant(c)
+    func widthEQ(_ viewName: String, prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC.width.eq(viewName, prop2).multi(multi).constant(constant)
         return self
     }
 
     @discardableResult
-    func heightEQ(_ viewName: String, _ prop2: RelativeProp, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
-        items += RC.height.eq(viewName, prop2).multi(multi).constant(c)
+    func heightEQ(_ viewName: String, prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC.height.eq(viewName, prop2).multi(multi).constant(constant)
         return self
     }
 
     @discardableResult
-    func widthEQ(_ viewName: String, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
-        items += RC.width.eq(viewName).multi(multi).constant(c)
+    func widthEQ(_ viewName: String, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC.width.eq(viewName).multi(multi).constant(constant)
         return self
     }
 
     @discardableResult
-    func heightEQ(_ viewName: String, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
-        items += RC.height.eq(viewName).multi(multi).constant(c)
+    func heightEQ(_ viewName: String, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC.height.eq(viewName).multi(multi).constant(constant)
         return self
     }
 
@@ -339,17 +326,141 @@ public extension RelativeParamsBuilder {
     }
 
     @discardableResult
-    func widthEQSelf(_ prop2: RelativeProp, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
-        items += RC.width.eq(SelfViewName, prop2).multi(multi).constant(c)
+    func widthEQSelf(_ prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC.width.eq(SelfViewName, prop2).multi(multi).constant(constant)
         return self
     }
 
     @discardableResult
-    func heightEQSelf(_ prop2: RelativeProp, _ multi: CGFloat = 1, _ c: CGFloat = 0) -> Self {
-        items += RC.height.eq(SelfViewName, prop2).multi(multi).constant(c)
+    func heightEQSelf(_ prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC.height.eq(SelfViewName, prop2).multi(multi).constant(constant)
         return self
     }
 }
+
+
+public class RelativeLayout: UIView {
+
+
+    public override func layoutSubviews() {
+        let childList = self.subviews
+        if childList.isEmpty {
+            return
+        }
+
+        var allCond: [RelativeCondition] = []
+        for child in childList {
+            guard  let param = child.relativeParams else {
+                continue
+            }
+            for cond in param.conditions {
+                cond.view = child
+                if let otherName = cond.otherViewName {
+                    if otherName == ParentViewName {
+                        cond.viewOther = self
+                    } else if otherName == SelfViewName {
+                        cond.viewOther = child
+                    } else {
+                        guard  let vOther = self.findByName(otherName) else {
+                            fatalError("View Named '\(otherName)' is NOT found!")
+                        }
+                        cond.viewOther = vOther
+                    }
+                }
+                cond.tempValue = UNSPEC
+                allCond.append(cond)
+            }
+        }
+
+
+        let vrList: ViewRects = ViewRects(childList)
+
+        for vr in vrList.items {
+            if vr.view.relativeParams == nil {
+                vr.left = 0
+                vr.right = 0
+                vr.width = 0
+                vr.height = 0
+            }
+        }
+
+        for c in allCond {
+            if c.viewOther == nil {
+                c.tempValue = c.constant
+                vrList.assignProp(c.view, c.prop, c.tempValue)
+            } else if c.viewOther == self {
+                guard let otherProp = c.otherProp else {
+                    fatalError("RelativeLayout Error: property \(c.prop) depend superview's property is NOT point out.")
+                }
+                c.tempValue = queryParentProp(otherProp) * c.multiplier + c.constant
+                vrList.assignProp(c.view, c.prop, c.tempValue)
+            }
+
+        }
+
+        var matchOne = false
+        repeat {
+            let notMatchList = allCond.filter {
+                !$0.OK
+            }
+            if notMatchList.isEmpty {
+                break
+            }
+            for c in notMatchList {
+                guard  let otherView = c.viewOther else {
+                    continue
+                }
+                guard  let otherProp = c.otherProp else {
+                    fatalError("NOT point out relative property name: \(c.view) \(c.relation) \(otherView)")
+                }
+                let otherVal = vrList.queryProp(otherView, otherProp)
+                if otherVal != UNSPEC {
+                    c.tempValue = otherVal
+                    vrList.assignProp(c.view, c.prop, otherVal)
+                    matchOne = true
+                }
+            }
+        } while matchOne
+
+        let notMatchList = allCond.filter {
+            !$0.OK
+        }
+        if !notMatchList.isEmpty {
+            print("WARNNING! RelativeLayout: some condition is NOT satisfied ! ")
+        }
+
+        for vr in vrList.items {
+            if vr.OK {
+                vr.view.frame = vr.rect
+            }
+        }
+
+    }
+
+
+    private func queryParentProp(_ prop: RelativeProp) -> CGFloat {
+        let rect: Rect = self.bounds
+        switch prop {
+        case .left:
+            return rect.minX
+        case .right:
+            return rect.maxX
+        case .top:
+            return rect.minY
+        case .bottom:
+            return rect.maxY
+        case .centerX:
+            return rect.center.x
+        case .centerY:
+            return rect.center.y
+        case .width:
+            return rect.width
+        case .height:
+            return rect.height
+        }
+    }
+}
+
 
 fileprivate class ViewRect {
     var view: UIView
@@ -593,141 +704,5 @@ fileprivate class ViewRects {
 
     func assignProp(_ view: UIView, _ prop: RelativeProp, _ value: CGFloat) {
         byView(view).assignProp(prop, value)
-    }
-}
-
-public extension RelativeLayout {
-    func buildChildren(@AnyBuilder _ block: AnyBuildBlock) -> Self {
-        let b = block()
-        let viewList: [UIView] = b.itemsTyped()
-        let ls = viewList.filter {
-            $0 !== self
-        }
-        for childView in ls {
-            addSubview(childView)
-        }
-        return self
-    }
-}
-
-public class RelativeLayout: UIView {
-
-
-    public override func layoutSubviews() {
-        let childList = self.subviews
-        if childList.isEmpty {
-            return
-        }
-
-        var allCond: [RelativeCondition] = []
-        for child in childList {
-            guard  let param = child.relativeParams else {
-                continue
-            }
-            for cond in param.conditions {
-                cond.view = child
-                if let otherName = cond.otherViewName {
-                    if otherName == ParentViewName {
-                        cond.viewOther = self
-                    } else if otherName == SelfViewName {
-                        cond.viewOther = child
-                    } else {
-                        guard  let vOther = self.findByName(otherName) else {
-                            fatalError("View Named '\(otherName)' is NOT found!")
-                        }
-                        cond.viewOther = vOther
-                    }
-                }
-                cond.tempValue = UNSPEC
-                allCond.append(cond)
-            }
-        }
-
-
-        let vrList: ViewRects = ViewRects(childList)
-
-        for vr in vrList.items {
-            if vr.view.relativeParams == nil {
-                vr.left = 0
-                vr.right = 0
-                vr.width = 0
-                vr.height = 0
-            }
-        }
-
-        for c in allCond {
-            if c.viewOther == nil {
-                c.tempValue = c.constant
-                vrList.assignProp(c.view, c.prop, c.tempValue)
-            } else if c.viewOther == self {
-                guard let otherProp = c.otherProp else {
-                    fatalError("RelativeLayout Error: property \(c.prop) depend superview's property is NOT point out.")
-                }
-                c.tempValue = queryParentProp(otherProp) * c.multiplier + c.constant
-                vrList.assignProp(c.view, c.prop, c.tempValue)
-            }
-
-        }
-
-        var matchOne = false
-        repeat {
-            let notMatchList = allCond.filter {
-                !$0.OK
-            }
-            if notMatchList.isEmpty {
-                break
-            }
-            for c in notMatchList {
-                guard  let otherView = c.viewOther else {
-                    continue
-                }
-                guard  let otherProp = c.otherProp else {
-                    fatalError("NOT point out relative property name: \(c.view) \(c.relation) \(otherView)")
-                }
-                let otherVal = vrList.queryProp(otherView, otherProp)
-                if otherVal != UNSPEC {
-                    c.tempValue = otherVal
-                    vrList.assignProp(c.view, c.prop, otherVal)
-                    matchOne = true
-                }
-            }
-        } while matchOne
-
-        let notMatchList = allCond.filter {
-            !$0.OK
-        }
-        if !notMatchList.isEmpty {
-            print("WARNNING! RelativeLayout: some condition is NOT satisfied ! ")
-        }
-
-        for vr in vrList.items {
-            if vr.OK {
-                vr.view.frame = vr.rect
-            }
-        }
-
-    }
-
-
-    private func queryParentProp(_ prop: RelativeProp) -> CGFloat {
-        let rect: Rect = self.bounds
-        switch prop {
-        case .left:
-            return rect.minX
-        case .right:
-            return rect.maxX
-        case .top:
-            return rect.minY
-        case .bottom:
-            return rect.maxY
-        case .centerX:
-            return rect.center.x
-        case .centerY:
-            return rect.center.y
-        case .width:
-            return rect.width
-        case .height:
-            return rect.height
-        }
     }
 }

@@ -144,17 +144,6 @@ public extension LinearParams {
 
 public extension LinearLayout {
 
-    func buildChildren(@AnyBuilder _ block: AnyBuildBlock) -> Self {
-        let b = block()
-        let viewList: [UIView] = b.itemsTyped()
-        let ls = viewList.filter {
-            $0 !== self
-        }
-        for childView in ls {
-            addSubview(childView)
-        }
-        return self
-    }
 
     @discardableResult
     func addView<T: UIView>(_ view: T, _ width: CGFloat, _ height: CGFloat) -> T {

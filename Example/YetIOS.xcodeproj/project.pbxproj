@@ -129,7 +129,7 @@
 		E11E1D94C54EFDC19680B3DF /* FileMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1940EB0B3974E1F666A9 /* FileMap.swift */; };
 		E11E1D98627262BA9C4C0C56 /* ActionBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1214B47B4D41B3040D14 /* ActionBlock.swift */; };
 		E11E1D9F2576C772B3BCEA42 /* AttrText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E11F5CACAB4D919A91BAC /* AttrText.swift */; };
-		E11E1DB3B54F99EC7564D063 /* LayoutParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E13AA8495DBBA47B1D19E /* LayoutParams.swift */; };
+		E11E1DB3B54F99EC7564D063 /* LayoutBasic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E13AA8495DBBA47B1D19E /* LayoutBasic.swift */; };
 		E11E1DCDD83E4DCAF348E692 /* TextTimeMsgStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1C0FCC77E89BCFF4E3B0 /* TextTimeMsgStatusCell.swift */; };
 		E11E1DEFABAB8B78BB1ED8F2 /* YsonBlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E10F817F5AC462DA86B02 /* YsonBlob.swift */; };
 		E11E1DF50A3D3527C88D937C /* ScrollPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1D03F7B05BFB6B532A05 /* ScrollPage.swift */; };
@@ -142,6 +142,7 @@
 		E11E1EA43655765C4F1CDEB2 /* YsonDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E163D7D64B26435CD8338 /* YsonDecode.swift */; };
 		E11E1EAE1BF16306584C3119 /* StringUIEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E18E38159147AABA46704 /* StringUIEx.swift */; };
 		E11E1EBD32950B5B99CAF026 /* ConstraintBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FACE23A229153D69A40 /* ConstraintBuilder.swift */; };
+		E11E1EF246EBE983A9845604 /* RelativeParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E11697753DD2A62D10278 /* RelativeParams.swift */; };
 		E11E1F078159507ECB31D17D /* YsonNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E142E04E9D636B84F95FE /* YsonNum.swift */; };
 		E11E1F0C9D90374B5E072DAE /* ImageText4Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E178B49F03351EC477862 /* ImageText4Cell.swift */; };
 		E11E1F202B5D2D3CAB23FA70 /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FC6CE20F285CFE5885D /* Files.swift */; };
@@ -179,6 +180,7 @@
 		E11E11139967C28A33C05063 /* QR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QR.swift; sourceTree = "<group>"; };
 		E11E113464E40D40892D0CFE /* FileArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileArray.swift; sourceTree = "<group>"; };
 		E11E1161D33446F738AFDE64 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		E11E11697753DD2A62D10278 /* RelativeParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelativeParams.swift; sourceTree = "<group>"; };
 		E11E11B12A3EDCD5594A8D67 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		E11E11C328BEC99F75E04338 /* ProtoResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtoResult.swift; sourceTree = "<group>"; };
 		E11E11E4E4C5294FFA9DD697 /* Windows.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Windows.swift; sourceTree = "<group>"; };
@@ -191,7 +193,7 @@
 		E11E12E467DE85BAF1C023B2 /* ColorEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorEx.swift; sourceTree = "<group>"; };
 		E11E135111723B2F2B966C2B /* Dialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
 		E11E138FAC63DAB23B538DE9 /* MyNavPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNavPage.swift; sourceTree = "<group>"; };
-		E11E13AA8495DBBA47B1D19E /* LayoutParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutParams.swift; sourceTree = "<group>"; };
+		E11E13AA8495DBBA47B1D19E /* LayoutBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutBasic.swift; sourceTree = "<group>"; };
 		E11E140A09E376AFF7FF817E /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		E11E141251E43B71A076C070 /* HttpReq.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpReq.swift; sourceTree = "<group>"; };
 		E11E142E04E9D636B84F95FE /* YsonNum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YsonNum.swift; sourceTree = "<group>"; };
@@ -451,12 +453,13 @@
 			children = (
 				E11E167836CB5AFEA5333063 /* YetLayout.swift */,
 				E11E176EA4443BF613B8FB82 /* GridLayout.swift */,
-				E11E13AA8495DBBA47B1D19E /* LayoutParams.swift */,
+				E11E13AA8495DBBA47B1D19E /* LayoutBasic.swift */,
 				E11E15AD7702A19724AE10FF /* LinearLayout.swift */,
 				E11E1AB429265DE81E5BEF9D /* ConstraintBase.swift */,
 				E11E1F830B123C705C4D0356 /* ConstraintLayout.swift */,
 				E11E1FACE23A229153D69A40 /* ConstraintBuilder.swift */,
 				E11E1C28CDB09FD4FD8004A1 /* RelativeLayout.swift */,
+				E11E11697753DD2A62D10278 /* RelativeParams.swift */,
 			);
 			path = layouts;
 			sourceTree = "<group>";
@@ -879,7 +882,7 @@
 				E11E1AE7612550678C0B5953 /* VerticalScrollView.swift in Sources */,
 				E11E136DB0D5178D39742749 /* YetLayout.swift in Sources */,
 				E11E113B491A8E5E2BB52054 /* GridLayout.swift in Sources */,
-				E11E1DB3B54F99EC7564D063 /* LayoutParams.swift in Sources */,
+				E11E1DB3B54F99EC7564D063 /* LayoutBasic.swift in Sources */,
 				E11E1C8E3EB3426CDEA84662 /* LinearLayout.swift in Sources */,
 				E11E1D7638AC9AB1DF2F925E /* ConstraintBase.swift in Sources */,
 				E11E1D1AAAAD8BC75DB6D5D5 /* ConstraintLayout.swift in Sources */,
@@ -922,6 +925,7 @@
 				E11E16B40A95538788F93A89 /* YsonString.swift in Sources */,
 				E11E1B88B4B72B5D9CC157E9 /* YsonCodable.swift in Sources */,
 				E11E1C3E0644E270ECCED553 /* RelativeLayout.swift in Sources */,
+				E11E1EF246EBE983A9845604 /* RelativeParams.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

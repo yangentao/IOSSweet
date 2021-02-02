@@ -9,6 +9,8 @@ import UIKit
 let SelfViewName = "__.__"
 let ParentViewName = "__..__"
 
+public typealias LayoutRelation = NSLayoutConstraint.Relation
+
 public enum GravityX: Int {
     case none = 0
     case left
@@ -128,6 +130,19 @@ public extension UIView {
     func marginY(_  m: CGFloat) -> Self {
         self.marginTop = m
         self.marginBottom = m
+        return self
+    }
+}
+
+public extension UIView {
+    func appendChildren(@AnyBuilder _ block: AnyBuildBlock) -> Self {
+        let b = block()
+        let viewList: [UIView] = b.itemsTyped()
+        for childView in viewList {
+            if childView !== self {
+                addSubview(childView)
+            }
+        }
         return self
     }
 }
