@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 
-let ParentViewName = "_parent_view_name_"
+
 
 private var _constraint_list_key = "_conkey_"
 

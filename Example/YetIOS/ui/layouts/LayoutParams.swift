@@ -6,6 +6,9 @@
 import Foundation
 import UIKit
 
+let MineViewName = "__.__"
+let ParentViewName = "__..__"
+
 public enum GravityX: Int {
     case none = 0
     case left
@@ -56,8 +59,6 @@ public class Edge: Equatable {
 
 public let MatchParent: CGFloat = -1
 public let WrapContent: CGFloat = -2
-
-
 
 
 public extension UIView {
