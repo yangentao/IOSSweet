@@ -137,7 +137,7 @@ public class LinearLayout: UIView {
         if weightSum > 0 {
             let a = max(0, avaliableWidth) / weightSum
             //先处理最大值小于平均值的
-            var useMaxWidthList: [Int] = []
+            var useMaxValueList: [Int] = []
             var fixedWeightSum: CGFloat = 0
             for i in unspecIndexList {
                 let pm = childViewList[i].linearParamEnsure
@@ -145,12 +145,12 @@ public class LinearLayout: UIView {
                     if pm.maxWidth < pm.weight * a {
                         fixedWeightSum += pm.weight
                         szList[i].width = pm.maxWidth
-                        useMaxWidthList.append(i)
+                        useMaxValueList.append(i)
                         avaliableWidth -= pm.maxWidth
                     }
                 }
             }
-            unspecIndexList.removeAll(useMaxWidthList)
+            unspecIndexList.removeAll(useMaxValueList)
             //剩下的全是没有设置最大值, 或最大值大于平均值的情况
             let aa = max(0, avaliableWidth) / max(1, weightSum - fixedWeightSum)
             for i in unspecIndexList {
@@ -229,20 +229,22 @@ public class LinearLayout: UIView {
             avaliableHeight -= chView.marginTop + chView.marginBottom
             if param.height == MatchParent {
                 matchSum += 1
+                avaliableHeight -= param.minHeight
             } else if param.height == WrapContent {
                 let sz = chView.sizeThatFits(size)
                 szList[index].height = max(0, sz.height)
                 avaliableHeight -= szList[index].height
+            } else if param.height > 0 {
+                szList[index].height = max(0, param.height)
+                avaliableHeight -= szList[index].height
             } else if param.height == 0 {
                 if param.weight > 0 {
                     weightSum += param.weight
+                    avaliableHeight -= param.minHeight
                 } else {
                     szList[index].height = 0
                 }
 
-            } else if param.height > 0 {
-                szList[index].height = max(0, param.height)
-                avaliableHeight -= szList[index].height
             } else {
                 fatalError("LinearParam.height < 0 ")
             }
@@ -250,20 +252,64 @@ public class LinearLayout: UIView {
         if matchSum > 0 && weightSum > 0 {
             fatalError("LinearParam error , Can not use MatchParent and weight in same time!")
         }
+
+        var unspecIndexList: [Int] = []
+        for i in 0..<childCount {
+            if szList[i].height == unspec {
+                unspecIndexList.append(i)
+            }
+        }
+        //每个先分配最小值
+        for i in unspecIndexList {
+            let pm = childViewList[i].linearParamEnsure
+            szList[i].height = pm.minHeight
+        }
+
+
         if matchSum > 0 {
             let h = max(0, avaliableHeight) / matchSum
-            for i in 0..<childCount {
-                if szList[i].height == unspec {
-                    szList[i].height = h
+            //先处理最大值小于平均值的
+            var useMaxWidthList: [Int] = []
+            for i in unspecIndexList {
+                let pm = childViewList[i].linearParamEnsure
+                if pm.maxHeight > 0 {
+                    if pm.maxHeight < h {
+                        szList[i].height = pm.maxHeight
+                        useMaxWidthList.append(i)
+                        avaliableHeight -= pm.maxHeight
+                    }
                 }
+            }
+            unspecIndexList.removeAll(useMaxWidthList)
+            //剩下的全是没有设置最大值, 或最大值大于平均值的情况
+            let hh = max(0, avaliableHeight) / max(1, matchSum - useMaxWidthList.count)
+            for i in unspecIndexList {
+                let pm = childViewList[i].linearParamEnsure
+                szList[i].height = pm.minHeight + hh
             }
         }
         if weightSum > 0 {
             let a = max(0, avaliableHeight) / weightSum
-            for i in 0..<childCount {
-                if szList[i].height == unspec {
-                    szList[i].height = a * childViewList[i].linearParam!.weight
+            //先处理最大值小于平均值的
+            var useMaxValueList: [Int] = []
+            var fixedWeightSum: CGFloat = 0
+            for i in unspecIndexList {
+                let pm = childViewList[i].linearParamEnsure
+                if pm.maxHeight > 0 {
+                    if pm.maxHeight < pm.weight * a {
+                        fixedWeightSum += pm.weight
+                        szList[i].height = pm.maxHeight
+                        useMaxValueList.append(i)
+                        avaliableHeight -= pm.maxHeight
+                    }
                 }
+            }
+            unspecIndexList.removeAll(useMaxValueList)
+            //剩下的全是没有设置最大值, 或最大值大于平均值的情况
+            let aa = max(0, avaliableHeight) / max(1, weightSum - fixedWeightSum)
+            for i in unspecIndexList {
+                let pm = childViewList[i].linearParamEnsure
+                szList[i].height = pm.minHeight + aa * pm.weight
             }
         }
         return szList

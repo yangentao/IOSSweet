@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 //import IOSSweet
 
 
@@ -20,17 +21,17 @@ class ViewController: UIViewController {
 
         self.view.layoutConstraint {
 
-            HorizontalLinear.paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
+            VerticalLinear.paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
                 $0.fill()
             }.buildChildren {
                 UILabel.Primary.text("AAA").align(.left).backColor(.cyan).linearParam { param in
-                    param.weight(10).heightFill().minWidth(30)//.maxWidth(50)
+                    param.weight(10).widthFill()
                 }
-                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(20).linearParam { param in
-                    param.weight(1).height(60).minWidth(80)
+                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(0).linearParam { param in
+                    param.weight(10).widthFill().maxHeight(200).minHeight(60)
                 }
                 UILabel.Primary.text("CCC").align(.right).backColor(.blue).linearParam { param in
-                    param.weight(10).height(60)
+                    param.weight(10).widthFill()
                 }
             }
 
