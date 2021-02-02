@@ -1,0 +1,16 @@
+PODS:
+  - IOSSweet (1.0.0)
+
+DEPENDENCIES:
+  - IOSSweet (from `../`)
+
+EXTERNAL SOURCES:
+  IOSSweet:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  IOSSweet: 3d7d7484ef6f4caf12843713b26618e48a823c79
+
+PODFILE CHECKSUM: ab32c1f8f27d67da8c8fcb263e33b6010112a15e
+
+COCOAPODS: 1.10.0
