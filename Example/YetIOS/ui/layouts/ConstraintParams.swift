@@ -550,38 +550,38 @@ public extension ConstraintsBuilder {
 
 public extension ConstraintsBuilder {
     @discardableResult
-    func centerX(_ constant: CGFloat = 0) -> Self {
+    func centerXParent(_ constant: CGFloat = 0) -> Self {
         centerXOf(ParentViewName, constant)
     }
 
     @discardableResult
-    func centerY(_ constant: CGFloat = 0) -> Self {
+    func centerYParent(_ constant: CGFloat = 0) -> Self {
         centerYOf(ParentViewName, constant)
     }
 
     @discardableResult
-    func center(_ xConstant: CGFloat = 0, _ yConstant: CGFloat = 0) -> Self {
-        centerX(xConstant)
-        return centerY(yConstant)
+    func centerParent(_ xConstant: CGFloat = 0, _ yConstant: CGFloat = 0) -> Self {
+        centerXParent(xConstant)
+        return centerYParent(yConstant)
     }
 
     @discardableResult
-    func left(_ constant: CGFloat = 0) -> Self {
+    func leftParent(_ constant: CGFloat = 0) -> Self {
         leftEQ(ParentViewName, constant)
     }
 
     @discardableResult
-    func right(_ constant: CGFloat = 0) -> Self {
+    func rightParent(_ constant: CGFloat = 0) -> Self {
         rightEQ(ParentViewName, constant)
     }
 
     @discardableResult
-    func top(_ constant: CGFloat = 0) -> Self {
+    func topParent(_ constant: CGFloat = 0) -> Self {
         topEQ(ParentViewName, constant)
     }
 
     @discardableResult
-    func bottom(_ constant: CGFloat = 0) -> Self {
+    func bottomParent(_ constant: CGFloat = 0) -> Self {
         bottomEQ(ParentViewName, constant)
     }
 

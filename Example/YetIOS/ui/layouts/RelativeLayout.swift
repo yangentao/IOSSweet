@@ -163,18 +163,18 @@ public class RelativeParamsBuilder {
 public extension RelativeParamsBuilder {
 
     @discardableResult
-    func center(_ xConst: CGFloat = 0, _ yConst: CGFloat = 0) -> Self {
-        centerX(xConst).centerY(yConst)
+    func centerParent(_ xConst: CGFloat = 0, _ yConst: CGFloat = 0) -> Self {
+        centerXParent(xConst).centerYParent(yConst)
     }
 
     @discardableResult
-    func centerX(_ xConst: CGFloat = 0) -> Self {
+    func centerXParent(_ xConst: CGFloat = 0) -> Self {
         items += RC.centerX.eqParent.constant(xConst)
         return self
     }
 
     @discardableResult
-    func centerY(_ yConst: CGFloat = 0) -> Self {
+    func centerYParent(_ yConst: CGFloat = 0) -> Self {
         items += RC.centerY.eqParent.constant(yConst)
         return self
     }
@@ -228,6 +228,27 @@ public extension RelativeParamsBuilder {
         items += RC.bottom.eq(c)
         return self
     }
+
+    @discardableResult
+    func leftParent(_ c: CGFloat = 0) -> Self {
+        leftEQ(ParentViewName, c)
+    }
+
+    @discardableResult
+    func rightParent(_ c: CGFloat = 0) -> Self {
+        rightEQ(ParentViewName, c)
+    }
+
+    @discardableResult
+    func topParent(_ c: CGFloat = 0) -> Self {
+        topEQ(ParentViewName, c)
+    }
+
+    @discardableResult
+    func bottomParent(_ c: CGFloat = 0) -> Self {
+        bottomEQ(ParentViewName, c)
+    }
+
 
     @discardableResult
     func leftEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {

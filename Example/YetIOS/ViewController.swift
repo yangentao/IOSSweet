@@ -26,7 +26,7 @@ class ViewController: UIViewController {
                 $0.fill()
             }.appendChildren {
                 UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).relativeParams {
-                    $0.center().widthEQParent(multi: 0.5).heightEQSelf(.width)
+                    $0.centerParent().widthEQParent(multi: 0.5).heightEQSelf(.width)
                 }
                 UILabel.Primary.named("b").text("BBB").align(.center).backColor(.blue).relativeParams {
                     $0.leftEQ("a").below("a", 20).widthEQParent(multi: 0.5).heightEQParent(multi: 0.3)
