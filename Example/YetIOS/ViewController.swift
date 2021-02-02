@@ -21,23 +21,28 @@ class ViewController: UIViewController {
 
         self.view.layoutConstraint {
 
-            LinearLayout(.vertical).paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
+
+            RelativeLayout(frame: .zero).paddings(left: 0, top: 25 + 20, right: 0, bottom: 20).constraints {
                 $0.fill()
             }.buildChildren {
-                UILabel.Primary.text("AAA").align(.left).backColor(.cyan).linearParams { param in
-                    param.weight(10).widthFill()
+                UILabel.Primary.text("AAA").align(.center).backColor(.green).relativeParams {
+                    RelativeCondition(prop: .centerX, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 200)
+                    RelativeCondition(prop: .width, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 100)
+//                    RelativeCondition(prop: .top, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 150)
+                    RelativeCondition(prop: .centerY, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 150)
+                    RelativeCondition(prop: .height, relation: .eq, other: nil, propOther: nil, multiplier: 1, constant: 200)
                 }
-                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(0).linearParams { param in
-                    param.weight(10).widthFill().maxHeight(200).minHeight(60)
-                }
-                UILabel.Primary.text("CCC").align(.right).backColor(.blue).linearParams { param in
-                    param.weight(10).widthFill()
-                }.apply { lb in
-                    lb.clickView { v in
-                        logd("Hello")
-                        self.dialog.showAlert(title: "Title", msg: "Message Is Null")
-                    }
-                }
+//                UILabel.Primary.text("BBB").align(.center).backColor(.green).marginY(0).linearParams { param in
+//                    param.weight(10).widthFill().maxHeight(200).minHeight(60)
+//                }
+//                UILabel.Primary.text("CCC").align(.right).backColor(.blue).linearParams { param in
+//                    param.weight(10).widthFill()
+//                }.apply { lb in
+//                    lb.clickView { v in
+//                        logd("Hello")
+//                        self.dialog.showAlert(title: "Title", msg: "Message Is Null")
+//                    }
+//                }
             }
 
 

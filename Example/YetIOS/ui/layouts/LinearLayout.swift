@@ -228,7 +228,7 @@ public class LinearLayout: UIView {
 
         var szList = [CGSize](repeating: CGSize(width: unspec, height: unspec), count: childViewList.count)
         for (index, chView) in childViewList.enumerated() {
-            guard  let param = chView.linearParam else {
+            guard  let param = chView.linearParams else {
                 szList[index] = Size(width: 0, height: 0)
                 continue
             }
@@ -328,7 +328,7 @@ public class LinearLayout: UIView {
             let xx = fromX + chView.marginLeft
             let ww = sizeList[index].width
             var hh: CGFloat = -1
-            let param = chView.linearParam!
+            let param = chView.linearParams!
 
             if param.height == MatchParent {
                 hh = totalHeight - chView.marginTop - chView.marginBottom
@@ -344,7 +344,7 @@ public class LinearLayout: UIView {
 
             var yy: CGFloat = bounds.origin.y + padding.top + chView.marginTop
             if param.height != MatchParent {
-                switch chView.linearParam!.gravityY {
+                switch chView.linearParams!.gravityY {
                 case .none, .top:
                     break
                 case .bottom:
@@ -379,7 +379,7 @@ public class LinearLayout: UIView {
 
         var szList = [CGSize](repeating: CGSize(width: unspec, height: unspec), count: childViewList.count)
         for (index, chView) in childViewList.enumerated() {
-            guard  let param = chView.linearParam else {
+            guard  let param = chView.linearParams else {
                 szList[index] = Size(width: 0, height: 0)
                 continue
             }
@@ -482,7 +482,7 @@ public class LinearLayout: UIView {
             let y = fromY + chView.marginTop
             let h = sizeList[index].height
             var w: CGFloat = -1
-            let param = chView.linearParam!
+            let param = chView.linearParams!
 
             if param.width == MatchParent {
                 w = totalWidth - chView.marginLeft - chView.marginRight
@@ -498,7 +498,7 @@ public class LinearLayout: UIView {
 
             var x: CGFloat = bounds.origin.x + padding.left + chView.marginLeft
             if param.width != MatchParent {
-                switch chView.linearParam!.gravityX {
+                switch chView.linearParams!.gravityX {
                 case .none, .left:
                     break
                 case .right:

@@ -21,11 +21,11 @@ open class VerticalScrollView: UIScrollView {
 		super.init(coder: aDecoder)
 	}
 
-	open func layoutScrollVertical(_ block: (VerticalLayout) -> Void) {
-		let L = VerticalLayout(self.contentVertical)
-		block(L)
-		L.install(true)
-	}
+//	open func layoutScrollVertical(_ block: (VerticalLayout) -> Void) {
+//		let L = VerticalLayout(self.contentVertical)
+//		block(L)
+//		L.install(true)
+//	}
 
 	open func layoutScrollGrid(_ block: (GridLayout) -> Void) {
 		let L = GridLayout(self.contentVertical)
