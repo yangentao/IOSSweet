@@ -69,7 +69,7 @@ public class Dialog: UIViewController {
         switch g {
         case .center, .none:
             self.gravityY = .center
-        case .top, .bottom:
+        case .top, .bottom, .fill:
             self.gravityY = g
             self.marginX = 0
             self.corner = 0
@@ -236,6 +236,8 @@ public class Dialog: UIViewController {
         case .top:
 //			L.topParent()
             linearView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        case .fill:
+            break
         }
 
 

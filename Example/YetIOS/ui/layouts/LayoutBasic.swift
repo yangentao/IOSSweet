@@ -35,6 +35,7 @@ public enum GravityX: Int {
     case left
     case right
     case center
+    case fill
 }
 
 public enum GravityY: Int {
@@ -42,6 +43,7 @@ public enum GravityY: Int {
     case top
     case bottom
     case center
+    case fill
 }
 
 public class Edge: Equatable {

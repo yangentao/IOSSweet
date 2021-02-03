@@ -17,11 +17,15 @@ public class GridParam {
 }
 
 public class Grid: UIView {
+    public var axis: LayoutAxis = .vertical
 
     public var columns: Int = 3
 
-    public var rowDivider: CGFloat = 0
-    public var colDivider: CGFloat = 0
+    public var hSpace: CGFloat = 0
+    public var vSpace: CGFloat = 0
+
+    public var gravityX: GravityX = .center
+    public var gravityY: GravityY = .center
 
 
     public override func layoutSubviews() {

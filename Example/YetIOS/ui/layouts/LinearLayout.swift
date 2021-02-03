@@ -340,7 +340,7 @@ public class LinearLayout: UIView {
             var hh: CGFloat = -1
             let param = chView.linearParams!
 
-            if param.height == MatchParent {
+            if param.height == MatchParent || param.gravityY == .fill {
                 hh = totalHeight - chView.marginTop - chView.marginBottom
             } else if param.height >= 0 {
                 hh = param.height
@@ -355,7 +355,7 @@ public class LinearLayout: UIView {
             var yy: CGFloat = bounds.origin.y + padding.top + chView.marginTop
             if param.height != MatchParent {
                 switch chView.linearParams!.gravityY {
-                case .none, .top:
+                case .none, .top, .fill:
                     break
                 case .bottom:
                     yy = bounds.maxY - padding.bottom - chView.marginBottom - hh
@@ -495,7 +495,7 @@ public class LinearLayout: UIView {
             var w: CGFloat = -1
             let param = chView.linearParams!
 
-            if param.width == MatchParent {
+            if param.width == MatchParent || param.gravityX == .fill {
                 w = totalWidth - chView.marginLeft - chView.marginRight
             } else if param.width >= 0 {
                 w = param.width
@@ -510,7 +510,7 @@ public class LinearLayout: UIView {
             var x: CGFloat = bounds.origin.x + padding.left + chView.marginLeft
             if param.width != MatchParent {
                 switch chView.linearParams!.gravityX {
-                case .none, .left:
+                case .none, .left, .fill:
                     break
                 case .right:
                     x = bounds.maxX - padding.right - chView.marginRight - w
