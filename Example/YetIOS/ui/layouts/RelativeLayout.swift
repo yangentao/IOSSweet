@@ -57,9 +57,9 @@ public class RelativeCondition {
     fileprivate unowned var viewOther: UIView? = nil
     public let id: Int = nextId()
     public var prop: RelativeProp
-    public var relation: LayoutRelation = .equal
+    public let relation: LayoutRelation = .equal
     public var otherViewName: String? = nil
-    public var otherProp: RelativeProp? = nil
+    public var otherProp: RelativeProp? = nil //if nil, use prop value
     public var multiplier: CGFloat = 1
     public var constant: CGFloat = 0
 
@@ -93,14 +93,14 @@ public extension RelativeCondition {
         return self
     }
 
-    func eq(_ otherView: String, _ otherProp: RelativeProp) -> Self {
+    func eq(_ otherView: String, _ otherProp: RelativeProp? = nil) -> Self {
         self.otherViewName = otherView
-        self.otherProp = otherProp
+        if let p = otherProp {
+            self.otherProp = p
+        } else {
+            self.otherProp = self.prop
+        }
         return self
-    }
-
-    func eq(_ otherView: String) -> Self {
-        eq(otherView, self.prop)
     }
 
     func eq(_ value: CGFloat) -> Self {
@@ -162,6 +162,29 @@ public class RelativeParamsBuilder {
 
 public extension RelativeParamsBuilder {
 
+
+    @discardableResult
+    func eq(_ prop: RelativeProp, viewName: String, prop2: RelativeProp?, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += RC(prop: prop).eq(viewName, prop2).multi(multi).constant(constant)
+        return self
+    }
+
+    @discardableResult
+    func eqSelf(_ prop: RelativeProp, prop2: RelativeProp?, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        eq(prop, viewName: SelfViewName, prop2: prop2, multi: multi, constant: constant)
+    }
+
+    @discardableResult
+    func eqParent(_ prop: RelativeProp, prop2: RelativeProp?, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        eq(prop, viewName: ParentViewName, prop2: prop2, multi: multi, constant: constant)
+    }
+
+    @discardableResult
+    func eqConst(_ prop: RelativeProp, constant: CGFloat) -> Self {
+        items += RC(prop: prop).constant(constant)
+        return self
+    }
+
     @discardableResult
     func centerParent(_ xConst: CGFloat = 0, _ yConst: CGFloat = 0) -> Self {
         centerXParent(xConst).centerYParent(yConst)
@@ -169,193 +192,166 @@ public extension RelativeParamsBuilder {
 
     @discardableResult
     func centerXParent(_ xConst: CGFloat = 0) -> Self {
-        items += RC.centerX.eqParent.constant(xConst)
-        return self
+        eqParent(.centerX, prop2: .centerX, constant: xConst)
     }
 
     @discardableResult
     func centerYParent(_ yConst: CGFloat = 0) -> Self {
-        items += RC.centerY.eqParent.constant(yConst)
-        return self
+        eqParent(.centerY, prop2: .centerY, constant: yConst)
     }
 
     @discardableResult
     func centerXOf(_ viewName: String, _ xConst: CGFloat = 0) -> Self {
-        items += RC.centerX.eq(viewName).constant(xConst)
-        return self
+        eq(.centerX, viewName: viewName, prop2: .centerX, constant: xConst)
     }
 
     @discardableResult
     func centerYOf(_ viewName: String, _ yConst: CGFloat = 0) -> Self {
-        items += RC.centerY.eq(viewName).constant(yConst)
-        return self
+        eq(.centerY, viewName: viewName, prop2: .centerY, constant: yConst)
     }
 
     @discardableResult
     func fillX(_ leftConst: CGFloat = 0, _ rightConst: CGFloat = 0) -> Self {
-        items += RC.left.eqParent.constant(leftConst)
-        items += RC.right.eqParent.constant(rightConst)
-        return self
+        eqParent(.left, prop2: nil, constant: leftConst)
+        return eqParent(.right, prop2: nil, constant: rightConst)
     }
 
     @discardableResult
     func fillY(_ topConst: CGFloat = 0, _ bottomConst: CGFloat = 0) -> Self {
-        items += RC.top.eqParent.constant(topConst)
-        items += RC.bottom.eqParent.constant(bottomConst)
-        return self
+        eqParent(.top, prop2: nil, constant: topConst)
+        return eqParent(.bottom, prop2: nil, constant: bottomConst)
     }
 
     @discardableResult
     func left(_ c: CGFloat) -> Self {
-        items += RC.left.eq(c)
-        return self
+        eqConst(.left, constant: c)
     }
 
     @discardableResult
     func right(_ c: CGFloat) -> Self {
-        items += RC.right.eq(c)
-        return self
+        eqConst(.right, constant: c)
     }
 
     @discardableResult
     func top(_ c: CGFloat) -> Self {
-        items += RC.top.eq(c)
-        return self
+        eqConst(.top, constant: c)
     }
 
     @discardableResult
     func bottom(_ c: CGFloat) -> Self {
-        items += RC.bottom.eq(c)
-        return self
+        eqConst(.bottom, constant: c)
     }
 
     @discardableResult
     func leftParent(_ c: CGFloat = 0) -> Self {
-        leftEQ(ParentViewName, c)
+        eqParent(.left, prop2: nil, constant: c)
     }
 
     @discardableResult
     func rightParent(_ c: CGFloat = 0) -> Self {
-        rightEQ(ParentViewName, c)
+        eqParent(.right, prop2: nil, constant: c)
     }
 
     @discardableResult
     func topParent(_ c: CGFloat = 0) -> Self {
-        topEQ(ParentViewName, c)
+        eqParent(.top, prop2: nil, constant: c)
     }
 
     @discardableResult
     func bottomParent(_ c: CGFloat = 0) -> Self {
-        bottomEQ(ParentViewName, c)
+        eqParent(.bottom, prop2: nil, constant: c)
     }
 
 
     @discardableResult
     func leftEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {
-        items += RC.left.eq(viewName).constant(c)
-        return self
+        eq(.left, viewName: viewName, prop2: nil, constant: c)
     }
 
     @discardableResult
     func rightEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {
-        items += RC.right.eq(viewName).constant(c)
-        return self
+        eq(.right, viewName: viewName, prop2: nil, constant: c)
     }
 
     @discardableResult
     func topEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {
-        items += RC.top.eq(viewName).constant(c)
-        return self
+        eq(.top, viewName: viewName, prop2: nil, constant: c)
     }
 
     @discardableResult
     func bottomEQ(_ viewName: String, _ c: CGFloat = 0) -> Self {
-        items += RC.bottom.eq(viewName).constant(c)
-        return self
+        eq(.bottom, viewName: viewName, prop2: nil, constant: c)
     }
 
     @discardableResult
     func toLeftOf(_ viewName: String, _ c: CGFloat = 0) -> Self {
-        items += RC.right.eq(viewName, .left).constant(c)
-        return self
+        eq(.right, viewName: viewName, prop2: .left, constant: c)
     }
 
     @discardableResult
     func toRightOf(_ viewName: String, _ c: CGFloat = 0) -> Self {
-        items += RC.left.eq(viewName, .right).constant(c)
-        return self
+        eq(.left, viewName: viewName, prop2: .right, constant: c)
     }
 
     @discardableResult
     func above(_ viewName: String, _ c: CGFloat = 0) -> Self {
-        items += RC.bottom.eq(viewName, .top).constant(c)
-        return self
+        eq(.bottom, viewName: viewName, prop2: .top, constant: c)
     }
 
     @discardableResult
     func below(_ viewName: String, _ c: CGFloat = 0) -> Self {
-        items += RC.top.eq(viewName, .bottom).constant(c)
-        return self
+        eq(.top, viewName: viewName, prop2: .bottom, constant: c)
     }
 
     @discardableResult
     func width(_ c: CGFloat) -> Self {
-        items += RC.width.eq(c)
-        return self
+        eqConst(.width, constant: c)
     }
 
     @discardableResult
     func height(_ c: CGFloat) -> Self {
-        items += RC.height.eq(c)
-        return self
+        eqConst(.height, constant: c)
     }
 
     @discardableResult
     func widthEQ(_ viewName: String, prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += RC.width.eq(viewName, prop2).multi(multi).constant(constant)
-        return self
+        eq(.width, viewName: viewName, prop2: prop2, multi: multi, constant: constant)
     }
 
     @discardableResult
     func heightEQ(_ viewName: String, prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += RC.height.eq(viewName, prop2).multi(multi).constant(constant)
-        return self
+        eq(.height, viewName: viewName, prop2: prop2, multi: multi, constant: constant)
     }
 
     @discardableResult
     func widthEQ(_ viewName: String, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += RC.width.eq(viewName).multi(multi).constant(constant)
+        eq(.width, viewName: viewName, prop2: nil, multi: multi, constant: constant)
         return self
     }
 
     @discardableResult
     func heightEQ(_ viewName: String, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += RC.height.eq(viewName).multi(multi).constant(constant)
-        return self
+        eq(.height, viewName: viewName, prop2: nil, multi: multi, constant: constant)
     }
 
     @discardableResult
     func widthEQParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += RC.width.eqParent.multi(multi).constant(constant)
-        return self
+        eqParent(.width, prop2: nil, multi: multi, constant: constant)
     }
 
     @discardableResult
     func heightEQParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += RC.height.eqParent.multi(multi).constant(constant)
-        return self
+        eqParent(.height, prop2: nil, multi: multi, constant: constant)
     }
 
     @discardableResult
     func widthEQSelf(_ prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += RC.width.eq(SelfViewName, prop2).multi(multi).constant(constant)
-        return self
+        eqSelf(.width, prop2: prop2, multi: multi, constant: constant)
     }
 
     @discardableResult
     func heightEQSelf(_ prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += RC.height.eq(SelfViewName, prop2).multi(multi).constant(constant)
-        return self
+        eqSelf(.height, prop2: prop2, multi: multi, constant: constant)
     }
 }
 
@@ -377,9 +373,11 @@ public class RelativeLayout: UIView {
 
     private func processScroll() {
         if let pv = self.superview as? UIScrollView {
+            logd(contentSize)
             pv.contentSize = CGSize(width: contentSize.width + padding.right, height: contentSize.height + padding.bottom)
         }
     }
+
 
     public override func layoutSubviews() {
         let childList = self.subviews
@@ -428,9 +426,7 @@ public class RelativeLayout: UIView {
                 c.tempValue = c.constant
                 vrList.assignProp(c.view, c.prop, c.tempValue)
             } else if c.viewOther == self {
-                guard let otherProp = c.otherProp else {
-                    fatalError("RelativeLayout Error: property \(c.prop) depend superview's property is NOT point out.")
-                }
+                let otherProp = c.otherProp ?? c.prop
                 c.tempValue = queryParentProp(otherProp) * c.multiplier + c.constant
                 vrList.assignProp(c.view, c.prop, c.tempValue)
             }
@@ -449,9 +445,7 @@ public class RelativeLayout: UIView {
                 guard  let otherView = c.viewOther else {
                     continue
                 }
-                guard  let otherProp = c.otherProp else {
-                    fatalError("NOT point out relative property name: \(c.view!) \(c.relation) \(otherView)")
-                }
+                let otherProp = c.otherProp ?? c.prop
                 let otherVal = vrList.queryProp(otherView, otherProp)
                 if otherVal != UNSPEC {
                     c.tempValue = otherVal
