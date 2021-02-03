@@ -361,7 +361,25 @@ public extension RelativeParamsBuilder {
 
 
 public class RelativeLayout: UIView {
+    public var padding: Edge = Edge()
+    private var contentSize: CGSize = .zero {
+        didSet {
+            if oldValue != contentSize {
+                processScroll()
+            }
+        }
+    }
 
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        processScroll()
+    }
+
+    private func processScroll() {
+        if let pv = self.superview as? UIScrollView {
+            pv.contentSize = CGSize(width: contentSize.width + padding.right, height: contentSize.height + padding.bottom)
+        }
+    }
 
     public override func layoutSubviews() {
         let childList = self.subviews
@@ -450,11 +468,18 @@ public class RelativeLayout: UIView {
             print("WARNNING! RelativeLayout: some condition is NOT satisfied ! ")
         }
 
+        var maxX: CGFloat = self.bounds.minX
+        var maxY: CGFloat = self.bounds.minY
+
         for vr in vrList.items {
             if vr.OK {
                 vr.view.frame = vr.rect
+                maxX = max(maxX, vr.right)
+                maxY = max(maxY, vr.bottom)
             }
         }
+
+        self.contentSize = CGSize(width: maxX - self.bounds.minX, height: maxY - self.bounds.minY)
 
     }
 

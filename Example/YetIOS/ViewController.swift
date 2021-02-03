@@ -19,14 +19,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.view.addView(UIScrollView(frame: .zero).backColor(.blue)).apply { sv in
             sv.layout.fill()
-            sv.addView(LinearLayout(.vertical)).apply { lv in
-                lv.layout.fill().widthOfParent()
-                lv.appendChildren {
-                    UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).linearParams {
-                        $0.widthFill().height(900)
+            sv.addView(RelativeLayout(frame: .zero)).apply { rv in
+                rv.layout.fill().widthOfParent()
+                rv.appendChildren {
+                    UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).relativeParams {
+                        $0.widthEQParent().height(900).topParent().leftParent()
                     }
-                    UILabel.Primary.named("b").text("BBB").align(.center).backColor(.cyan).linearParams {
-                        $0.widthFill().height(900)
+                    UILabel.Primary.named("b").text("BBB").align(.center).backColor(.cyan).relativeParams {
+                        $0.widthEQParent().height(900).below("a").leftParent()
                     }
                 }
             }

@@ -159,9 +159,7 @@ public class LinearLayout: UIView {
     private var contentSize: CGSize = .zero {
         didSet {
             if oldValue != contentSize {
-                if let pv = self.superview as? UIScrollView {
-                    pv.contentSize = contentSize
-                }
+                processScroll()
             }
         }
     }
@@ -173,6 +171,10 @@ public class LinearLayout: UIView {
 
     public override func didMoveToSuperview() {
         super.didMoveToSuperview()
+        processScroll()
+    }
+
+    private func processScroll() {
         if let pv = self.superview as? UIScrollView {
             pv.contentSize = contentSize
         }
