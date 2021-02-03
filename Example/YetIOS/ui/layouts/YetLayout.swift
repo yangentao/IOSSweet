@@ -399,14 +399,26 @@ public extension YetLayout {
     }
 
     @discardableResult
-    func widthOf(_ v: UIView) -> YetLayout {
-        self.width.eq(v).active()
+    func widthOf(_ v: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> YetLayout {
+        self.width.eq(v).multi(multi).constant(constant).active()
         return self
     }
 
     @discardableResult
-    func heightOf(_ v: UIView) -> YetLayout {
-        self.height.eq(v).active()
+    func heightOf(_ v: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> YetLayout {
+        self.height.eq(v).multi(multi).constant(constant).active()
+        return self
+    }
+
+    @discardableResult
+    func widthOfParent(multi: CGFloat = 1, constant: CGFloat = 0) -> YetLayout {
+        self.width.eq(self.view.superview!).multi(multi).constant(constant).active()
+        return self
+    }
+
+    @discardableResult
+    func heightOfParent(multi: CGFloat = 1, constant: CGFloat = 0) -> YetLayout {
+        self.height.eq(self.view.superview!).multi(multi).constant(constant).active()
         return self
     }
 

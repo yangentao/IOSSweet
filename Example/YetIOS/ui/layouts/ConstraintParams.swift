@@ -8,7 +8,8 @@ import UIKit
 
 //as parent view
 public extension UIView {
-    func layoutConstraint(@AnyBuilder _ block: AnyBuildBlock) {
+    @discardableResult
+    func layoutConstraint(@AnyBuilder _ block: AnyBuildBlock) -> Self {
         let b = block()
         let viewList: [UIView] = b.itemsTyped()
         let ls = viewList.filter {
@@ -20,6 +21,7 @@ public extension UIView {
         for v in ls {
             v.installMyConstraints()
         }
+        return self
     }
 }
 

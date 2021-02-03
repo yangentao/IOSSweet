@@ -42,6 +42,32 @@ public extension UIView {
     }
 }
 
+
+public extension UIView {
+    @discardableResult
+    func addView<T: UIView>(_ child: T) -> T {
+        self.addSubview(child)
+        return child
+    }
+
+    func child(named: String, deep: Bool = false) -> UIView? {
+        if deep {
+            for v in self.subviews {
+                if let a = v.findByName(named) {
+                    return a
+                }
+            }
+        } else {
+            for v in self.subviews {
+                if v.name == named {
+                    return v
+                }
+            }
+        }
+        return nil
+    }
+}
+
 public extension UIView {
 
     @discardableResult

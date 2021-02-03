@@ -15,6 +15,8 @@ public typealias LayoutRelation = NSLayoutConstraint.Relation
 public typealias LayoutAxis = NSLayoutConstraint.Axis
 
 public extension UIView {
+
+    @discardableResult
     func appendChildren(@AnyBuilder _ block: AnyBuildBlock) -> Self {
         let b = block()
         let viewList: [UIView] = b.itemsTyped()

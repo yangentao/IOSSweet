@@ -90,6 +90,7 @@
 		E11E18B25E297A764221DAAF /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E16877A561EB94EB8693D /* Buttons.swift */; };
 		E11E18EAE740839A9C28B5F0 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E15CBEA0D72F21D3C123B /* Error.swift */; };
 		E11E18FA71340E9BD971BF33 /* StringEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1D0D07A8D08E8A16436C /* StringEx.swift */; };
+		E11E190859CE40388C805F5B /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1E5F0271A16C474160A2 /* Grid.swift */; };
 		E11E19259A8EA70FAE624FCB /* MyTabBarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1CEA1FD6E316F6337FCC /* MyTabBarPage.swift */; };
 		E11E19369FFCD075AFEEF41A /* AppExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E189DC9414DA23BDB1E9B /* AppExt.swift */; };
 		E11E194D582F67D72A343F03 /* ListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1D09EAB7E60C791026FE /* ListPage.swift */; };
@@ -296,6 +297,7 @@
 		E11E1DCAA588FEE942E3A641 /* QRPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRPage.swift; sourceTree = "<group>"; };
 		E11E1DCEB3651B6DBFEBE922 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E11E1E02B3A89849142D0C1F /* MsgCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MsgCenter.swift; sourceTree = "<group>"; };
+		E11E1E5F0271A16C474160A2 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		E11E1E7560146D2096745BE6 /* Sizes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sizes.swift; sourceTree = "<group>"; };
 		E11E1F5C7F08F5F996A182F4 /* MapTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTable.swift; sourceTree = "<group>"; };
 		E11E1F78B0CBAD8E71309AC8 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				E11E15AD7702A19724AE10FF /* LinearLayout.swift */,
 				E11E1AB429265DE81E5BEF9D /* ConstraintParams.swift */,
 				E11E1C28CDB09FD4FD8004A1 /* RelativeLayout.swift */,
+				E11E1E5F0271A16C474160A2 /* Grid.swift */,
 			);
 			path = layouts;
 			sourceTree = "<group>";
@@ -914,6 +917,7 @@
 				E11E16B40A95538788F93A89 /* YsonString.swift in Sources */,
 				E11E1B88B4B72B5D9CC157E9 /* YsonCodable.swift in Sources */,
 				E11E1C3E0644E270ECCED553 /* RelativeLayout.swift in Sources */,
+				E11E190859CE40388C805F5B /* Grid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

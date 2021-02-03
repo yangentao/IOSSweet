@@ -156,9 +156,26 @@ public class LinearLayout: UIView {
     public var axis: LayoutAxis = .vertical
     public var padding: Edge = Edge()
 
+    private var contentSize: CGSize = .zero {
+        didSet {
+            if oldValue != contentSize {
+                if let pv = self.superview as? UIScrollView {
+                    pv.contentSize = contentSize
+                }
+            }
+        }
+    }
+
     convenience init(_ axis: LayoutAxis) {
         self.init(frame: .zero)
         self.axis = axis
+    }
+
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if let pv = self.superview as? UIScrollView {
+            pv.contentSize = contentSize
+        }
     }
 
     @discardableResult
@@ -191,15 +208,18 @@ public class LinearLayout: UIView {
         if self.subviews.count == 0 {
             return
         }
-        var sz = bounds.size
+        let tmpBounds = bounds
+        var sz = tmpBounds.size
         sz.width -= padding.left + padding.right
         sz.height -= padding.top + padding.bottom
         if axis == .vertical {
             let ls = calcSizesVertical(sz)
-            layoutChildrenVertical(ls)
+            let maxY = layoutChildrenVertical(ls)
+            contentSize = CGSize(width: tmpBounds.size.width, height: max(0, maxY - tmpBounds.minY))
         } else {
             let ls = calcSizesHor(sz)
-            layoutChildrenHor(ls)
+            let maxX = layoutChildrenHor(ls)
+            contentSize = CGSize(width: max(0, maxX - tmpBounds.minX), height: tmpBounds.size.height)
         }
     }
 
@@ -306,7 +326,7 @@ public class LinearLayout: UIView {
         return szList
     }
 
-    private func layoutChildrenHor(_ sizeList: [CGSize]) {
+    private func layoutChildrenHor(_ sizeList: [CGSize]) -> CGFloat {
         let childViewList = subviews
 
         let boundsSize = bounds.size
@@ -347,7 +367,8 @@ public class LinearLayout: UIView {
             chView.frame = r
             fromX += chView.marginLeft + ww + chView.marginRight
         }
-
+        fromX += padding.right
+        return fromX
 
     }
 
@@ -460,7 +481,7 @@ public class LinearLayout: UIView {
         return szList
     }
 
-    private func layoutChildrenVertical(_ sizeList: [CGSize]) {
+    private func layoutChildrenVertical(_ sizeList: [CGSize]) -> CGFloat {
         let childViewList = subviews
 
         let boundsSize = bounds.size
@@ -501,7 +522,8 @@ public class LinearLayout: UIView {
             chView.frame = r
             fromY += chView.marginTop + h + chView.marginBottom
         }
-
+        fromY += padding.bottom
+        return fromY
 
     }
 }
