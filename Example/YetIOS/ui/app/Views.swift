@@ -9,8 +9,11 @@ import UIKit
 public typealias ViewClickBlock = (UIView) -> Void
 
 //lazy var label: UILabel = NamedView("hello", self)
-public func NamedView<T: UIView>(_ page: UIViewController, _ key: String) -> T {
-    page.view.findByName(key) as! T
+public func NamedView<T: UIView>(_ page: UIViewController, _ viewName: String) -> T {
+    guard  let v = page.view.child(named: viewName, deep: true) else {
+        fatalError("NO view named: \(viewName)")
+    }
+    return v as! T
 }
 
 public extension UIView {
