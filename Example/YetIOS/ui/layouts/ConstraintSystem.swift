@@ -10,22 +10,20 @@ import UIKit
 //系统约束布局, 添加布局时, superview不能为空(只有width/height属性且是常量除外)
 
 
-public typealias LayoutRelation = NSLayoutConstraint.Relation
-public typealias LayoutAxis = NSLayoutConstraint.Axis
-public typealias LayoutAttribute = NSLayoutConstraint.Attribute
+
 
 //public typealias CC = ConstraintItem
 
 public extension UIView {
-    @discardableResult
-    func sysConstraints(_ block: (SysConstraintBuilder) -> Void) -> Self {
-        block(SysConstraintBuilder(self))
-        for item in sysConstraintItems.items {
-            item.install()
-        }
-        sysConstraintItems.items = []
-        return self
-    }
+//    @discardableResult
+//    func sysConstraints(_ block: (SysConstraintBuilder) -> Void) -> Self {
+//        block(SysConstraintBuilder(self))
+//        for item in sysConstraintItems.items {
+//            item.install()
+//        }
+//        sysConstraintItems.items = []
+//        return self
+//    }
 
 
     fileprivate var sysConstraintItems: SysConstraintItems {
@@ -42,54 +40,7 @@ fileprivate class SysConstraintItems {
     var items: [SysConstraintItem] = []
 }
 
-public class SysConstraintParams {
-    var items = [NSLayoutConstraint]()
-}
 
-public extension UIView {
-    var sysConstraintParams: SysConstraintParams {
-        if let ls = getAttr("_conkey_") as? SysConstraintParams {
-            return ls
-        }
-        let c = SysConstraintParams()
-        setAttr("_conkey_", c)
-        return c
-    }
-
-    @discardableResult
-    func constraintUpdate(ident: String, constant: CGFloat) -> Self {
-        if let a = sysConstraintParams.items.first({ $0.identifier == ident }) {
-            a.constant = constant
-            setNeedsUpdateConstraints()
-            superview?.setNeedsUpdateConstraints()
-        }
-        return self
-    }
-
-    func constraintRemoveAll() {
-        for c in sysConstraintParams.items {
-            c.isActive = false
-        }
-        sysConstraintParams.items = []
-    }
-
-    func constraintRemove(ident: String) {
-        let c = sysConstraintParams.items.removeFirstIf { n in
-            n.identifier == ident
-        }
-        c?.isActive = false
-    }
-
-    //resist larger than intrinsic content size
-    func stretchContent(_ axis: NSLayoutConstraint.Axis) {
-        setContentHuggingPriority(UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue - 1), for: axis)
-    }
-
-    //resist smaller than intrinsic content size
-    func keepContent(_ axis: NSLayoutConstraint.Axis) {
-        setContentCompressionResistancePriority(UILayoutPriority(rawValue: UILayoutPriority.defaultHigh.rawValue + 1), for: axis)
-    }
-}
 
 
 public class SysConstraintItem {

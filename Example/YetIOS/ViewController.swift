@@ -128,12 +128,12 @@ class ViewController: UIViewController {
 
     func testSysConstraint() {
         self.view.addView(UILabel.Primary).named("a").text("AAA").backColor(.green).align(.center).lines(0).apply { lb in
-            lb.sysConstraints {
+            lb.constraintsInstall {
                 $0.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.5).ident("heightId")
             }
         }
         self.view.addView(UILabel.Primary).text("BBBBBB").backColor(.cyan).align(.center).apply { lb in
-            lb.sysConstraints { b in
+            lb.constraintsInstall { b in
                 b.centerX.eq("a")
                 b.width.eq("a")
                 b.top.eq("a", otherAttr: .bottom)
