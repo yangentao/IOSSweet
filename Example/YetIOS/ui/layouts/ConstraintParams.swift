@@ -6,25 +6,6 @@ import Foundation
 import UIKit
 
 
-//as parent view
-public extension UIView {
-    @discardableResult
-    func layoutConstraint(@AnyBuilder _ block: AnyBuildBlock) -> Self {
-        let b = block()
-        let viewList: [UIView] = b.itemsTyped()
-        let ls = viewList.filter {
-            $0 !== self
-        }
-        for childView in ls {
-            addSubview(childView)
-        }
-        for v in ls {
-            v.installMyConstraints()
-        }
-        return self
-    }
-}
-
 //as subview
 public extension UIView {
     @discardableResult
@@ -88,7 +69,7 @@ public extension UIView {
             let cp = NSLayoutConstraint(item: c.itemView as Any, attribute: c.attr, relatedBy: c.relation, toItem: toItemView, attribute: c.attr2, multiplier: c.multiplier, constant: c.constant)
             cp.priority = c.priority
             cp.identifier = c.ident
-            constraintParams.items.append(cp)
+            sysConstraintParams.items.append(cp)
             cp.isActive = true
         }
         return self
@@ -99,7 +80,6 @@ public extension UIView {
 class ConstraintConditionItems {
     var items: [ConstraintCondition] = []
 }
-
 
 
 public typealias CC = ConstraintCondition

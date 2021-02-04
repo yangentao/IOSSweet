@@ -279,7 +279,7 @@ public extension YetLayoutEndNode {
 
     private func findOld() -> NSLayoutConstraint? {
         let view: UIView = self.conItem.itemView
-        let ls = view.constraintParams.items.filter { n in
+        let ls = view.sysConstraintParams.items.filter { n in
             n.isActive && n.firstItem === view && n.firstAttribute == self.conItem.attr && n.relation == self.conItem.relation
         }
         if !ls.isEmpty {
@@ -300,7 +300,7 @@ public extension YetLayoutEndNode {
 
     func remove() {
         let view: UIView = self.conItem.itemView
-        let c = view.constraintParams.items.removeFirstIf { n in
+        let c = view.sysConstraintParams.items.removeFirstIf { n in
             n.firstItem === view && n.firstAttribute == conItem.attr && n.relation == conItem.relation
         }
         c?.isActive = false
@@ -312,7 +312,7 @@ public extension YetLayoutEndNode {
         n.priority = conItem.priority
         n.identifier = conItem.ident
         n.isActive = true
-        conItem.itemView.constraintParams.items.append(n)
+        conItem.itemView.sysConstraintParams.items.append(n)
         return n
     }
 

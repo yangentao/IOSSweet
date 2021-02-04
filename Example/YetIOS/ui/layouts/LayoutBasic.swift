@@ -17,11 +17,14 @@ public extension UIView {
     @discardableResult
     func buildViews(@AnyBuilder _ block: AnyBuildBlock) -> Self {
         let b = block()
-        let viewList: [UIView] = b.itemsTyped()
-        for childView in viewList {
-            if childView !== self {
-                addSubview(childView)
-            }
+        let viewList: [UIView] = b.itemsTyped().filter {
+            $0 !== self
+        }
+        viewList.each {
+            addSubview($0)
+        }
+        viewList.each {
+            $0.installMyConstraints()
         }
         return self
     }

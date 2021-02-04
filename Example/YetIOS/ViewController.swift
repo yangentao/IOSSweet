@@ -60,7 +60,7 @@ class ViewController: UIViewController {
 //        self.view.backColor(Colors.fill)
 
         self.view.addView(UILabel.Primary).apply { lb in
-            lb.constraintChain.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.5).ident("heightId").install()
+            lb.sysConstraintChain.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.5).ident("heightId").install()
 //            lb.constraintSystem { b in
 //                b.center.eqParent()
 //                b.rightBottom.eqParent()

@@ -67,6 +67,7 @@ public extension UIView {
         }
         return nil
     }
+
 }
 
 
@@ -83,6 +84,15 @@ public extension UIView {
         block(child)
         return child
     }
+
+    func siblings<T>(_: T.Type) -> [T] {
+        self.superview!.subviews.filter {
+            $0 != self
+        }.compactMap {
+            $0 as? T
+        }
+    }
+
 }
 
 public extension UIView {
