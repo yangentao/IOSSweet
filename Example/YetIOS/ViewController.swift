@@ -116,10 +116,10 @@ class ViewController: UIViewController {
                 $0.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.6)
             }
             UILabel.Primary.text("BBB").align(.center).named("b").backColor(.cyan).apply { lb in
-                lb.constraintsBuild { b in
-                    b.left.eq(otherName: "a")
-                    b.top.eq(otherName: "a", otherAttr: .bottom)
-                    b.size.eq(otherName: "a")
+                lb.constraints { b in
+                    b.left.eq("a")
+                    b.top.eq("a", otherAttr: .bottom)
+                    b.size.eq("a")
                 }
             }
         }
@@ -127,23 +127,18 @@ class ViewController: UIViewController {
     }
 
     func testSysConstraint() {
-        let lb1 = self.view.addView(UILabel.Primary).apply { lb in
+        self.view.addView(UILabel.Primary).named("a").text("AAA").backColor(.green).align(.center).lines(0).apply { lb in
             lb.sysConstraints {
                 $0.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.5).ident("heightId")
             }
-            lb.numberOfLines = 0
-            lb.backColor(.green).align(.center)
-            lb.text = "杨恩涛"
         }
-        self.view.addView(UILabel.Primary).apply { lb in
-            lb.sysConstraintsBuild { b in
-                b.centerX.eq(view2: lb1)
-                b.width.eq(view2: lb1)
-                b.top.eq(view2: lb1, attr2: .bottom)
-                b.height.eq(view2: lb1)
+        self.view.addView(UILabel.Primary).text("BBBBBB").backColor(.cyan).align(.center).apply { lb in
+            lb.sysConstraints { b in
+                b.centerX.eq("a")
+                b.width.eq("a")
+                b.top.eq("a", otherAttr: .bottom)
+                b.height.eq("a")
             }
-            lb.text("BBBBBB")
-            lb.backColor(.cyan).align(.center)
         }
     }
 

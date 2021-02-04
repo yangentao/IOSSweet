@@ -74,6 +74,11 @@ public extension UILabel {
         return self
     }
 
+    @discardableResult
+    func lines(_ n: Int) -> Self {
+        self.numberOfLines = n
+        return self
+    }
 
     @discardableResult
     func text(_ s: String?) -> Self {

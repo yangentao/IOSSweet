@@ -6,28 +6,22 @@ import Foundation
 import UIKit
 
 
-//as subview
 public extension UIView {
 
-    func constraints(_ block: (ConstraintChainBuilder) -> Void) -> Self {
-        block(ConstraintChainBuilder(self))
-        return self
-    }
 
     @discardableResult
-    func constraintsBuild(_ block: (ConstraintBuilderStart) -> Void) -> Self {
-        let b = ConstraintBuilderStart(self)
-        block(b)
+    func constraints(_ block: (ConstraintBuilder) -> Void) -> Self {
+        block(ConstraintBuilder(self))
         return self
     }
 
 
     fileprivate var constraintItems: ConstraintItems {
-        if let a = getAttr("_constraint_param_list_") as? ConstraintItems {
+        if let a = getAttr("__ConstraintItems__") as? ConstraintItems {
             return a
         }
         let ls = ConstraintItems()
-        setAttr("_constraint_param_list_", ls)
+        setAttr("__ConstraintItems__", ls)
         return ls
     }
 
@@ -37,17 +31,16 @@ public extension UIView {
         if superview == nil {
             fatalError("installonstraints() error: superview is nil!")
         }
-        let condList = constraintItems.items
-        constraintItems.items = []
-        condList.each {
+        constraintItems.items.each {
             $0.install()
         }
+        constraintItems.items = []
         return self
     }
 
 }
 
-class ConstraintItems {
+internal class ConstraintItems {
     var items: [ConstraintItem] = []
 }
 
@@ -143,32 +136,34 @@ public class ConstraintItem {
 
 }
 
-
-public class ConstraintChainBuilder {
-    fileprivate unowned let view: UIView
+public class ConstraintBuilder {
+    fileprivate unowned var view: UIView
 
     fileprivate init(_ view: UIView) {
         self.view = view
     }
+}
+
+public extension ConstraintBuilder {
 
     @discardableResult
-    public func ident(_ id: String) -> Self {
+    func ident(_ id: String) -> Self {
         view.constraintItems.items.last!.ident = id
         return self
     }
 
     @discardableResult
-    public func priority(_ p: UILayoutPriority) -> Self {
+    func priority(_ p: UILayoutPriority) -> Self {
         view.constraintItems.items.last!.priority = p
         return self
     }
 
     @discardableResult
-    public func priority(_ p: Float) -> Self {
+    func priority(_ p: Float) -> Self {
         priority(UILayoutPriority(rawValue: p))
     }
 
-    public func append(_ attr: LayoutAttribute) -> ConstraintItem {
+    private func append(_ attr: LayoutAttribute) -> ConstraintItem {
         let item = ConstraintItem(view: view, attr: attr)
         view.constraintItems.items.append(item)
         return item
@@ -176,39 +171,9 @@ public class ConstraintChainBuilder {
 }
 
 //combine
-public extension ConstraintChainBuilder {
-    @discardableResult
-    func center(_  otherName: String, xConst: CGFloat = 0, yConst: CGFloat = 0) -> Self {
-        centerX(otherName, xConst).centerY(otherName, yConst)
-    }
 
-    @discardableResult
-    func center(_ otherView: UIView, xConst: CGFloat = 0, yConst: CGFloat = 0) -> Self {
-        centerX(otherView, xConst).centerY(otherView, yConst)
-    }
 
-    @discardableResult
-    func centerParent(xConst: CGFloat = 0, yConst: CGFloat = 0) -> Self {
-        centerXParent(xConst).centerYParent(yConst)
-    }
-
-    @discardableResult
-    func edgeXParent(leftConst: CGFloat = 0, rightConst: CGFloat = 0) -> Self {
-        leftParent(leftConst).rightParent(rightConst)
-    }
-
-    @discardableResult
-    func edgeYParent(topConst: CGFloat = 0, bottomConst: CGFloat = 0) -> Self {
-        topParent(topConst).bottomParent(bottomConst)
-    }
-
-    @discardableResult
-    func edgesParent(leftConst: CGFloat = 0, rightConst: CGFloat = 0, topConst: CGFloat = 0, bottomConst: CGFloat = 0) -> Self {
-        leftParent(leftConst).rightParent(rightConst).topParent(topConst).bottomParent(bottomConst)
-    }
-}
-
-public extension ConstraintChainBuilder {
+public extension ConstraintBuilder {
 
     @discardableResult
     func left(_ c: CGFloat) -> Self {
@@ -263,7 +228,26 @@ public extension ConstraintChainBuilder {
 }
 
 //parent
-public extension ConstraintChainBuilder {
+public extension ConstraintBuilder {
+    @discardableResult
+    func centerParent(xConst: CGFloat = 0, yConst: CGFloat = 0) -> Self {
+        centerXParent(xConst).centerYParent(yConst)
+    }
+
+    @discardableResult
+    func edgeXParent(leftConst: CGFloat = 0, rightConst: CGFloat = 0) -> Self {
+        leftParent(leftConst).rightParent(rightConst)
+    }
+
+    @discardableResult
+    func edgeYParent(topConst: CGFloat = 0, bottomConst: CGFloat = 0) -> Self {
+        topParent(topConst).bottomParent(bottomConst)
+    }
+
+    @discardableResult
+    func edgesParent(leftConst: CGFloat = 0, rightConst: CGFloat = 0, topConst: CGFloat = 0, bottomConst: CGFloat = 0) -> Self {
+        leftParent(leftConst).rightParent(rightConst).topParent(topConst).bottomParent(bottomConst)
+    }
 
     @discardableResult
     func leftParent(_ c: CGFloat = 0) -> Self {
@@ -314,19 +298,46 @@ public extension ConstraintChainBuilder {
     }
 }
 
-//to other
-public extension ConstraintChainBuilder {
-
+public extension ConstraintBuilder {
     @discardableResult
-    func width(_ otherView: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        append(.width).relationTo(rel: .equal, otherView: otherView, multi: multi, constant: constant)
+    func left(_ otherName: String, _ c: CGFloat = 0) -> Self {
+        append(.left).relationTo(rel: .equal, otherName: otherName, constant: c)
         return self
     }
 
     @discardableResult
-    func height(_ otherView: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        append(.height).relationTo(rel: .equal, otherView: otherView, multi: multi, constant: constant)
+    func right(_  otherName: String, _ c: CGFloat = 0) -> Self {
+        append(.right).relationTo(rel: .equal, otherName: otherName, constant: c)
         return self
+    }
+
+    @discardableResult
+    func top(_  otherName: String, _ c: CGFloat = 0) -> Self {
+        append(.top).relationTo(rel: .equal, otherName: otherName, constant: c)
+        return self
+    }
+
+    @discardableResult
+    func bottom(_  otherName: String, _ c: CGFloat = 0) -> Self {
+        append(.bottom).relationTo(rel: .equal, otherName: otherName, constant: c)
+        return self
+    }
+
+    @discardableResult
+    func centerX(_  otherName: String, _ c: CGFloat = 0) -> Self {
+        append(.centerX).relationTo(rel: .equal, otherName: otherName, constant: c)
+        return self
+    }
+
+    @discardableResult
+    func centerY(_  otherName: String, _ c: CGFloat = 0) -> Self {
+        append(.centerY).relationTo(rel: .equal, otherName: otherName, constant: c)
+        return self
+    }
+
+    @discardableResult
+    func center(_  otherName: String, xConst: CGFloat = 0, yConst: CGFloat = 0) -> Self {
+        centerX(otherName, xConst).centerY(otherName, yConst)
     }
 
     @discardableResult
@@ -340,27 +351,49 @@ public extension ConstraintChainBuilder {
         append(.height).relationTo(rel: .equal, otherName: otherName, multi: multi, constant: constant)
         return self
     }
+}
+
+
+//to other
+public extension ConstraintBuilder {
+    @discardableResult
+    func center(_ otherView: UIView, xConst: CGFloat = 0, yConst: CGFloat = 0) -> Self {
+        centerX(otherView, xConst).centerY(otherView, yConst)
+    }
 
     @discardableResult
-    func leftEQ(_ otherView: UIView, _ c: CGFloat = 0) -> Self {
+    func width(_ otherView: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        append(.width).relationTo(rel: .equal, otherView: otherView, multi: multi, constant: constant)
+        return self
+    }
+
+    @discardableResult
+    func height(_ otherView: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        append(.height).relationTo(rel: .equal, otherView: otherView, multi: multi, constant: constant)
+        return self
+    }
+
+
+    @discardableResult
+    func left(_ otherView: UIView, _ c: CGFloat = 0) -> Self {
         append(.left).relationTo(rel: .equal, otherView: otherView, constant: c)
         return self
     }
 
     @discardableResult
-    func rightEQ(_ otherView: UIView, _ c: CGFloat = 0) -> Self {
+    func right(_ otherView: UIView, _ c: CGFloat = 0) -> Self {
         append(.right).relationTo(rel: .equal, otherView: otherView, constant: c)
         return self
     }
 
     @discardableResult
-    func topEQ(_ otherView: UIView, _ c: CGFloat = 0) -> Self {
+    func top(_ otherView: UIView, _ c: CGFloat = 0) -> Self {
         append(.top).relationTo(rel: .equal, otherView: otherView, constant: c)
         return self
     }
 
     @discardableResult
-    func bottomEQ(_ otherView: UIView, _ c: CGFloat = 0) -> Self {
+    func bottom(_ otherView: UIView, _ c: CGFloat = 0) -> Self {
         append(.bottom).relationTo(rel: .equal, otherView: otherView, constant: c)
         return self
     }
@@ -377,58 +410,10 @@ public extension ConstraintChainBuilder {
         return self
     }
 
-
-    //===
-    @discardableResult
-    func leftEQ(_ otherName: String, _ c: CGFloat = 0) -> Self {
-        append(.left).relationTo(rel: .equal, otherName: otherName, constant: c)
-        return self
-    }
-
-    @discardableResult
-    func rightEQ(_  otherName: String, _ c: CGFloat = 0) -> Self {
-        append(.right).relationTo(rel: .equal, otherName: otherName, constant: c)
-        return self
-    }
-
-    @discardableResult
-    func topEQ(_  otherName: String, _ c: CGFloat = 0) -> Self {
-        append(.top).relationTo(rel: .equal, otherName: otherName, constant: c)
-        return self
-    }
-
-    @discardableResult
-    func bottomEQ(_  otherName: String, _ c: CGFloat = 0) -> Self {
-        append(.bottom).relationTo(rel: .equal, otherName: otherName, constant: c)
-        return self
-    }
-
-    @discardableResult
-    func centerX(_  otherName: String, _ c: CGFloat = 0) -> Self {
-        append(.centerX).relationTo(rel: .equal, otherName: otherName, constant: c)
-        return self
-    }
-
-    @discardableResult
-    func centerY(_  otherName: String, _ c: CGFloat = 0) -> Self {
-        append(.centerY).relationTo(rel: .equal, otherName: otherName, constant: c)
-        return self
-    }
-}
-
-//=========
-
-
-public class ConstraintBuilderStart {
-    fileprivate unowned var view: UIView
-
-    fileprivate init(_ view: UIView) {
-        self.view = view
-    }
 }
 
 
-public extension ConstraintBuilderStart {
+public extension ConstraintBuilder {
     private func props(_ attrs: LayoutAttribute...) -> ConstraintBuilderEnd {
         let ls = attrs.map {
             ConstraintItem(view: self.view, attr: $0)
@@ -563,7 +548,7 @@ public class ConstraintBuilderEnd {
 public extension ConstraintBuilderEnd {
 
     @discardableResult
-    func relationTo(rel: LayoutRelation, otherView: UIView, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    private func relationTo(rel: LayoutRelation, otherView: UIView, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         for a in self.items {
             a.relationTo(rel: rel, otherView: otherView, otherAttr: otherAttr, multi: multi, constant: constant)
         }
@@ -571,7 +556,7 @@ public extension ConstraintBuilderEnd {
     }
 
     @discardableResult
-    func relationTo(rel: LayoutRelation, otherName: String?, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    private func relationTo(rel: LayoutRelation, otherName: String?, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         for a in self.items {
             a.relationTo(rel: rel, otherName: otherName, otherAttr: otherAttr, multi: multi, constant: constant)
         }
@@ -579,7 +564,7 @@ public extension ConstraintBuilderEnd {
     }
 
     @discardableResult
-    func relationParent(rel: LayoutRelation, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    private func relationParent(rel: LayoutRelation, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         for a in self.items {
             a.relationTo(rel: rel, otherName: ParentViewName, otherAttr: otherAttr, multi: multi, constant: constant)
         }
@@ -587,7 +572,7 @@ public extension ConstraintBuilderEnd {
     }
 
     @discardableResult
-    func relationSelf(rel: LayoutRelation, otherAttr: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    private func relationSelf(rel: LayoutRelation, otherAttr: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         for a in self.items {
             a.relationTo(rel: rel, otherView: a.view, otherAttr: otherAttr, multi: multi, constant: constant)
         }
@@ -595,32 +580,32 @@ public extension ConstraintBuilderEnd {
     }
 
     @discardableResult
-    func eq(otherView: UIView, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    func eq(_ otherView: UIView, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         relationTo(rel: .equal, otherView: otherView, otherAttr: otherAttr, multi: multi, constant: constant)
     }
 
     @discardableResult
-    func ge(otherView: UIView, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    func ge(_ otherView: UIView, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         relationTo(rel: .greaterThanOrEqual, otherView: otherView, otherAttr: otherAttr, multi: multi, constant: constant)
     }
 
     @discardableResult
-    func le(otherView: UIView, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    func le(_ otherView: UIView, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         relationTo(rel: .lessThanOrEqual, otherView: otherView, otherAttr: otherAttr, multi: multi, constant: constant)
     }
 
     @discardableResult
-    func eq(otherName: String, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    func eq(_ otherName: String, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         relationTo(rel: .equal, otherName: otherName, otherAttr: otherAttr, multi: multi, constant: constant)
     }
 
     @discardableResult
-    func ge(otherName: String, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    func ge(_ otherName: String, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         relationTo(rel: .greaterThanOrEqual, otherName: otherName, otherAttr: otherAttr, multi: multi, constant: constant)
     }
 
     @discardableResult
-    func le(otherName: String, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+    func le(_ otherName: String, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         relationTo(rel: .lessThanOrEqual, otherName: otherName, otherAttr: otherAttr, multi: multi, constant: constant)
     }
 
