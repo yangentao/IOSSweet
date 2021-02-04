@@ -8,20 +8,19 @@ import UIKit
 
 //系统约束布局, 添加布局时, superview不能为空(只有width/height属性且是常量除外)
 
-func testConstraint() {
-    let a = UIView(frame: .zero)
-    let v = UIView(frame: .zero)
-    //superView.addSubview(v)
-    v.constraintSystem { b in
-        b.left.eqParent()
-        b.top.eqParent()
-        b.centerX.eqParent()
-        b.width.eqSelf(.height)
-        b.height.eqConst(100)
-        b.centerX.eq(view2: a)//.priority(200).ident("helloIdent")
-    }
-
-}
+//func testConstraint() {
+//    let a = UIView(frame: .zero)
+//    let v = UIView(frame: .zero)
+//    //superView.addSubview(v)
+//    v.constraintSystem { b in
+//        b.left.eqParent()
+//        b.top.eqParent()
+//        b.centerX.eqParent()
+//        b.width.eqSelf(.height)
+//        b.height.eqConst(100)
+//        b.centerX.eq(view2: a)//.priority(200).ident("helloIdent")
+//    }
+//}
 
 public typealias LayoutRelation = NSLayoutConstraint.Relation
 public typealias LayoutAxis = NSLayoutConstraint.Axis
@@ -88,10 +87,14 @@ extension UIView {
         }
         return self
     }
+
+    var constraintChain: ConstraintChainBuilder {
+        ConstraintChainBuilder(self)
+    }
 }
 
 public class ConstraintItem {
-    fileprivate unowned var view: UIView! // view
+    fileprivate unowned var view: UIView // view
     fileprivate var attr: LayoutAttribute
     fileprivate var relation: LayoutRelation = .equal
     fileprivate unowned var view2: UIView? = nil
@@ -127,6 +130,201 @@ public class ConstraintItem {
 
     public func priority(_ p: Float) -> Self {
         priority = UILayoutPriority(rawValue: p)
+        return self
+    }
+
+    @discardableResult
+    fileprivate func relationTo(rel: LayoutRelation, view2: UIView? = nil, attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
+        relation = rel
+        self.view2 = view2
+        if view2 != nil {
+            if let p2 = attr2 {
+                self.attr2 = p2
+            } else {
+                self.attr2 = self.attr
+            }
+            if self.view === self.view2 && self.attr == self.attr2 {
+                fatalError("依赖于自己的同一属性: \(self.attr), \(self.view) ")
+            }
+        }
+        self.multiplier = multi
+        self.constant = constant
+        return self
+    }
+}
+
+public class ConstraintChainBuilder {
+    fileprivate unowned let view: UIView
+    fileprivate var items: [ConstraintItem] = []
+
+    fileprivate init(_ view: UIView) {
+        self.view = view
+    }
+
+    public func install() {
+        items.each {
+            $0.install()
+        }
+    }
+
+    public func ident(_ id: String) -> Self {
+        items.last!.ident = id
+        return self
+    }
+
+    public func priority(_ p: UILayoutPriority) -> Self {
+        items.last!.priority = p
+        return self
+    }
+
+    public func priority(_ p: Float) -> Self {
+        items.last!.priority = UILayoutPriority(rawValue: p)
+        return self
+    }
+}
+
+public extension ConstraintChainBuilder {
+
+    func edgeXParent(leftConst: CGFloat = 0, rightConst: CGFloat = 0) -> Self {
+        leftParent(leftConst).rightParent(rightConst)
+    }
+
+    func edgeYParent(topConst: CGFloat = 0, bottomConst: CGFloat = 0) -> Self {
+        topParent(topConst).bottomParent(bottomConst)
+    }
+
+    func edgesParent(leftConst: CGFloat = 0, rightConst: CGFloat = 0, topConst: CGFloat = 0, bottomConst: CGFloat = 0) -> Self {
+        leftParent(leftConst).rightParent(rightConst).topParent(topConst).bottomParent(bottomConst)
+    }
+
+    func left(_ c: CGFloat) -> Self {
+        items += ConstraintItem(view: view, attr: .left).relationTo(rel: .equal, constant: c)
+        return self
+    }
+
+    func right(_ c: CGFloat) -> Self {
+        items += ConstraintItem(view: view, attr: .right).relationTo(rel: .equal, constant: c)
+        return self
+    }
+
+    func top(_ c: CGFloat) -> Self {
+        items += ConstraintItem(view: view, attr: .top).relationTo(rel: .equal, constant: c)
+        return self
+    }
+
+    func bottom(_ c: CGFloat) -> Self {
+        items += ConstraintItem(view: view, attr: .bottom).relationTo(rel: .equal, constant: c)
+        return self
+    }
+
+    func leftParent(_ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .left).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        return self
+    }
+
+    func rightParent(_ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .right).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        return self
+    }
+
+    func topParent(_ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .top).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        return self
+    }
+
+    func bottomParent(_ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .bottom).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        return self
+    }
+
+    func leftEQ(_ view2: UIView, _ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .left).relationTo(rel: .equal, view2: view2, constant: c)
+        return self
+    }
+
+    func rightEQ(_ view2: UIView, _ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .right).relationTo(rel: .equal, view2: view2, constant: c)
+        return self
+    }
+
+    func topEQ(_ view2: UIView, _ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .top).relationTo(rel: .equal, view2: view2, constant: c)
+        return self
+    }
+
+    func bottomEQ(_ view2: UIView, _ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .bottom).relationTo(rel: .equal, view2: view2, constant: c)
+        return self
+    }
+
+
+    func centerX(_ view2: UIView, _ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .centerX).relationTo(rel: .equal, view2: view2, constant: c)
+        return self
+    }
+
+    func centerY(_ view2: UIView, _ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .centerY).relationTo(rel: .equal, view2: view2, constant: c)
+        return self
+    }
+
+    func center(_ view2: UIView, xConst: CGFloat = 0, yConst: CGFloat = 0) -> Self {
+        centerX(view2, xConst).centerY(view2, yConst)
+    }
+
+    func centerXParent(_ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .centerX).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        return self
+    }
+
+    func centerYParent(_ c: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .centerY).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        return self
+    }
+
+    func centerParent(xConst: CGFloat = 0, yConst: CGFloat = 0) -> Self {
+        centerXParent(xConst).centerYParent(yConst)
+    }
+
+    func width(_  constant: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .width).relationTo(rel: .equal, constant: constant)
+        return self
+    }
+
+    func height(_  constant: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .height).relationTo(rel: .equal, constant: constant)
+        return self
+    }
+
+    func width(_ view2: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .width).relationTo(rel: .equal, view2: view2, multi: multi, constant: constant)
+        return self
+    }
+
+    func height(_ view2: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .height).relationTo(rel: .equal, view2: view2, multi: multi, constant: constant)
+        return self
+    }
+
+    func widthParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .width).relationTo(rel: .equal, view2: view.superview!, multi: multi, constant: constant)
+        return self
+    }
+
+    func heightParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .height).relationTo(rel: .equal, view2: view.superview!, multi: multi, constant: constant)
+        return self
+    }
+
+    //w = h * multi + constant
+    func widthRatio(multi: CGFloat , constant: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .width).relationTo(rel: .equal, view2: view, attr2: .height, multi: multi, constant: constant)
+        return self
+    }
+
+    //h = w * multi + constant
+    func heightRatio(multi: CGFloat, constant: CGFloat = 0) -> Self {
+        items += ConstraintItem(view: view, attr: .height).relationTo(rel: .equal, view2: view, attr2: .width, multi: multi, constant: constant)
         return self
     }
 }
@@ -259,53 +457,21 @@ public extension ConstraintItemBuilderSome {
 
     func relationTo(rel: LayoutRelation, view2: UIView?, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
         for a in self.items {
-            a.relation = rel
-            a.view2 = view2
-            if view2 != nil {
-                if let p2 = attr2 {
-                    a.attr2 = p2
-                } else {
-                    a.attr2 = a.attr
-                }
-                if a.view === a.view2 && a.attr == a.attr2 {
-                    fatalError("依赖于自己的同一属性: \(a.attr), \(a.view!) ")
-                }
-            }
-            a.multiplier = multi
-            a.constant = constant
+            a.relationTo(rel: rel, view2: view2, attr2: attr2, multi: multi, constant: constant)
         }
         return items
     }
 
     func relationParent(rel: LayoutRelation, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
         for a in self.items {
-            a.relation = rel
-            a.view2 = a.view.superview!
-            if let p2 = attr2 {
-                a.attr2 = p2
-            } else {
-                a.attr2 = a.attr
-            }
-            a.multiplier = multi
-            a.constant = constant
+            a.relationTo(rel: rel, view2: a.view.superview!, attr2: attr2, multi: multi, constant: constant)
         }
         return items
     }
 
     func relationSelf(rel: LayoutRelation, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
         for a in self.items {
-            a.relation = rel
-            a.view2 = a.view
-            if let p2 = attr2 {
-                a.attr2 = p2
-            } else {
-                a.attr2 = a.attr
-            }
-            if a.view === a.view2 && a.attr == a.attr2 {
-                fatalError("依赖于自己的同一属性: \(a.attr), \(a.view!) ")
-            }
-            a.multiplier = multi
-            a.constant = constant
+            a.relationTo(rel: rel, view2: a.view, attr2: attr2, multi: multi, constant: constant)
         }
         return items
     }
@@ -380,23 +546,7 @@ public class ConstraintItemBuilderOne {
 public extension ConstraintItemBuilderOne {
 
     func relationTo(rel: LayoutRelation, view2: UIView?, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
-        let a = self.item
-        a.relation = rel
-        a.view2 = view2
-        if view2 != nil {
-            if let p2 = attr2 {
-                a.attr2 = p2
-            } else {
-                a.attr2 = a.attr
-            }
-            if a.view === a.view2 && a.attr == a.attr2 {
-                fatalError("依赖于自己的同一属性: \(a.attr), \(a.view!) ")
-            }
-        }
-        a.multiplier = multi
-        a.constant = constant
-
-        return item
+        item.relationTo(rel: rel, view2: view2, attr2: attr2, multi: multi, constant: constant)
     }
 
     func eq(view2: UIView?, attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {

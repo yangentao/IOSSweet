@@ -60,14 +60,16 @@ class ViewController: UIViewController {
 //        self.view.backColor(Colors.fill)
 
         self.view.addView(UILabel.Primary).apply { lb in
-            lb.constraintSystem { b in
-                b.center.eqParent()
+            lb.constraintChain.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.5).ident("heightId").install()
+//            lb.constraintSystem { b in
+//                b.center.eqParent()
 //                b.rightBottom.eqParent()
 //                b.edges.eqParent()
 //                b.size.eqConst(200)
-                b.width.eqParent(multi: 0.9)
-                b.height.eqSelf(.width, multi: 0.5).ident("wid")
-            }
+//                b.width.eqParent(multi: 0.9)
+//                b.height.eqSelf(.width, multi: 0.5).ident("wid")
+//                b.width.eqSelf(.height, multi: 2, constant: 0)
+//            }
 
             lb.numberOfLines = 0
             lb.backColor(.green)
