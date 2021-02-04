@@ -35,11 +35,11 @@ public class YetLayout {
 public extension YetLayout {
 
     func removeAll() {
-        self.view.removeAllConstraints()
+        self.view.constraintRemoveAll()
     }
 
     func remove(ident: String) {
-        self.view.removeConstraint(ident: ident)
+        self.view.constraintRemove(ident: ident)
     }
 
     var left: YetLayoutAttr {

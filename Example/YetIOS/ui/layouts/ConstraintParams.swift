@@ -101,66 +101,16 @@ class ConstraintConditionItems {
 }
 
 
-public class ConstraintParams {
-    var items = [NSLayoutConstraint]()
-}
 
-public extension UIView {
-    var constraintParams: ConstraintParams {
-        if let ls = getAttr("_conkey_") as? ConstraintParams {
-            return ls
-        }
-        let c = ConstraintParams()
-        setAttr("_conkey_", c)
-        return c
-    }
-
-    @discardableResult
-    func updateConstraint(ident: String, constant: CGFloat) -> Self {
-        if let a = constraintParams.items.first({ $0.identifier == ident }) {
-            a.constant = constant
-            setNeedsUpdateConstraints()
-            superview?.setNeedsUpdateConstraints()
-        }
-        return self
-    }
-
-    func removeAllConstraints() {
-        for c in constraintParams.items {
-            c.isActive = false
-        }
-        constraintParams.items = []
-    }
-
-    func removeConstraint(ident: String) {
-        let c = constraintParams.items.removeFirstIf { n in
-            n.identifier == ident
-        }
-        c?.isActive = false
-    }
-
-    //resist larger than intrinsic content size
-    func stretchContent(_ axis: NSLayoutConstraint.Axis) {
-        setContentHuggingPriority(UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue - 1), for: axis)
-    }
-
-    //resist smaller than intrinsic content size
-    func keepContent(_ axis: NSLayoutConstraint.Axis) {
-        setContentCompressionResistancePriority(UILayoutPriority(rawValue: UILayoutPriority.defaultHigh.rawValue + 1), for: axis)
-    }
-
-}
-
-public typealias ConstraintAttribute = NSLayoutConstraint.Attribute
 public typealias CC = ConstraintCondition
 
 public class ConstraintCondition {
     unowned var itemView: UIView! // view
-    public var attr: ConstraintAttribute
+    public var attr: LayoutAttribute
     public var relation: LayoutRelation = .equal
     unowned var toItemView: UIView? = nil
     public var toItemName: String? = nil
-    public var attr2: ConstraintAttribute = .notAnAttribute
+    public var attr2: LayoutAttribute = .notAnAttribute
     public var multiplier: CGFloat = 1
     public var constant: CGFloat = 0
     public var ident: String? = nil
@@ -203,7 +153,7 @@ public extension ConstraintCondition {
 }
 
 public extension ConstraintCondition {
-    func eq(_ otherViewName: String, _ attr2: ConstraintAttribute) -> Self {
+    func eq(_ otherViewName: String, _ attr2: LayoutAttribute) -> Self {
         self.relation = .equal
         self.toItemName = otherViewName
         self.attr2 = attr2
@@ -225,11 +175,11 @@ public extension ConstraintCondition {
         eq(ParentViewName)
     }
 
-    func eqParent(_ attr2: ConstraintAttribute) -> Self {
+    func eqParent(_ attr2: LayoutAttribute) -> Self {
         eq(ParentViewName, attr2)
     }
 
-    func le(_ otherVieName: String, _ attr2: ConstraintAttribute) -> Self {
+    func le(_ otherVieName: String, _ attr2: LayoutAttribute) -> Self {
         relation = .lessThanOrEqual
         self.toItemName = otherVieName
         self.attr2 = attr2
@@ -251,7 +201,7 @@ public extension ConstraintCondition {
         le(ParentViewName)
     }
 
-    func leParent(_ attr2: ConstraintAttribute) -> Self {
+    func leParent(_ attr2: LayoutAttribute) -> Self {
         le(ParentViewName, attr2)
     }
 
@@ -266,7 +216,7 @@ public extension ConstraintCondition {
         ge(otherVieName, attr)
     }
 
-    func ge(_ otherVieName: String, _ attr2: ConstraintAttribute) -> Self {
+    func ge(_ otherVieName: String, _ attr2: LayoutAttribute) -> Self {
         self.relation = .greaterThanOrEqual
         self.toItemName = otherVieName
         self.attr2 = attr2
@@ -278,10 +228,11 @@ public extension ConstraintCondition {
         ge(ParentViewName)
     }
 
-    func geParent(_ attr2: ConstraintAttribute) -> Self {
+    func geParent(_ attr2: LayoutAttribute) -> Self {
         ge(ParentViewName, attr2)
     }
 }
+
 
 public extension ConstraintCondition {
     static var left: ConstraintCondition {

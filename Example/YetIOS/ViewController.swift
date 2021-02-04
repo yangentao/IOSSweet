@@ -59,18 +59,19 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 //        self.view.backColor(Colors.fill)
 
-        let lb = UILabel.Primary
-        self.view.addView(lb)
-        lb.layout { L in
-            L.centerParent().width(200)
-            L.height.eq(lb, .width).active()
-        }
-        lb.numberOfLines = 0
-        lb.backColor(.green)
-        lb.preferredMaxLayoutWidth = 100
-        lb.text = "Hello"
-        lb.text = "杨恩涛我问问www我问问呜呜呜呜呜呜呜呜杨恩涛我问问www我问问呜呜呜呜呜呜呜呜杨恩涛我问问www我问问呜呜呜呜呜呜呜呜"
+        self.view.addView(UILabel.Primary).apply { lb in
+            lb.constraintSystem { b in
+                b.centerX.eqParent()
+                b.centerY.eqParent()
+                b.width.eqParent(multi: 0.9)
+                b.height.eqSelf(.width, multi: 0.5)
+            }
 
+            lb.numberOfLines = 0
+            lb.backColor(.green)
+//            lb.preferredMaxLayoutWidth = 100
+            lb.text = "杨恩涛我问问www我问问呜呜呜呜呜呜呜呜杨恩涛我问问www我问问呜呜呜呜呜呜呜呜杨恩涛我问问www我问问呜呜呜呜呜呜呜呜"
+        }
 //        let a = self.view.addView(ImageLabelView(frame:  let a = self.view.addView(ImageLabelView(frame: .zero)).layout { L in
 ////            L.centerParent().size(100, 100)
 ////        }
