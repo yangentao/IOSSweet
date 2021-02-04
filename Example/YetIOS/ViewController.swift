@@ -57,8 +57,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        testSysConstraint()
-//        testBuildConstraint()
+//        testSysConstraint()
+        testBuildConstraint()
 
 
 //        let a = self.view.addView(ImageLabelView(frame:  let a = self.view.addView(ImageLabelView(frame: .zero)).layout { L in
