@@ -100,6 +100,7 @@ public extension Array {
     }
 
     //只删除第一个符合条件的, 返回被删除的元素
+    @discardableResult
     mutating func removeFirstIf(block: (Element) -> Bool) -> Element? {
         for i in self.indices {
             let item = self[i]

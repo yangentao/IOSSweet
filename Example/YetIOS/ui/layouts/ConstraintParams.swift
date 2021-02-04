@@ -139,12 +139,14 @@ public extension UIView {
         c?.isActive = false
     }
 
-    func layoutStretch(_ axis: NSLayoutConstraint.Axis) {
-        setContentHuggingPriority(UILayoutPriority(rawValue: 240), for: axis)
+    //resist larger than intrinsic content size
+    func stretchContent(_ axis: NSLayoutConstraint.Axis) {
+        setContentHuggingPriority(UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue - 1), for: axis)
     }
 
-    func layoutKeepContent(_ axis: NSLayoutConstraint.Axis) {
-        setContentCompressionResistancePriority(UILayoutPriority(rawValue: 760), for: axis)
+    //resist smaller than intrinsic content size
+    func keepContent(_ axis: NSLayoutConstraint.Axis) {
+        setContentCompressionResistancePriority(UILayoutPriority(rawValue: UILayoutPriority.defaultHigh.rawValue + 1), for: axis)
     }
 
 }

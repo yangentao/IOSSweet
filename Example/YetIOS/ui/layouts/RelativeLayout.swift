@@ -53,8 +53,8 @@ public enum RelativeProp: Int {
 fileprivate let UNSPEC: CGFloat = -10000
 
 public class RelativeCondition {
-    fileprivate unowned var view: UIView!
-    fileprivate unowned var viewOther: UIView? = nil
+    fileprivate weak var view: UIView?
+    fileprivate weak var viewOther: UIView? = nil
     public let id: Int = nextId()
     public var prop: RelativeProp
     public let relation: LayoutRelation = .equal
@@ -62,6 +62,9 @@ public class RelativeCondition {
     public var otherProp: RelativeProp? = nil //if nil, use prop value
     public var multiplier: CGFloat = 1
     public var constant: CGFloat = 0
+    //只有width,height是WrapContent的时候用到
+    public var minWidth: CGFloat = 0
+    public var minHeight: CGFloat = 0
 
     fileprivate var tempValue: CGFloat = UNSPEC
     fileprivate var OK: Bool {
@@ -78,8 +81,6 @@ public class RelativeCondition {
         _lastId += 1
         return _lastId
     }
-
-
 }
 
 public extension RelativeCondition {
@@ -153,6 +154,27 @@ public extension RelativeCondition {
 public class RelativeParams {
     public var conditions: [RelativeCondition] = []
 
+    @discardableResult
+    public func updateConstant(_ prop: RelativeProp, _ constant: CGFloat) -> Self {
+        guard let c = self.conditions.first({ c in c.prop == prop }) else {
+            return self
+        }
+        _ = c.constant(constant)
+        c.view?.superview?.setNeedsLayout()
+        return self
+    }
+
+    @discardableResult
+    public func updateConstantIf(_ constant: CGFloat, _ block: (RelativeCondition) -> Bool) -> Self {
+        for c in conditions {
+            if block(c) {
+                _ = c.constant(constant)
+                c.view?.superview?.setNeedsLayout()
+                break
+            }
+        }
+        return self
+    }
 }
 
 
@@ -161,7 +183,21 @@ public class RelativeParamsBuilder {
 }
 
 public extension RelativeParamsBuilder {
+    @discardableResult
+    func widthWrap(_ minWidth: CGFloat = 0) -> Self {
+        let a = RC(prop: .width).constant(WrapContent)
+        a.minWidth = minWidth
+        items += a
+        return self
+    }
 
+    @discardableResult
+    func heightWrap(_ minHeight: CGFloat = 0) -> Self {
+        let a = RC(prop: .height).constant(WrapContent)
+        a.minHeight = minHeight
+        items += a
+        return self
+    }
 
     @discardableResult
     func eq(_ prop: RelativeProp, viewName: String, prop2: RelativeProp?, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
@@ -313,6 +349,7 @@ public extension RelativeParamsBuilder {
         eqConst(.height, constant: c)
     }
 
+
     @discardableResult
     func widthEQ(_ viewName: String, prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         eq(.width, viewName: viewName, prop2: prop2, multi: multi, constant: constant)
@@ -340,8 +377,18 @@ public extension RelativeParamsBuilder {
     }
 
     @discardableResult
+    func widthEQParent(_ prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        eqParent(.width, prop2: prop2, multi: multi, constant: constant)
+    }
+
+    @discardableResult
     func heightEQParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
         eqParent(.height, prop2: nil, multi: multi, constant: constant)
+    }
+
+    @discardableResult
+    func heightEQParent(_ prop2: RelativeProp, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
+        eqParent(.height, prop2: prop2, multi: multi, constant: constant)
     }
 
     @discardableResult
@@ -357,7 +404,6 @@ public extension RelativeParamsBuilder {
 
 
 public class RelativeLayout: UIView {
-    public var padding: Edge = Edge()
     private var contentSize: CGSize = .zero {
         didSet {
             if oldValue != contentSize {
@@ -374,7 +420,7 @@ public class RelativeLayout: UIView {
     private func processScroll() {
         if let pv = self.superview as? UIScrollView {
             logd(contentSize)
-            pv.contentSize = CGSize(width: contentSize.width + padding.right, height: contentSize.height + padding.bottom)
+            pv.contentSize = self.contentSize
         }
     }
 
@@ -423,12 +469,32 @@ public class RelativeLayout: UIView {
 
         for c in allCond {
             if c.viewOther == nil {
-                c.tempValue = c.constant
-                vrList.assignProp(c.view, c.prop, c.tempValue)
+                switch c.constant {
+                case WrapContent:
+                    let sz = c.view!.sizeThatFits(self.bounds.size)
+                    if c.prop == .width {
+                        c.tempValue = max(sz.width, c.minWidth)
+                    } else if c.prop == .height {
+                        c.tempValue = max(sz.height, c.minHeight)
+                    } else {
+                        fatalError("WrapContent ONLY used on width or height property")
+                    }
+                    break
+                case MatchParent:
+                    if c.prop == .width || c.prop == .height {
+                        c.tempValue = queryParentProp(c.prop)
+                    } else {
+                        fatalError("WrapContent ONLY used on width or height property")
+                    }
+                    break
+                default:
+                    c.tempValue = c.constant
+                }
+                vrList.assignProp(c.view!, c.prop, c.tempValue)
             } else if c.viewOther == self {
                 let otherProp = c.otherProp ?? c.prop
                 c.tempValue = queryParentProp(otherProp) * c.multiplier + c.constant
-                vrList.assignProp(c.view, c.prop, c.tempValue)
+                vrList.assignProp(c.view!, c.prop, c.tempValue)
             }
 
         }
@@ -448,8 +514,8 @@ public class RelativeLayout: UIView {
                 let otherProp = c.otherProp ?? c.prop
                 let otherVal = vrList.queryProp(otherView, otherProp)
                 if otherVal != UNSPEC {
-                    c.tempValue = otherVal
-                    vrList.assignProp(c.view, c.prop, otherVal)
+                    c.tempValue = otherVal * c.multiplier + c.constant
+                    vrList.assignProp(c.view!, c.prop, c.tempValue)
                     matchOne = true
                 }
             }

@@ -53,8 +53,8 @@ public class ImageText4Cell: UITableViewCell {
 		}
 
 		timeView.layout.toRightOf(textView)
-		textView.layoutStretch(.horizontal)
-		timeView.layoutKeepContent(.horizontal)
+		textView.stretchContent(.horizontal)
+		timeView.keepContent(.horizontal)
 
 		msgView.layout { L in
 			L.toRightOf(self.iconView, 10)
@@ -68,8 +68,8 @@ public class ImageText4Cell: UITableViewCell {
 		}
 
 		statusView.layout.toRightOf(msgView)
-		msgView.layoutStretch(.horizontal)
-		statusView.layoutKeepContent(.horizontal)
+		msgView.stretchContent(.horizontal)
+		statusView.keepContent(.horizontal)
 
 		textView.stylePrimary()
 		msgView.styleMinor()

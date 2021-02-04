@@ -121,6 +121,6 @@ public class Grid: UIView {
     }
 
     private func calcSizeVertical(_ viewList: [UIView]) {
-
+        self.intrinsicContentSize
     }
 }

@@ -6,118 +6,92 @@
 import Foundation
 import UIKit
 
-public class WatchItem: Equatable {
-	public weak var item: NSObject?
-	public var propName: String = ""
-	public var fireMsg: String = ""
-	public weak var layoutView: UIView?
-	public var layoutSuper: Bool = false
 
-	public init(obj: NSObject, prop: String) {
-		self.item = obj
-		self.propName = prop
-	}
+public class WatchCenter {
+    private class PropItem {
+        weak var obj: NSObject?
+        let keyPath: String
+        weak var actionTarget: AnyObject? = nil
+        var action: Selector? = nil
+        var msg: MsgID? = nil
 
-	@discardableResult
-	public func fire(_ msg: String) -> WatchItem {
-		fireMsg = msg
-		return self
-	}
+        init(obj: NSObject, keyPath: String) {
+            self.obj = obj
+            self.keyPath = keyPath
+        }
 
-	@discardableResult
-	public func layout(_ view: UIView) -> WatchItem {
-		layoutView = view
-		return self
-	}
+        convenience init(obj: NSObject, keyPath: String, actionTarget: AnyObject, action: Selector) {
+            self.init(obj: obj, keyPath: keyPath)
+            self.actionTarget = actionTarget
+            self.action = action
+        }
 
-	@discardableResult
-	public func layoutSuperView() -> WatchItem {
-		layoutSuper = true
-		return self
-	}
+        convenience init(obj: NSObject, keyPath: String, msg: MsgID) {
+            self.init(obj: obj, keyPath: keyPath)
+            self.msg = msg
+        }
+    }
 
-	fileprivate func isMsg(_ m: String) -> Bool {
-		return self.fireMsg == m
-	}
+    private class _Stub: NSObject {
 
-	public static func ==(lhs: WatchItem, rhs: WatchItem) -> Bool {
-		if lhs === rhs {
-			return true
-		}
-		if lhs.propName == rhs.propName {
-			if let a = lhs.item, let b = rhs.item, a === b {
-				return true
-			}
-		}
-		return false
-	}
+        private var items: [PropItem] = []
+
+        func listen(obj: NSObject, keyPath: String, actionTarget: AnyObject, action: Selector) {
+            let item = PropItem(obj: obj, keyPath: keyPath, actionTarget: actionTarget, action: action)
+            items.append(item)
+            obj.addObserver(self, forKeyPath: keyPath, context: nil)
+
+            clean()
+        }
+
+        func listen(obj: NSObject, keyPath: String, msg: MsgID) {
+            let item = PropItem(obj: obj, keyPath: keyPath, msg: msg)
+            items.append(item)
+            obj.addObserver(self, forKeyPath: keyPath, context: nil)
+            clean()
+        }
+
+        func remove(obj: NSObject, keyPath: String) {
+            _ = items.removeFirstIf {
+                $0.obj === obj && $0.keyPath == keyPath
+            }
+            clean()
+        }
+
+        func clean() {
+            items.removeAllIf {
+                $0.obj == nil || ($0.msg == nil && $0.actionTarget == nil)
+            }
+        }
+
+        override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+            guard let obj = object as? NSObject, let kp = keyPath else {
+                return
+            }
+
+            if let a = items.first({ $0.obj === obj && $0.keyPath == kp }) {
+                if let msg = a.msg {
+                    msg.fire()
+                }
+                if let t = a.actionTarget, let ac = a.action {
+                    _ = t.perform(ac)
+                }
+            }
+
+        }
+    }
+
+    private static let inst = _Stub()
+
+    public static func listen(obj: NSObject, keyPath: String, actionTarget: AnyObject, action: Selector) {
+        inst.listen(obj: obj, keyPath: keyPath, actionTarget: actionTarget, action: action)
+    }
+
+    public static func listen(obj: NSObject, keyPath: String, msg: MsgID) {
+        inst.listen(obj: obj, keyPath: keyPath, msg: msg)
+    }
+
+    public static func remove(obj: NSObject, keyPath: String) {
+        inst.remove(obj: obj, keyPath: keyPath)
+    }
 }
-
-public class ObjectWatch: NSObject {
-
-	fileprivate var all = Array<WatchItem>()
-
-	deinit {
-		for item in all {
-			item.item?.removeObserver(self, forKeyPath: item.propName)
-		}
-		all.removeAll()
-	}
-
-	public func watch(obj: NSObject, property: String) -> WatchItem {
-		let item = WatchItem(obj: obj, prop: property)
-		all.append(item)
-		item.item?.addObserver(self, forKeyPath: item.propName, options: [.new], context: nil)
-		return item
-	}
-
-	public func remove(obj: NSObject, _ property: String) {
-		obj.removeObserver(self, forKeyPath: property)
-		sync(self) {
-			_ = all.drop {
-				return $0.item === obj && $0.propName == property
-			}
-		}
-	}
-
-	public func remove(obj: NSObject) {
-		sync(self) {
-			_ = all.drop {
-				if $0.item === obj {
-					obj.removeObserver(self, forKeyPath: $0.propName)
-					return true
-				}
-				return false
-			}
-		}
-	}
-
-	override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-		if let kp = keyPath, let obj = object as? NSObject {
-			sync(self) {
-				all.filter { item in
-					return item.item === obj && item.propName == kp
-				}.forEach { item in
-					if !item.fireMsg.isEmpty {
-						MsgID(item.fireMsg).fire()
-					}
-					if let v = item.layoutView {
-						v.setNeedsLayout()
-					}
-					if item.layoutSuper {
-						if let v = item.item as? UIView {
-							v.superview?.setNeedsLayout()
-						}
-					}
-				}
-
-				_ = all.drop { item in
-					return item.item == nil
-				}
-			}
-		}
-
-	}
-}
-
-public let WatchCenter = ObjectWatch()

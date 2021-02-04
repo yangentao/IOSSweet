@@ -41,8 +41,8 @@ public class TextTimeMsgStatusCell: UITableViewCell {
 			L.height(Theme.Text.heightMinor)
 		}
 		timeView.layout.toRightOf(textView)
-		textView.layoutStretch(.horizontal)
-		timeView.layoutKeepContent(.horizontal)
+		textView.stretchContent(.horizontal)
+		timeView.keepContent(.horizontal)
 
 		msgView.layout { L in
 			L.leftParent(10)
@@ -56,8 +56,8 @@ public class TextTimeMsgStatusCell: UITableViewCell {
 		}
 
 		statusView.layout.toRightOf(msgView)
-		statusView.layoutKeepContent(.horizontal)
-		msgView.layoutStretch(.horizontal)
+		statusView.keepContent(.horizontal)
+		msgView.stretchContent(.horizontal)
 
 		textView.stylePrimary()
 		msgView.styleMinor()

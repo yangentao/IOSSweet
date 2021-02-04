@@ -20,8 +20,8 @@ public class TextDetailView: UIView {
 		let L = detailView.layout.centerYParent().heightEdit().rightParent(0)
 		L.toRightOf(textView)
 
-		textView.layoutStretch(.horizontal)
-		detailView.layoutKeepContent(.horizontal)
+		textView.stretchContent(.horizontal)
+		detailView.keepContent(.horizontal)
 
 		detailView.alignRight()
 		self.itemStyle(Dim.itemHeightNormal)

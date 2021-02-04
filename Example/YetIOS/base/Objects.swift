@@ -100,3 +100,4 @@ extension NSObject {
         NotificationCenter.default.post(name: name, object: object, userInfo: userInfo)
     }
 }
+

@@ -13,8 +13,9 @@ public extension UIView {
         YetLayout(self)
     }
 
-    func layout(block: (YetLayout) -> Void) {
+    func layout(block: (YetLayout) -> Void) -> Self {
         block(self.layout)
+        return self
     }
 
 

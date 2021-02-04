@@ -101,12 +101,4 @@ public extension UIView {
 	var layoutGrid: GridLayout {
 		return GridLayout(self)
 	}
-
-	@discardableResult
-	func layoutGrid(_ block: (GridLayout) -> Void) -> CGFloat {
-		let L = self.layoutGrid
-		block(L)
-		L.install()
-		return L.totalHeight
-	}
 }

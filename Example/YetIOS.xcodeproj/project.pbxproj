@@ -16,6 +16,7 @@
 		E11E1019DD32829778829185 /* Res.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E18C3EAA71138373C11DE /* Res.swift */; };
 		E11E1023D2DE467B0269C7CB /* TableViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1847F01DC49DD37F50CD /* TableViews.swift */; };
 		E11E105AAE6FB462505AD146 /* KeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1906AD7CAED9850AF1C5 /* KeyValue.swift */; };
+		E11E10B69449CE5B5F150B01 /* a.png in Resources */ = {isa = PBXBuildFile; fileRef = E11E1DAD6DD553BEEE84CF72 /* a.png */; };
 		E11E10C4461E121A117F761F /* DataEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1A21A1ACDEFC487105F3 /* DataEx.swift */; };
 		E11E10C4F6983DAFA4971621 /* InputPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1CD0DEB97AF06AE29673 /* InputPage.swift */; };
 		E11E1105285F0352B8912EA9 /* QRScaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1796B39777FBF68004FF /* QRScaner.swift */; };
@@ -294,6 +295,7 @@
 		E11E1D745147BFF6A9FA3681 /* HttpExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpExt.swift; sourceTree = "<group>"; };
 		E11E1D7722074A042ACA3F76 /* PullToRefreshLoadingViewCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshLoadingViewCircle.swift; sourceTree = "<group>"; };
 		E11E1DABFDB38E6E263CA6FD /* TextDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextDetailCell.swift; sourceTree = "<group>"; };
+		E11E1DAD6DD553BEEE84CF72 /* a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a.png; sourceTree = "<group>"; };
 		E11E1DCAA588FEE942E3A641 /* QRPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRPage.swift; sourceTree = "<group>"; };
 		E11E1DCEB3651B6DBFEBE922 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E11E1E02B3A89849142D0C1F /* MsgCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MsgCenter.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				E11E1C354CC29E160D884A30 /* sql */,
 				E11E189163AA2B2CE8C406DA /* ui */,
 				E11E1053BA420BCED4F4B8EA /* yson */,
+				E11E1DAD6DD553BEEE84CF72 /* a.png */,
 			);
 			name = "Example for YetIOS";
 			path = YetIOS;
@@ -742,6 +745,7 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				E11E10B69449CE5B5F150B01 /* a.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

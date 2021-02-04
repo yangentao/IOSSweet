@@ -16,6 +16,13 @@ public func NamedView<T: UIView>(_ page: UIViewController, _ viewName: String) -
     return v as! T
 }
 
+public func NamedView<T: UIView>(_ parentView: UIView, _ viewName: String) -> T {
+    guard  let v = parentView.child(named: viewName, deep: true) else {
+        fatalError("NO view named: \(viewName)")
+    }
+    return v as! T
+}
+
 public extension UIView {
     var name: String? {
         get {
@@ -43,15 +50,6 @@ public extension UIView {
         }
         return nil
     }
-}
-
-
-public extension UIView {
-    @discardableResult
-    func addView<T: UIView>(_ child: T) -> T {
-        self.addSubview(child)
-        return child
-    }
 
     func child(named: String, deep: Bool = false) -> UIView? {
         if deep {
@@ -68,6 +66,22 @@ public extension UIView {
             }
         }
         return nil
+    }
+}
+
+
+public extension UIView {
+    @discardableResult
+    func addView<T: UIView>(_ child: T) -> T {
+        self.addSubview(child)
+        return child
+    }
+
+    @discardableResult
+    func addView<T: UIView>(_ child: T, _ block: (T) -> Void) -> T {
+        self.addSubview(child)
+        block(child)
+        return child
     }
 }
 
@@ -237,24 +251,29 @@ public extension UIView {
         }
     }
 
-    func roundLayer(_ cornerRadius: CGFloat) {
+    @discardableResult
+    func roundLayer(_ cornerRadius: CGFloat) -> Self {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = cornerRadius
-    }
-
-    func borderLayer(_ borderWidth: CGFloat, color: UIColor) {
-        self.layer.borderWidth = borderWidth
-        self.layer.borderColor = color.cgColor
-    }
-
-    func roundBorder(_ corner: CGFloat, _ border: CGFloat, _ borderColor: UIColor) -> UIView {
-        self.roundLayer(corner)
-        self.borderLayer(border, color: borderColor)
         return self
     }
 
-    func roundBorder() {
-        _ = roundBorder(4, 1, Theme.grayBackColor)
+    @discardableResult
+    func borderLayer(_ borderWidth: CGFloat, color: UIColor) -> Self {
+        self.layer.borderWidth = borderWidth
+        self.layer.borderColor = color.cgColor
+        return self
+    }
+
+    @discardableResult
+    func roundBorder(_ corner: CGFloat, _ border: CGFloat, _ borderColor: UIColor) -> Self {
+        self.roundLayer(corner)
+        return self.borderLayer(border, color: borderColor)
+    }
+
+    @discardableResult
+    func roundBorder() -> Self {
+        roundBorder(4, 1, Theme.grayBackColor)
     }
 
     func dotBorder(_ corner: CGFloat, _ color: Color, _ pattern: [NSNumber]) {
@@ -273,7 +292,8 @@ public extension UIView {
         logd(v.bounds)
     }
 
-    func shadow(_ color: UIColor, _ offset: CGSize, _ opacity: Float, _ radius: CGFloat) -> UIView {
+    @discardableResult
+    func shadow(_ color: UIColor, _ offset: CGSize, _ opacity: Float, _ radius: CGFloat) -> Self {
         let lay: CALayer = self.layer
         lay.shadowColor = color.cgColor
         lay.shadowOffset = offset
@@ -283,8 +303,9 @@ public extension UIView {
         return self
     }
 
-    func shadow(offset: CGFloat) {
-        _ = shadow(UIColor.black, Size.sized(offset, offset), 0.6, offset)
+    @discardableResult
+    func shadow(offset: CGFloat) -> Self {
+        shadow(UIColor.black, Size.sized(offset, offset), 0.6, offset)
     }
 
 
