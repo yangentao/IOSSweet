@@ -32,7 +32,7 @@ public typealias LayoutAttribute = NSLayoutConstraint.Attribute
 
 public extension UIView {
     @discardableResult
-    func sysConstraints(@AnyBuilder _ block: (SysConstraintItemBuilder) -> AnyGroup) -> Self {
+    func sysConstraintsBuild(@AnyBuilder _ block: (SysConstraintItemBuilder) -> AnyGroup) -> Self {
         let b = SysConstraintItemBuilder(self)
         let ls: [SysConstraintItem] = block(b).itemsTyped(true)
         for item in ls {
@@ -42,8 +42,12 @@ public extension UIView {
     }
 
 
-    var sysConstraintChain: SysConstraintChainBuilder {
-        SysConstraintChainBuilder(self)
+    @discardableResult
+    func sysConstraints(_ block: (SysConstraintChainBuilder) -> Void) -> Self {
+        let a = SysConstraintChainBuilder(self)
+        block(a)
+        a.install()
+        return self
     }
 }
 
@@ -98,15 +102,15 @@ public class SysConstraintParams {
 }
 
 public class SysConstraintItem {
-    fileprivate unowned var view: UIView // view
-    fileprivate var attr: LayoutAttribute
-    fileprivate var relation: LayoutRelation = .equal
-    fileprivate unowned var view2: UIView? = nil
-    fileprivate var attr2: LayoutAttribute = .notAnAttribute
+    unowned var view: UIView // view
+    var attr: LayoutAttribute
+    var relation: LayoutRelation = .equal
+    fileprivate unowned var otherView: UIView? = nil
+    fileprivate var otherAttr: LayoutAttribute = .notAnAttribute
     fileprivate var multiplier: CGFloat = 1
     fileprivate var constant: CGFloat = 0
     fileprivate var ident: String? = nil
-    fileprivate var priority: UILayoutPriority = .required
+    var priority: UILayoutPriority = .required
 
     fileprivate init(view: UIView, attr: LayoutAttribute) {
         self.view = view
@@ -115,7 +119,7 @@ public class SysConstraintItem {
 
     public func install() {
         view.translatesAutoresizingMaskIntoConstraints(false)
-        let cp = NSLayoutConstraint(item: view as Any, attribute: attr, relatedBy: relation, toItem: view2, attribute: attr2, multiplier: multiplier, constant: constant)
+        let cp = NSLayoutConstraint(item: view as Any, attribute: attr, relatedBy: relation, toItem: otherView, attribute: otherAttr, multiplier: multiplier, constant: constant)
         cp.priority = priority
         cp.identifier = ident
         view.sysConstraintParams.items.append(cp)
@@ -138,16 +142,16 @@ public class SysConstraintItem {
     }
 
     @discardableResult
-    fileprivate func relationTo(rel: LayoutRelation, view2: UIView? = nil, attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> SysConstraintItem {
+    fileprivate func relationTo(rel: LayoutRelation, otherView: UIView? = nil, otherAttr: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> SysConstraintItem {
         relation = rel
-        self.view2 = view2
-        if view2 != nil {
-            if let p2 = attr2 {
-                self.attr2 = p2
+        self.otherView = otherView
+        if otherView != nil {
+            if let p = otherAttr {
+                self.otherAttr = p
             } else {
-                self.attr2 = self.attr
+                self.otherAttr = self.attr
             }
-            if self.view === self.view2 && self.attr == self.attr2 {
+            if self.view === self.otherView && self.attr == self.otherAttr {
                 fatalError("依赖于自己的同一属性: \(self.attr), \(self.view) ")
             }
         }
@@ -224,53 +228,53 @@ public extension SysConstraintChainBuilder {
     }
 
     func leftParent(_ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .left).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        items += SysConstraintItem(view: view, attr: .left).relationTo(rel: .equal, otherView: view.superview!, constant: c)
         return self
     }
 
     func rightParent(_ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .right).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        items += SysConstraintItem(view: view, attr: .right).relationTo(rel: .equal, otherView: view.superview!, constant: c)
         return self
     }
 
     func topParent(_ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .top).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        items += SysConstraintItem(view: view, attr: .top).relationTo(rel: .equal, otherView: view.superview!, constant: c)
         return self
     }
 
     func bottomParent(_ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .bottom).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        items += SysConstraintItem(view: view, attr: .bottom).relationTo(rel: .equal, otherView: view.superview!, constant: c)
         return self
     }
 
     func leftEQ(_ view2: UIView, _ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .left).relationTo(rel: .equal, view2: view2, constant: c)
+        items += SysConstraintItem(view: view, attr: .left).relationTo(rel: .equal, otherView: view2, constant: c)
         return self
     }
 
     func rightEQ(_ view2: UIView, _ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .right).relationTo(rel: .equal, view2: view2, constant: c)
+        items += SysConstraintItem(view: view, attr: .right).relationTo(rel: .equal, otherView: view2, constant: c)
         return self
     }
 
     func topEQ(_ view2: UIView, _ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .top).relationTo(rel: .equal, view2: view2, constant: c)
+        items += SysConstraintItem(view: view, attr: .top).relationTo(rel: .equal, otherView: view2, constant: c)
         return self
     }
 
     func bottomEQ(_ view2: UIView, _ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .bottom).relationTo(rel: .equal, view2: view2, constant: c)
+        items += SysConstraintItem(view: view, attr: .bottom).relationTo(rel: .equal, otherView: view2, constant: c)
         return self
     }
 
 
     func centerX(_ view2: UIView, _ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .centerX).relationTo(rel: .equal, view2: view2, constant: c)
+        items += SysConstraintItem(view: view, attr: .centerX).relationTo(rel: .equal, otherView: view2, constant: c)
         return self
     }
 
     func centerY(_ view2: UIView, _ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .centerY).relationTo(rel: .equal, view2: view2, constant: c)
+        items += SysConstraintItem(view: view, attr: .centerY).relationTo(rel: .equal, otherView: view2, constant: c)
         return self
     }
 
@@ -279,12 +283,12 @@ public extension SysConstraintChainBuilder {
     }
 
     func centerXParent(_ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .centerX).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        items += SysConstraintItem(view: view, attr: .centerX).relationTo(rel: .equal, otherView: view.superview!, constant: c)
         return self
     }
 
     func centerYParent(_ c: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .centerY).relationTo(rel: .equal, view2: view.superview!, constant: c)
+        items += SysConstraintItem(view: view, attr: .centerY).relationTo(rel: .equal, otherView: view.superview!, constant: c)
         return self
     }
 
@@ -303,34 +307,34 @@ public extension SysConstraintChainBuilder {
     }
 
     func width(_ view2: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .width).relationTo(rel: .equal, view2: view2, multi: multi, constant: constant)
+        items += SysConstraintItem(view: view, attr: .width).relationTo(rel: .equal, otherView: view2, multi: multi, constant: constant)
         return self
     }
 
     func height(_ view2: UIView, multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .height).relationTo(rel: .equal, view2: view2, multi: multi, constant: constant)
+        items += SysConstraintItem(view: view, attr: .height).relationTo(rel: .equal, otherView: view2, multi: multi, constant: constant)
         return self
     }
 
     func widthParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .width).relationTo(rel: .equal, view2: view.superview!, multi: multi, constant: constant)
+        items += SysConstraintItem(view: view, attr: .width).relationTo(rel: .equal, otherView: view.superview!, multi: multi, constant: constant)
         return self
     }
 
     func heightParent(multi: CGFloat = 1, constant: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .height).relationTo(rel: .equal, view2: view.superview!, multi: multi, constant: constant)
+        items += SysConstraintItem(view: view, attr: .height).relationTo(rel: .equal, otherView: view.superview!, multi: multi, constant: constant)
         return self
     }
 
     //w = h * multi + constant
     func widthRatio(multi: CGFloat, constant: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .width).relationTo(rel: .equal, view2: view, attr2: .height, multi: multi, constant: constant)
+        items += SysConstraintItem(view: view, attr: .width).relationTo(rel: .equal, otherView: view, otherAttr: .height, multi: multi, constant: constant)
         return self
     }
 
     //h = w * multi + constant
     func heightRatio(multi: CGFloat, constant: CGFloat = 0) -> Self {
-        items += SysConstraintItem(view: view, attr: .height).relationTo(rel: .equal, view2: view, attr2: .width, multi: multi, constant: constant)
+        items += SysConstraintItem(view: view, attr: .height).relationTo(rel: .equal, otherView: view, otherAttr: .width, multi: multi, constant: constant)
         return self
     }
 }
@@ -463,21 +467,21 @@ public extension SysConstraintItemBuilderSome {
 
     func relationTo(rel: LayoutRelation, view2: UIView?, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [SysConstraintItem] {
         for a in self.items {
-            a.relationTo(rel: rel, view2: view2, attr2: attr2, multi: multi, constant: constant)
+            a.relationTo(rel: rel, otherView: view2, otherAttr: attr2, multi: multi, constant: constant)
         }
         return items
     }
 
     func relationParent(rel: LayoutRelation, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [SysConstraintItem] {
         for a in self.items {
-            a.relationTo(rel: rel, view2: a.view.superview!, attr2: attr2, multi: multi, constant: constant)
+            a.relationTo(rel: rel, otherView: a.view.superview!, otherAttr: attr2, multi: multi, constant: constant)
         }
         return items
     }
 
     func relationSelf(rel: LayoutRelation, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [SysConstraintItem] {
         for a in self.items {
-            a.relationTo(rel: rel, view2: a.view, attr2: attr2, multi: multi, constant: constant)
+            a.relationTo(rel: rel, otherView: a.view, otherAttr: attr2, multi: multi, constant: constant)
         }
         return items
     }
@@ -552,7 +556,7 @@ public class SysConstraintItemBuilderOne {
 public extension SysConstraintItemBuilderOne {
 
     func relationTo(rel: LayoutRelation, view2: UIView?, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> SysConstraintItem {
-        item.relationTo(rel: rel, view2: view2, attr2: attr2, multi: multi, constant: constant)
+        item.relationTo(rel: rel, otherView: view2, otherAttr: attr2, multi: multi, constant: constant)
     }
 
     func eq(view2: UIView?, attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> SysConstraintItem {

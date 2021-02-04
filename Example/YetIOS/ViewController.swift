@@ -57,25 +57,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.view.backColor(Colors.fill)
+        testSysConstraint()
+//        testBuildConstraint()
 
-        self.view.addView(UILabel.Primary).apply { lb in
-            lb.sysConstraintChain.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.5).ident("heightId").install()
-//            lb.constraintSystem { b in
-//                b.center.eqParent()
-//                b.rightBottom.eqParent()
-//                b.edges.eqParent()
-//                b.size.eqConst(200)
-//                b.width.eqParent(multi: 0.9)
-//                b.height.eqSelf(.width, multi: 0.5).ident("wid")
-//                b.width.eqSelf(.height, multi: 2, constant: 0)
-//            }
 
-            lb.numberOfLines = 0
-            lb.backColor(.green)
-//            lb.preferredMaxLayoutWidth = 100
-            lb.text = "杨恩涛我问问www我问问呜呜呜呜呜呜呜呜杨恩涛我问问www我问问呜呜呜呜呜呜呜呜杨恩涛我问问www我问问呜呜呜呜呜呜呜呜"
-        }
 //        let a = self.view.addView(ImageLabelView(frame:  let a = self.view.addView(ImageLabelView(frame: .zero)).layout { L in
 ////            L.centerParent().size(100, 100)
 ////        }
@@ -123,7 +108,43 @@ class ViewController: UIViewController {
         self.view.layoutIfNeeded()
 //        logd(label.frame)
 
+    }
 
+    func testBuildConstraint() {
+        view.buildViews {
+            UILabel.Primary.text("AAA").align(.center).named("a").backColor(.green).constraints {
+                $0.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.6)
+            }
+            UILabel.Primary.text("BBB").align(.center).named("b").backColor(.cyan).apply { lb in
+                lb.constraintsBuild { b in
+                    b.left.eq(otherName: "a")
+                    b.top.eq(otherName: "a", otherAttr: .bottom)
+                    b.size.eq(otherName: "a")
+                }
+            }
+        }
+
+    }
+
+    func testSysConstraint() {
+        let lb1 = self.view.addView(UILabel.Primary).apply { lb in
+            lb.sysConstraints {
+                $0.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.5).ident("heightId")
+            }
+            lb.numberOfLines = 0
+            lb.backColor(.green).align(.center)
+            lb.text = "杨恩涛"
+        }
+        self.view.addView(UILabel.Primary).apply { lb in
+            lb.sysConstraintsBuild { b in
+                b.centerX.eq(view2: lb1)
+                b.width.eq(view2: lb1)
+                b.top.eq(view2: lb1, attr2: .bottom)
+                b.height.eq(view2: lb1)
+            }
+            lb.text("BBBBBB")
+            lb.backColor(.cyan).align(.center)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {

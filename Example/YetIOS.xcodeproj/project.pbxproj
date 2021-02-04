@@ -126,7 +126,7 @@
 		E11E1D557B5417A75018B619 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E156CEDF86FA682B1EEFE /* ScanView.swift */; };
 		E11E1D6711EE089176176659 /* CursorModelEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E192AFEE72B8FAA9F004F /* CursorModelEx.swift */; };
 		E11E1D6CA13035C8BAFA0C47 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E18921D4770D0ACF9A005 /* Result.swift */; };
-		E11E1D7638AC9AB1DF2F925E /* ConstraintParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1AB429265DE81E5BEF9D /* ConstraintParams.swift */; };
+		E11E1D7638AC9AB1DF2F925E /* ConstraintViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1AB429265DE81E5BEF9D /* ConstraintViewBuilder.swift */; };
 		E11E1D8C785487FD517479F6 /* PullToRefreshLoadingViewCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1D7722074A042ACA3F76 /* PullToRefreshLoadingViewCircle.swift */; };
 		E11E1D94C54EFDC19680B3DF /* FileMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1940EB0B3974E1F666A9 /* FileMap.swift */; };
 		E11E1D98627262BA9C4C0C56 /* ActionBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1214B47B4D41B3040D14 /* ActionBlock.swift */; };
@@ -266,7 +266,7 @@
 		E11E1A5005909BD8387276CE /* ItemPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemPage.swift; sourceTree = "<group>"; };
 		E11E1A9923AA6323E095ED31 /* ByteBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ByteBuffer.swift; sourceTree = "<group>"; };
 		E11E1A9E29D430242BB721CA /* SQLite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLite.swift; sourceTree = "<group>"; };
-		E11E1AB429265DE81E5BEF9D /* ConstraintParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintParams.swift; sourceTree = "<group>"; };
+		E11E1AB429265DE81E5BEF9D /* ConstraintViewBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintViewBuilder.swift; sourceTree = "<group>"; };
 		E11E1AE0227DE849EC2AAF6C /* SQLiteExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteExt.swift; sourceTree = "<group>"; };
 		E11E1AE60133CF6926FEA919 /* Yson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Yson.swift; sourceTree = "<group>"; };
 		E11E1AFB706813ED7B03FAD0 /* InputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
@@ -456,7 +456,7 @@
 				E11E176EA4443BF613B8FB82 /* GridLayout.swift */,
 				E11E13AA8495DBBA47B1D19E /* LayoutBasic.swift */,
 				E11E15AD7702A19724AE10FF /* LinearLayout.swift */,
-				E11E1AB429265DE81E5BEF9D /* ConstraintParams.swift */,
+				E11E1AB429265DE81E5BEF9D /* ConstraintViewBuilder.swift */,
 				E11E1C28CDB09FD4FD8004A1 /* RelativeLayout.swift */,
 				E11E1E5F0271A16C474160A2 /* Grid.swift */,
 				E11E17379E28F52EADF62675 /* ConstraintSystem.swift */,
@@ -885,7 +885,7 @@
 				E11E113B491A8E5E2BB52054 /* GridLayout.swift in Sources */,
 				E11E1DB3B54F99EC7564D063 /* LayoutBasic.swift in Sources */,
 				E11E1C8E3EB3426CDEA84662 /* LinearLayout.swift in Sources */,
-				E11E1D7638AC9AB1DF2F925E /* ConstraintParams.swift in Sources */,
+				E11E1D7638AC9AB1DF2F925E /* ConstraintViewBuilder.swift in Sources */,
 				E11E1E8692EFB40E8BB60CF3 /* Alert.swift in Sources */,
 				E11E1177E706250C27281DD1 /* Labels.swift in Sources */,
 				E11E18B25E297A764221DAAF /* Buttons.swift in Sources */,

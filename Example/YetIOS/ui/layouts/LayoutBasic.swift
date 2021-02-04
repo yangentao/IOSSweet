@@ -24,7 +24,7 @@ public extension UIView {
             addSubview($0)
         }
         viewList.each {
-            $0.installMyConstraints()
+            $0.installSelfConstraints()
         }
         return self
     }

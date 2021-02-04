@@ -121,36 +121,36 @@ public extension YetLayout {
 }
 
 public class YetLayoutAttr {
-    let conItem: ConstraintCondition
+    let conItem: ConstraintItem
 
     init(_ view: UIView, _ attr: NSLayoutConstraint.Attribute) {
-        conItem = ConstraintCondition(attr)
-        conItem.itemView = view
-        conItem.attr2 = .notAnAttribute
+        conItem = ConstraintItem(view: view, attr: attr)
+        conItem.view = view
+        conItem.otherAttr = .notAnAttribute
     }
 }
 
 public class YetLayoutEndNode {
-    var conItem: ConstraintCondition
+    var conItem: ConstraintItem
 
-    init(_ item: ConstraintCondition, _ relation: NSLayoutConstraint.Relation, _ constant: CGFloat) {
+    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ constant: CGFloat) {
         self.conItem = item
         self.conItem.relation = relation
         self.conItem.constant = constant
     }
 
-    init(_ item: ConstraintCondition, _ relation: NSLayoutConstraint.Relation, _ view2: UIView) {
+    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ view2: UIView) {
         self.conItem = item
         self.conItem.relation = relation
-        self.conItem.toItemView = view2
-        self.conItem.attr2 = self.conItem.attr
+        self.conItem.otherView = view2
+        self.conItem.otherAttr = self.conItem.attr
     }
 
-    init(_ item: ConstraintCondition, _ relation: NSLayoutConstraint.Relation, _ view2: UIView, _ attr2: NSLayoutConstraint.Attribute) {
+    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ view2: UIView, _ attr2: NSLayoutConstraint.Attribute) {
         self.conItem = item
         self.conItem.relation = relation
-        self.conItem.toItemView = view2
-        self.conItem.attr2 = attr2
+        self.conItem.otherView = view2
+        self.conItem.otherAttr = attr2
     }
 }
 
@@ -201,50 +201,50 @@ public extension YetLayoutAttr {
 
     func eq(_ viewName: String) -> YetLayoutEndNode {
         if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .equal, conItem.itemView.superview!)
+            return YetLayoutEndNode(conItem, .equal, conItem.view.superview!)
         } else {
-            return YetLayoutEndNode(conItem, .equal, conItem.itemView.superview!.findByName(viewName)!)
+            return YetLayoutEndNode(conItem, .equal, conItem.view.superview!.findByName(viewName)!)
         }
     }
 
     func ge(_ viewName: String) -> YetLayoutEndNode {
         if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.itemView.superview!)
+            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.view.superview!)
         } else {
-            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.itemView.superview!.findByName(viewName)!)
+            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.view.superview!.findByName(viewName)!)
         }
     }
 
     func le(_ viewName: String) -> YetLayoutEndNode {
         if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.itemView.superview!)
+            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.view.superview!)
         } else {
-            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.itemView.superview!.findByName(viewName)!)
+            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.view.superview!.findByName(viewName)!)
         }
     }
 
     func eq(_ viewName: String, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
         if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .equal, conItem.itemView.superview!, attr2)
+            return YetLayoutEndNode(conItem, .equal, conItem.view.superview!, attr2)
         } else {
-            return YetLayoutEndNode(conItem, .equal, conItem.itemView.superview!.findByName(viewName)!, attr2)
+            return YetLayoutEndNode(conItem, .equal, conItem.view.superview!.findByName(viewName)!, attr2)
         }
 
     }
 
     func ge(_ viewName: String, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
         if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.itemView.superview!, attr2)
+            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.view.superview!, attr2)
         } else {
-            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.itemView.superview!.findByName(viewName)!, attr2)
+            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.view.superview!.findByName(viewName)!, attr2)
         }
     }
 
     func le(_ viewName: String, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
         if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.itemView.superview!, attr2)
+            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.view.superview!, attr2)
         } else {
-            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.itemView.superview!.findByName(viewName)!, attr2)
+            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.view.superview!.findByName(viewName)!, attr2)
         }
     }
 }
@@ -252,33 +252,33 @@ public extension YetLayoutAttr {
 public extension YetLayoutAttr {
 
     var eqParent: YetLayoutEndNode {
-        eq(conItem.itemView.superview!)
+        eq(conItem.view.superview!)
     }
     var geParent: YetLayoutEndNode {
-        eq(conItem.itemView.superview!)
+        eq(conItem.view.superview!)
     }
     var leParent: YetLayoutEndNode {
-        le(conItem.itemView.superview!)
+        le(conItem.view.superview!)
     }
 
 
     func eqParent(_ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        eq(conItem.itemView.superview!, attr2)
+        eq(conItem.view.superview!, attr2)
     }
 
     func geParent(_ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        ge(conItem.itemView.superview!, attr2)
+        ge(conItem.view.superview!, attr2)
     }
 
     func leParent(_ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        le(conItem.itemView.superview!, attr2)
+        le(conItem.view.superview!, attr2)
     }
 }
 
 public extension YetLayoutEndNode {
 
     private func findOld() -> NSLayoutConstraint? {
-        let view: UIView = self.conItem.itemView
+        let view: UIView = self.conItem.view
         let ls = view.sysConstraintParams.items.filter { n in
             n.isActive && n.firstItem === view && n.firstAttribute == self.conItem.attr && n.relation == self.conItem.relation
         }
@@ -289,7 +289,7 @@ public extension YetLayoutEndNode {
     }
 
     func update() {
-        let view: UIView = self.conItem.itemView
+        let view: UIView = self.conItem.view
         if let c = findOld() {
             c.constant = conItem.constant
             view.setNeedsUpdateConstraints()
@@ -299,7 +299,7 @@ public extension YetLayoutEndNode {
     }
 
     func remove() {
-        let view: UIView = self.conItem.itemView
+        let view: UIView = self.conItem.view
         let c = view.sysConstraintParams.items.removeFirstIf { n in
             n.firstItem === view && n.firstAttribute == conItem.attr && n.relation == conItem.relation
         }
@@ -308,11 +308,11 @@ public extension YetLayoutEndNode {
 
     @discardableResult
     func active() -> NSLayoutConstraint {
-        let n = NSLayoutConstraint(item: conItem.itemView as Any, attribute: conItem.attr, relatedBy: conItem.relation, toItem: conItem.toItemView, attribute: conItem.attr2, multiplier: conItem.multiplier, constant: conItem.constant)
+        let n = NSLayoutConstraint(item: conItem.view as Any, attribute: conItem.attr, relatedBy: conItem.relation, toItem: conItem.otherView, attribute: conItem.otherAttr, multiplier: conItem.multiplier, constant: conItem.constant)
         n.priority = conItem.priority
         n.identifier = conItem.ident
         n.isActive = true
-        conItem.itemView.sysConstraintParams.items.append(n)
+        conItem.view.sysConstraintParams.items.append(n)
         return n
     }
 
