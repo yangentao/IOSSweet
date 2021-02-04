@@ -61,10 +61,12 @@ class ViewController: UIViewController {
 
         self.view.addView(UILabel.Primary).apply { lb in
             lb.constraintSystem { b in
-                b.centerX.eqParent()
-                b.centerY.eqParent()
+                b.center.eqParent()
+//                b.rightBottom.eqParent()
+//                b.edges.eqParent()
+//                b.size.eqConst(200)
                 b.width.eqParent(multi: 0.9)
-                b.height.eqSelf(.width, multi: 0.5)
+                b.height.eqSelf(.width, multi: 0.5).ident("wid")
             }
 
             lb.numberOfLines = 0

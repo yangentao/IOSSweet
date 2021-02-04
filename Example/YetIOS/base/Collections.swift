@@ -49,6 +49,14 @@ public extension Sequence {
         }
         return m
     }
+
+    @discardableResult
+    func each(_ block: (Element) -> Void) -> Self {
+        for item in self {
+            block(item)
+        }
+        return self
+    }
 }
 
 public extension Sequence where Element: Hashable {

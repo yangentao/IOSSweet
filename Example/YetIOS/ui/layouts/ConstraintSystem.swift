@@ -18,7 +18,7 @@ func testConstraint() {
         b.centerX.eqParent()
         b.width.eqSelf(.height)
         b.height.eqConst(100)
-        b.centerX.eq(view2: a, attr2: .centerX).priority(200).ident("helloIdent")
+        b.centerX.eq(view2: a)//.priority(200).ident("helloIdent")
     }
 
 }
@@ -142,86 +142,242 @@ public class ConstraintItemBuilder {
 
 
 public extension ConstraintItemBuilder {
-    private func prop(_ attr: LayoutAttribute) -> ConstraintItemBuilderNext {
-        let a = ConstraintItem(view: self.view, attr: attr)
-        return ConstraintItemBuilderNext(self.view, item: a)
+    private func prop(_ attr: LayoutAttribute) -> ConstraintItemBuilderOne {
+        return ConstraintItemBuilderOne(ConstraintItem(view: self.view, attr: attr))
     }
 
-    var left: ConstraintItemBuilderNext {
+    private func props(_ attrs: LayoutAttribute...) -> ConstraintItemBuilderSome {
+        let ls = attrs.map {
+            ConstraintItem(view: self.view, attr: $0)
+        }
+        return ConstraintItemBuilderSome(ls)
+    }
+
+    var edges: ConstraintItemBuilderSome {
+        props(.left, .top, .right, .bottom)
+    }
+    var edgeX: ConstraintItemBuilderSome {
+        props(.left, .right)
+    }
+    var edgeY: ConstraintItemBuilderSome {
+        props(.top, .bottom)
+    }
+
+    var leftTop: ConstraintItemBuilderSome {
+        props(.left, .top)
+    }
+    var leftBottom: ConstraintItemBuilderSome {
+        props(.left, .bottom)
+    }
+    var rightTop: ConstraintItemBuilderSome {
+        props(.right, .top)
+    }
+    var rightBottom: ConstraintItemBuilderSome {
+        props(.right, .bottom)
+    }
+    var size: ConstraintItemBuilderSome {
+        props(.width, .height)
+    }
+    var center: ConstraintItemBuilderSome {
+        props(.centerX, .centerY)
+    }
+
+    //------
+    var left: ConstraintItemBuilderOne {
         prop(.left)
     }
-    var right: ConstraintItemBuilderNext {
+    var right: ConstraintItemBuilderOne {
         prop(.right)
     }
-    var top: ConstraintItemBuilderNext {
+    var top: ConstraintItemBuilderOne {
         prop(.top)
     }
-    var bottom: ConstraintItemBuilderNext {
+    var bottom: ConstraintItemBuilderOne {
         prop(.bottom)
     }
-    var centerX: ConstraintItemBuilderNext {
+    var centerX: ConstraintItemBuilderOne {
         prop(.centerX)
     }
-    var centerY: ConstraintItemBuilderNext {
+    var centerY: ConstraintItemBuilderOne {
         prop(.centerY)
     }
-    var width: ConstraintItemBuilderNext {
+    var width: ConstraintItemBuilderOne {
         prop(.width)
     }
-    var height: ConstraintItemBuilderNext {
+    var height: ConstraintItemBuilderOne {
         prop(.height)
     }
-    var leading: ConstraintItemBuilderNext {
+    var leading: ConstraintItemBuilderOne {
         prop(.leading)
     }
-    var trailing: ConstraintItemBuilderNext {
+    var trailing: ConstraintItemBuilderOne {
         prop(.trailing)
     }
 
-    var lastBaseline: ConstraintItemBuilderNext {
+    var lastBaseline: ConstraintItemBuilderOne {
         prop(.lastBaseline)
     }
-    var firstBaseline: ConstraintItemBuilderNext {
+    var firstBaseline: ConstraintItemBuilderOne {
         prop(.firstBaseline)
     }
-    var leftMargin: ConstraintItemBuilderNext {
+    var leftMargin: ConstraintItemBuilderOne {
         prop(.leftMargin)
     }
-    var rightMargin: ConstraintItemBuilderNext {
+    var rightMargin: ConstraintItemBuilderOne {
         prop(.rightMargin)
     }
-    var topMargin: ConstraintItemBuilderNext {
+    var topMargin: ConstraintItemBuilderOne {
         prop(.topMargin)
     }
-    var bottomMargin: ConstraintItemBuilderNext {
+    var bottomMargin: ConstraintItemBuilderOne {
         prop(.bottomMargin)
     }
-    var leadingMargin: ConstraintItemBuilderNext {
+    var leadingMargin: ConstraintItemBuilderOne {
         prop(.leadingMargin)
     }
-    var trailingMargin: ConstraintItemBuilderNext {
+    var trailingMargin: ConstraintItemBuilderOne {
         prop(.trailingMargin)
     }
-    var centerXWithinMargins: ConstraintItemBuilderNext {
+    var centerXWithinMargins: ConstraintItemBuilderOne {
         prop(.centerXWithinMargins)
     }
-    var centerYWithinMargins: ConstraintItemBuilderNext {
+    var centerYWithinMargins: ConstraintItemBuilderOne {
         prop(.centerYWithinMargins)
     }
 }
 
-public class ConstraintItemBuilderNext {
-    fileprivate unowned var view: UIView
-    fileprivate let item: ConstraintItem
+public class ConstraintItemBuilderSome {
+    fileprivate var items: [ConstraintItem] = []
 
-    fileprivate init(_ view: UIView, item: ConstraintItem) {
-        self.view = view
-        self.item = item
+    fileprivate init(_ items: [ConstraintItem]) {
+        self.items = items
     }
 
 }
 
-public extension ConstraintItemBuilderNext {
+public extension ConstraintItemBuilderSome {
+
+    func relationTo(rel: LayoutRelation, view2: UIView?, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        for a in self.items {
+            a.relation = rel
+            a.view2 = view2
+            if view2 != nil {
+                if let p2 = attr2 {
+                    a.attr2 = p2
+                } else {
+                    a.attr2 = a.attr
+                }
+                if a.view === a.view2 && a.attr == a.attr2 {
+                    fatalError("依赖于自己的同一属性: \(a.attr), \(a.view!) ")
+                }
+            }
+            a.multiplier = multi
+            a.constant = constant
+        }
+        return items
+    }
+
+    func relationParent(rel: LayoutRelation, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        for a in self.items {
+            a.relation = rel
+            a.view2 = a.view.superview!
+            if let p2 = attr2 {
+                a.attr2 = p2
+            } else {
+                a.attr2 = a.attr
+            }
+            a.multiplier = multi
+            a.constant = constant
+        }
+        return items
+    }
+
+    func relationSelf(rel: LayoutRelation, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        for a in self.items {
+            a.relation = rel
+            a.view2 = a.view
+            if let p2 = attr2 {
+                a.attr2 = p2
+            } else {
+                a.attr2 = a.attr
+            }
+            if a.view === a.view2 && a.attr == a.attr2 {
+                fatalError("依赖于自己的同一属性: \(a.attr), \(a.view!) ")
+            }
+            a.multiplier = multi
+            a.constant = constant
+        }
+        return items
+    }
+
+    func eq(view2: UIView?, attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        relationTo(rel: .equal, view2: view2, attr2: attr2, multi: multi, constant: constant)
+    }
+
+    func ge(view2: UIView?, attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        relationTo(rel: .greaterThanOrEqual, view2: view2, attr2: attr2, multi: multi, constant: constant)
+    }
+
+    func le(view2: UIView?, attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        relationTo(rel: .lessThanOrEqual, view2: view2, attr2: attr2, multi: multi, constant: constant)
+    }
+
+
+    func eqParent(attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        relationParent(rel: .equal, attr2: attr2, multi: multi, constant: constant)
+    }
+
+    func geParent(attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        relationParent(rel: .greaterThanOrEqual, attr2: attr2, multi: multi, constant: constant)
+    }
+
+    func leParent(attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        relationParent(rel: .lessThanOrEqual, attr2: attr2, multi: multi, constant: constant)
+    }
+
+    func eqSelf(_ attr2: LayoutAttribute, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        return relationSelf(rel: .equal, attr2: attr2, multi: multi, constant: constant)
+    }
+
+    func geSelf(_ attr2: LayoutAttribute, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        return relationSelf(rel: .greaterThanOrEqual, attr2: attr2, multi: multi, constant: constant)
+    }
+
+    func leSelf(_ attr2: LayoutAttribute, multi: CGFloat = 1, constant: CGFloat = 0) -> [ConstraintItem] {
+        return relationSelf(rel: .lessThanOrEqual, attr2: attr2, multi: multi, constant: constant)
+    }
+
+    func eqConst(_ constant: CGFloat) -> [ConstraintItem] {
+        relationTo(rel: .equal, view2: nil, attr2: .notAnAttribute, multi: 1, constant: constant)
+    }
+
+    func geConst(_ constant: CGFloat) -> [ConstraintItem] {
+        relationTo(rel: .greaterThanOrEqual, view2: nil, attr2: .notAnAttribute, multi: 1, constant: constant)
+    }
+
+    func leConst(_ constant: CGFloat) -> [ConstraintItem] {
+        relationTo(rel: .lessThanOrEqual, view2: nil, attr2: .notAnAttribute, multi: 1, constant: constant)
+    }
+
+}
+
+
+public class ConstraintItemBuilderOne {
+    fileprivate var item: ConstraintItem
+
+    fileprivate init(_ item: ConstraintItem) {
+        self.item = item
+    }
+
+    fileprivate var view: UIView {
+        item.view
+    }
+    fileprivate var superView: UIView {
+        item.view.superview!
+    }
+}
+
+public extension ConstraintItemBuilderOne {
 
     func relationTo(rel: LayoutRelation, view2: UIView?, attr2: LayoutAttribute?, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
         let a = self.item
@@ -233,10 +389,14 @@ public extension ConstraintItemBuilderNext {
             } else {
                 a.attr2 = a.attr
             }
+            if a.view === a.view2 && a.attr == a.attr2 {
+                fatalError("依赖于自己的同一属性: \(a.attr), \(a.view!) ")
+            }
         }
         a.multiplier = multi
         a.constant = constant
-        return a
+
+        return item
     }
 
     func eq(view2: UIView?, attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
@@ -253,35 +413,26 @@ public extension ConstraintItemBuilderNext {
 
 
     func eqParent(attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
-        relationTo(rel: .equal, view2: view.superview!, attr2: attr2, multi: multi, constant: constant)
+        relationTo(rel: .equal, view2: superView, attr2: attr2, multi: multi, constant: constant)
     }
 
     func geParent(attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
-        relationTo(rel: .greaterThanOrEqual, view2: view.superview!, attr2: attr2, multi: multi, constant: constant)
+        relationTo(rel: .greaterThanOrEqual, view2: superView, attr2: attr2, multi: multi, constant: constant)
     }
 
     func leParent(attr2: LayoutAttribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
-        relationTo(rel: .lessThanOrEqual, view2: view.superview!, attr2: attr2, multi: multi, constant: constant)
+        relationTo(rel: .lessThanOrEqual, view2: superView, attr2: attr2, multi: multi, constant: constant)
     }
 
     func eqSelf(_ attr2: LayoutAttribute, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
-        if item.attr == attr2 {
-            fatalError("依赖与自己的同一属性: \(attr2)")
-        }
         return relationTo(rel: .equal, view2: view, attr2: attr2, multi: multi, constant: constant)
     }
 
     func geSelf(_ attr2: LayoutAttribute, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
-        if item.attr == attr2 {
-            fatalError("依赖与自己的同一属性: \(attr2)")
-        }
         return relationTo(rel: .greaterThanOrEqual, view2: view, attr2: attr2, multi: multi, constant: constant)
     }
 
     func leSelf(_ attr2: LayoutAttribute, multi: CGFloat = 1, constant: CGFloat = 0) -> ConstraintItem {
-        if item.attr == attr2 {
-            fatalError("依赖与自己的同一属性: \(attr2)")
-        }
         return relationTo(rel: .lessThanOrEqual, view2: view, attr2: attr2, multi: multi, constant: constant)
     }
 
