@@ -18,6 +18,13 @@ public let WrapContent: CGFloat = -2
 
 public class SysConstraintParams {
     var items = [NSLayoutConstraint]()
+
+    func removeByID(_ ident: String) {
+        let a = items.removeFirstIf {
+            $0.identifier == ident
+        }
+        a?.isActive = false
+    }
 }
 
 public extension UIView {
@@ -47,11 +54,8 @@ public extension UIView {
         sysConstraintParams.items = []
     }
 
-    func constraintRemove(ident: String) {
-        let c = sysConstraintParams.items.removeFirstIf { n in
-            n.identifier == ident
-        }
-        c?.isActive = false
+    func constraintRemove(_ ident: String) {
+        sysConstraintParams.removeByID(ident)
     }
 
     //resist larger than intrinsic content size

@@ -13,21 +13,20 @@ public extension UIView {
         YetLayout(self)
     }
 
+    @discardableResult
     func layout(block: (YetLayout) -> Void) -> Self {
-        block(self.layout)
+        block(YetLayout(self))
+        self.installSelfConstraints()
         return self
     }
-
-
 }
 
 
 public class YetLayout {
-    private unowned var view: UIView
+    private let view: UIView
 
     public init(_ view: UIView) {
         self.view = view
-        self.view.translatesAutoresizingMaskIntoConstraints = false
     }
 }
 
@@ -39,118 +38,129 @@ public extension YetLayout {
     }
 
     func remove(ident: String) {
-        self.view.constraintRemove(ident: ident)
+        self.view.constraintRemove(ident)
+    }
+
+    private func prop(_ attr: LayoutAttribute) -> YetLayoutAttr {
+        YetLayoutAttr(ConstraintItem(view: self.view, attr: attr))
     }
 
     var left: YetLayoutAttr {
-        YetLayoutAttr(self.view, .left)
+        prop(.left)
     }
 
     var right: YetLayoutAttr {
-        YetLayoutAttr(self.view, .right)
+        prop(.right)
     }
 
     var top: YetLayoutAttr {
-        YetLayoutAttr(self.view, .top)
+        prop(.top)
     }
 
     var bottom: YetLayoutAttr {
-        YetLayoutAttr(self.view, .bottom)
+        prop(.bottom)
     }
 
     var leading: YetLayoutAttr {
-        YetLayoutAttr(self.view, .leading)
+        prop(.leading)
     }
 
     var trailing: YetLayoutAttr {
-        YetLayoutAttr(self.view, .trailing)
+        prop(.trailing)
     }
 
     var width: YetLayoutAttr {
-        YetLayoutAttr(self.view, .width)
+        prop(.width)
     }
 
     var height: YetLayoutAttr {
-        YetLayoutAttr(self.view, .height)
+        prop(.height)
     }
 
     var centerX: YetLayoutAttr {
-        YetLayoutAttr(self.view, .centerX)
+        prop(.centerX)
     }
 
     var centerY: YetLayoutAttr {
-        YetLayoutAttr(self.view, .centerY)
+        prop(.centerY)
     }
 
     var lastBaseline: YetLayoutAttr {
-        YetLayoutAttr(self.view, .lastBaseline)
+        prop(.lastBaseline)
     }
 
     var firstBaseline: YetLayoutAttr {
-        YetLayoutAttr(self.view, .firstBaseline)
+        prop(.firstBaseline)
     }
 
     var leftMargin: YetLayoutAttr {
-        YetLayoutAttr(self.view, .leftMargin)
+        prop(.leftMargin)
     }
 
     var rightMargin: YetLayoutAttr {
-        YetLayoutAttr(self.view, .rightMargin)
+        prop(.rightMargin)
     }
 
     var topMargin: YetLayoutAttr {
-        YetLayoutAttr(self.view, .topMargin)
+        prop(.topMargin)
     }
 
     var bottomMargin: YetLayoutAttr {
-        YetLayoutAttr(self.view, .bottomMargin)
+        prop(.bottomMargin)
     }
 
     var leadingMargin: YetLayoutAttr {
-        YetLayoutAttr(self.view, .leadingMargin)
+        prop(.leadingMargin)
     }
 
     var trailingMargin: YetLayoutAttr {
-        YetLayoutAttr(self.view, .trailingMargin)
+        prop(.trailingMargin)
     }
 
     var centerYWithinMargins: YetLayoutAttr {
-        YetLayoutAttr(self.view, .centerYWithinMargins)
+        prop(.centerYWithinMargins)
     }
 
 }
 
 public class YetLayoutAttr {
-    let conItem: ConstraintItem
+    let item: ConstraintItem
 
-    init(_ view: UIView, _ attr: NSLayoutConstraint.Attribute) {
-        conItem = ConstraintItem(view: view, attr: attr)
-        conItem.view = view
-        conItem.otherAttr = .notAnAttribute
+    init(_ item: ConstraintItem) {
+        self.item = item
+        item.view.constraintItems.items.append(item)
     }
 }
 
 public class YetLayoutEndNode {
-    var conItem: ConstraintItem
+    var item: ConstraintItem
 
-    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ constant: CGFloat) {
-        self.conItem = item
-        self.conItem.relation = relation
-        self.conItem.constant = constant
+    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ view2: UIView?, _ attr2: NSLayoutConstraint.Attribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) {
+        self.item = item
+        self.item.relation = relation
+        self.item.otherView = view2
+        self.item.multiplier = multi
+        self.item.constant = constant
+        if view2 != nil {
+            if attr2 == nil {
+                self.item.otherAttr = self.item.attr
+            } else {
+                self.item.otherAttr = attr2!
+            }
+        }
     }
 
-    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ view2: UIView) {
-        self.conItem = item
-        self.conItem.relation = relation
-        self.conItem.otherView = view2
-        self.conItem.otherAttr = self.conItem.attr
-    }
-
-    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ view2: UIView, _ attr2: NSLayoutConstraint.Attribute) {
-        self.conItem = item
-        self.conItem.relation = relation
-        self.conItem.otherView = view2
-        self.conItem.otherAttr = attr2
+    init(_ item: ConstraintItem, _ relation: NSLayoutConstraint.Relation, _ viewName: String, _ attr2: NSLayoutConstraint.Attribute? = nil, multi: CGFloat = 1, constant: CGFloat = 0) {
+        self.item = item
+        self.item.relation = relation
+        self.item.otherName = viewName
+        self.item.multiplier = multi
+        self.item.constant = constant
+        if attr2 == nil {
+            self.item.otherAttr = self.item.attr
+        } else {
+            self.item.otherAttr = attr2!
+        }
     }
 }
 
@@ -158,205 +168,180 @@ public class YetLayoutEndNode {
 public extension YetLayoutAttr {
 
     func eq(_ c: CGFloat) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .equal, c)
+        YetLayoutEndNode(item, .equal, nil, constant: c)
     }
 
     func ge(_ c: CGFloat) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .greaterThanOrEqual, c)
+        YetLayoutEndNode(item, .greaterThanOrEqual, nil, constant: c)
     }
 
     func le(_ c: CGFloat) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .lessThanOrEqual, c)
+        YetLayoutEndNode(item, .lessThanOrEqual, nil, constant: c)
     }
 }
 
 public extension YetLayoutAttr {
-
+    @discardableResult
     func eq(_ v: UIView) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .equal, v)
+        YetLayoutEndNode(item, .equal, v)
     }
 
+    @discardableResult
     func ge(_ v: UIView) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .greaterThanOrEqual, v)
+        YetLayoutEndNode(item, .greaterThanOrEqual, v)
     }
 
+    @discardableResult
     func le(_ v: UIView) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .lessThanOrEqual, v)
+        YetLayoutEndNode(item, .lessThanOrEqual, v)
     }
 
-    func eq(_ v: UIView, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .equal, v, attr2)
+    @discardableResult
+    func eq(_ v: UIView, _ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        YetLayoutEndNode(item, .equal, v, otherAttr)
     }
 
-    func ge(_ v: UIView, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .greaterThanOrEqual, v, attr2)
+    @discardableResult
+    func ge(_ v: UIView, _ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        YetLayoutEndNode(item, .greaterThanOrEqual, v, otherAttr)
     }
 
-    func le(_ v: UIView, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        YetLayoutEndNode(conItem, .lessThanOrEqual, v, attr2)
+    @discardableResult
+    func le(_ v: UIView, _ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        YetLayoutEndNode(item, .lessThanOrEqual, v, otherAttr)
     }
 }
 
 public extension YetLayoutAttr {
 
+    @discardableResult
     func eq(_ viewName: String) -> YetLayoutEndNode {
-        if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .equal, conItem.view.superview!)
-        } else {
-            return YetLayoutEndNode(conItem, .equal, conItem.view.superview!.findByName(viewName)!)
-        }
+        YetLayoutEndNode(item, .equal, viewName)
     }
 
+    @discardableResult
     func ge(_ viewName: String) -> YetLayoutEndNode {
-        if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.view.superview!)
-        } else {
-            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.view.superview!.findByName(viewName)!)
-        }
+        YetLayoutEndNode(item, .greaterThanOrEqual, viewName)
     }
 
+    @discardableResult
     func le(_ viewName: String) -> YetLayoutEndNode {
-        if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.view.superview!)
-        } else {
-            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.view.superview!.findByName(viewName)!)
-        }
+        YetLayoutEndNode(item, .lessThanOrEqual, viewName)
     }
 
-    func eq(_ viewName: String, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .equal, conItem.view.superview!, attr2)
-        } else {
-            return YetLayoutEndNode(conItem, .equal, conItem.view.superview!.findByName(viewName)!, attr2)
-        }
+    @discardableResult
+    func eq(_ viewName: String, _ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        YetLayoutEndNode(item, .equal, viewName, otherAttr)
 
     }
 
-    func ge(_ viewName: String, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.view.superview!, attr2)
-        } else {
-            return YetLayoutEndNode(conItem, .greaterThanOrEqual, conItem.view.superview!.findByName(viewName)!, attr2)
-        }
+    @discardableResult
+    func ge(_ viewName: String, _ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        YetLayoutEndNode(item, .greaterThanOrEqual, viewName, otherAttr)
     }
 
-    func le(_ viewName: String, _ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        if viewName == ParentViewName {
-            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.view.superview!, attr2)
-        } else {
-            return YetLayoutEndNode(conItem, .lessThanOrEqual, conItem.view.superview!.findByName(viewName)!, attr2)
-        }
+    @discardableResult
+    func le(_ viewName: String, _ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        YetLayoutEndNode(item, .lessThanOrEqual, viewName, otherAttr)
     }
 }
 
 public extension YetLayoutAttr {
-
     var eqParent: YetLayoutEndNode {
-        eq(conItem.view.superview!)
+        eq(ParentViewName)
     }
     var geParent: YetLayoutEndNode {
-        eq(conItem.view.superview!)
+        eq(ParentViewName)
     }
     var leParent: YetLayoutEndNode {
-        le(conItem.view.superview!)
+        le(ParentViewName)
     }
 
-
-    func eqParent(_ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        eq(conItem.view.superview!, attr2)
+    @discardableResult
+    func eqParent(_ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        eq(ParentViewName, otherAttr)
     }
 
-    func geParent(_ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        ge(conItem.view.superview!, attr2)
+    @discardableResult
+    func geParent(_ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        ge(ParentViewName, otherAttr)
     }
 
-    func leParent(_ attr2: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
-        le(conItem.view.superview!, attr2)
+    @discardableResult
+    func leParent(_ otherAttr: NSLayoutConstraint.Attribute) -> YetLayoutEndNode {
+        le(ParentViewName, otherAttr)
     }
 }
 
 public extension YetLayoutEndNode {
 
-    private func findOld() -> NSLayoutConstraint? {
-        let view: UIView = self.conItem.view
-        let ls = view.sysConstraintParams.items.filter { n in
-            n.isActive && n.firstItem === view && n.firstAttribute == self.conItem.attr && n.relation == self.conItem.relation
-        }
-        if !ls.isEmpty {
-            return ls.first
-        }
-        return nil
+    private func findOldIdent() -> String? {
+        let view: UIView = self.item.view
+        return view.sysConstraintParams.items.filter { n in
+            n.isActive && n.firstItem === view && n.firstAttribute == self.item.attr && n.relation == self.item.relation
+        }.first?.identifier
     }
 
     func update() {
-        let view: UIView = self.conItem.view
-        if let c = findOld() {
-            c.constant = conItem.constant
-            view.setNeedsUpdateConstraints()
-            view.superview?.setNeedsUpdateConstraints()
-            view.superview?.setNeedsLayout()
+        if let s = findOldIdent() {
+            item.view.constraintUpdate(ident: s, constant: item.constant)
         }
+        item.view.constraintItems.removeByID(item._ID)
     }
 
     func remove() {
-        let view: UIView = self.conItem.view
-        let c = view.sysConstraintParams.items.removeFirstIf { n in
-            n.firstItem === view && n.firstAttribute == conItem.attr && n.relation == conItem.relation
+        if let s = findOldIdent() {
+            item.view.constraintRemove(s)
         }
-        c?.isActive = false
+        item.view.constraintItems.removeByID(item._ID)
     }
 
-    @discardableResult
-    func active() -> NSLayoutConstraint {
-        let n = NSLayoutConstraint(item: conItem.view as Any, attribute: conItem.attr, relatedBy: conItem.relation, toItem: conItem.otherView, attribute: conItem.otherAttr, multiplier: conItem.multiplier, constant: conItem.constant)
-        n.priority = conItem.priority
-        n.identifier = conItem.ident
-        n.isActive = true
-        conItem.view.sysConstraintParams.items.append(n)
-        return n
+    func active() {
+        item.view.constraintItems.removeByID(item._ID)
+        item.install()
     }
 
 
     func priority(_ p: UILayoutPriority) -> Self {
-        conItem.priority = p
+        item.priority = p
         return self
     }
 
     func priority(_ n: Int) -> Self {
-        conItem.priority = UILayoutPriority(rawValue: Float(n))
+        item.priority = UILayoutPriority(rawValue: Float(n))
         return self
     }
 
     var priorityLow: Self {
-        conItem.priority = UILayoutPriority.defaultLow
+        item.priority = UILayoutPriority.defaultLow
         return self
     }
     var priorityHigh: Self {
-        conItem.priority = UILayoutPriority.defaultHigh
+        item.priority = UILayoutPriority.defaultHigh
         return self
     }
     var priorityFittingSize: Self {
-        conItem.priority = UILayoutPriority.fittingSizeLevel
+        item.priority = UILayoutPriority.fittingSizeLevel
         return self
     }
 
     func ident(_ name: String) -> Self {
-        conItem.ident = name
+        item.ident = name
         return self
     }
 
     func divided(_ m: CGFloat) -> Self {
-        conItem.multiplier = 1 / m
+        item.multiplier = 1 / m
         return self
     }
 
     func multi(_ m: CGFloat) -> Self {
-        conItem.multiplier = m
+        item.multiplier = m
         return self
     }
 
     func constant(_ c: CGFloat) -> Self {
-        conItem.constant = c
+        item.constant = c
         return self
     }
 }
@@ -413,13 +398,27 @@ public extension YetLayout {
 
     @discardableResult
     func widthOfParent(multi: CGFloat = 1, constant: CGFloat = 0) -> YetLayout {
-        self.width.eq(self.view.superview!).multi(multi).constant(constant).active()
+        self.width.eq(ParentViewName).multi(multi).constant(constant).active()
         return self
     }
 
     @discardableResult
     func heightOfParent(multi: CGFloat = 1, constant: CGFloat = 0) -> YetLayout {
-        self.height.eq(self.view.superview!).multi(multi).constant(constant).active()
+        self.height.eq(ParentViewName).multi(multi).constant(constant).active()
+        return self
+    }
+
+    //w = h * multi + constant
+    @discardableResult
+    func widthRatio(multi: CGFloat, constant: CGFloat = 0) -> Self {
+        self.width.eq(self.view, .height).multi(multi).constant(constant).active()
+        return self
+    }
+
+    //h = w * multi + constant
+    @discardableResult
+    func heightRatio(multi: CGFloat, constant: CGFloat = 0) -> Self {
+        self.height.eq(self.view, .width).multi(multi).constant(constant).active()
         return self
     }
 

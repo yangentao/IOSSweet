@@ -58,7 +58,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        testSysConstraint()
-        testBuildConstraint()
+//        testBuildConstraint()
+        testYetLayout()
 
 
 //        let a = self.view.addView(ImageLabelView(frame:  let a = self.view.addView(ImageLabelView(frame: .zero)).layout { L in
@@ -108,6 +109,22 @@ class ViewController: UIViewController {
         self.view.layoutIfNeeded()
 //        logd(label.frame)
 
+    }
+
+    func testYetLayout() {
+        self.view.addView(UILabel.Primary).named("a").text("AAA").backColor(.green).align(.center).lines(0).apply { lb in
+            lb.layout {
+                $0.centerParent().widthOfParent(multi: 0.8).heightRatio(multi: 0.5)
+            }
+        }
+        self.view.addView(UILabel.Primary).text("BBBBBB").backColor(.cyan).align(.center).apply { lb in
+            lb.layout { b in
+                b.centerX.eq("a")
+                b.width.eq("a")
+                b.top.eq("a", .bottom)
+                b.height.eq("a")
+            }
+        }
     }
 
     func testBuildConstraint() {

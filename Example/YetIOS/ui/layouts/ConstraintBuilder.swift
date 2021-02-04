@@ -23,7 +23,7 @@ public extension UIView {
     }
 
 
-    fileprivate var constraintItems: ConstraintItems {
+    internal var constraintItems: ConstraintItems {
         if let a = getAttr("__ConstraintItems__") as? ConstraintItems {
             return a
         }
@@ -49,9 +49,16 @@ public extension UIView {
 
 internal class ConstraintItems {
     var items: [ConstraintItem] = []
+
+    func removeByID(_ id: Int) {
+        items.removeFirstIf {
+            $0._ID == id
+        }
+    }
 }
 
 public class ConstraintItem {
+    public let _ID: Int = GenID()
     unowned var view: UIView // view
     var attr: LayoutAttribute
     var relation: LayoutRelation = .equal
@@ -68,11 +75,16 @@ public class ConstraintItem {
         self.attr = attr
     }
 
+    var identifierValue: String {
+        ident ?? "autoID_\(self._ID)"
+    }
+
+    @discardableResult
     public func install() {
         view.translatesAutoresizingMaskIntoConstraints(false)
         let cp = NSLayoutConstraint(item: view as Any, attribute: attr, relatedBy: relation, toItem: makeOtherView(), attribute: otherAttr, multiplier: multiplier, constant: constant)
         cp.priority = priority
-        cp.identifier = ident
+        cp.identifier = identifierValue
         view.sysConstraintParams.items.append(cp)
         cp.isActive = true
     }
