@@ -104,6 +104,12 @@ public class Grid: UIView {
             setNeedsLayout()
         }
     }
+    @GreatEQ(minValue: 1)
+    public var defaultRowHeight: CGFloat = 60 {
+        didSet {
+            setNeedsLayout()
+        }
+    }
 
     private var contentSize: CGSize = .zero {
         didSet {
@@ -142,30 +148,71 @@ public class Grid: UIView {
         if axis == .vertical {
             let cells: Array2D<CellItem> = calcCellsVertical(childViews)
             calcWidthsVertical(cells)
+            calcHeightsVertical(cells)
         } else {
 
         }
 
     }
 
+    private func calcRectVertical(_ cells: Array2D<CellItem>) {
+
+        for row in 0..<cells.rows {
+            var y: CGFloat = paddings.top
+            for i in 0..<row {
+                y += cells[row, 0]!.height + vSpace
+            }
+            for col in 0..<cells.cols {
+                guard let cell = cells[row, col] else {
+                    continue
+                }
+                if col > 0 && cell === cells[row, col - 1] {
+                    continue
+                }
+                if row > 0 && cell === cells[row - 1, col] {
+                    continue
+                }
+                var x: CGFloat = paddings.left // (cell.width + hSpace) * cell.view.gridParams!.spanColumns
+                for i in 0..<col {
+//                    x += cells[row, col]
+                }
+                cell.left = x
+                cell.right = y
+
+
+            }
+        }
+
+
+    }
+
     private func calcHeightsVertical(_ cells: Array2D<CellItem>) {
-        let totalHeight: CGFloat = self.bounds.height - self.vSpace * (cells.rows - 1)
-        var heightSum: CGFloat = 0
-        var weightSum: CGFloat = 0
-        var leftHeight: CGFloat = totalHeight
+        let totalHeight: CGFloat = self.bounds.height - self.vSpace * (cells.rows - 1) - paddings.top - paddings.bottom
+
+        var allRowInfos: [GridRowInfo] = .init(repeating: GridRowInfo(height: defaultRowHeight, weight: 0), count: cells.rows)
         for (k, v) in self.rowInfos {
-            heightSum += v.height
-            weightSum += v.weight
-            if v.height > 0 {
-                v.realHeight = v.height
-                leftHeight -= v.height
+            allRowInfos[k] = v
+        }
+        let heightSum: CGFloat = allRowInfos.filter({ $0.weight == 0 && $0.value > 0 }).sumBy({ $0.value })
+        let weightSum: CGFloat = allRowInfos.filter({ $0.weight > 0 }).sumBy({ $0.weight })
+        let leftHeight = max(0, totalHeight - heightSum)
+        for ri in allRowInfos {
+            if ri.value > 0 {
+                ri.realValue = ri.value
+            } else if weightSum > 0 {
+                ri.realValue = leftHeight * ri.weight / weightSum
+            }
+        }
+        for row in 0..<cells.rows {
+            for col in 0..<cells.cols {
+                cells[row, col]?.height = allRowInfos[col].realValue
             }
         }
 
     }
 
     private func calcWidthsVertical(_ cells: Array2D<CellItem>) {
-        let totalWidth: CGFloat = self.bounds.width - self.hSpace * (self.columns - 1)
+        let totalWidth: CGFloat = self.bounds.width - self.hSpace * (self.columns - 1) - paddings.left - paddings.right
         var weightSum: CGFloat = self.colInfos.sumBy {
             $0.weight
         }
@@ -173,38 +220,38 @@ public class Grid: UIView {
 
         var leftWidth: CGFloat = totalWidth
         for ci in self.colInfos {
-            if ci.width > 0 {
-                leftWidth -= ci.width
-                ci.realWidth = ci.width
+            if ci.value > 0 {
+                leftWidth -= ci.value
+                ci.realValue = ci.value
             } else if ci.weight > 0 {
                 leftWidth -= ci.minWidth
             } else {
-                ci.realWidth = ci.minWidth
+                ci.realValue = ci.minWidth
                 leftWidth -= ci.minWidth
             }
         }
-        let lsW = self.colInfos.filter({ $0.realWidth != GRID_UNSPEC && $0.maxWidth > 0 }).sortedAsc({ $0.maxWidth })
+        let lsW = self.colInfos.filter({ $0.realValue != GRID_UNSPEC && $0.maxWidth > 0 }).sortedAsc({ $0.maxWidth })
         for ci in lsW {
             if weightSum > 0 {
                 let wVal = ci.minWidth + leftWidth * ci.weight / weightSum
                 if ci.maxWidth > ci.minWidth && wVal > ci.maxWidth {
                     weightSum -= ci.weight
                     leftWidth -= ci.maxWidth
-                    ci.realWidth = ci.maxWidth
+                    ci.realValue = ci.maxWidth
                 }
             }
         }
-        let ls2 = self.colInfos.filter({ $0.realWidth != GRID_UNSPEC }).sortedAsc({ $0.maxWidth })
+        let ls2 = self.colInfos.filter({ $0.realValue != GRID_UNSPEC }).sortedAsc({ $0.maxWidth })
         for ci in ls2 {
             if ci.weight > 0 && weightSum > 0 {
-                ci.realWidth = ci.minWidth + leftWidth * ci.weight / weightSum
+                ci.realValue = ci.minWidth + leftWidth * ci.weight / weightSum
             }
         }
 
 
         for row in 0..<cells.rows {
             for col in 0..<cells.cols {
-                cells[row, col]?.width = self.colInfos[col].width
+                cells[row, col]?.width = self.colInfos[col].realValue
             }
         }
 
@@ -302,28 +349,51 @@ fileprivate let GRID_UNSPEC: CGFloat = -1
 
 public class GridColumnInfo {
     public var weight: CGFloat = 0
-    public var width: CGFloat = 0
+    public var value: CGFloat = 0
     public var minWidth: CGFloat = 0
     public var maxWidth: CGFloat = 0
 
-    fileprivate var realWidth: CGFloat = GRID_UNSPEC
+    fileprivate var realValue: CGFloat = GRID_UNSPEC
 
     public init(width: CGFloat, weight: CGFloat) {
-        self.width = width
+        self.value = width
         self.weight = weight
     }
 }
 
 public class GridRowInfo {
     public var weight: CGFloat = 0
-    public var height: CGFloat = 0
-//    public var minHeight: CGFloat = 0
-//    public var maxHeight: CGFloat = 0
+    public var value: CGFloat = 0
 
-    fileprivate var realHeight: CGFloat = GRID_UNSPEC
+    fileprivate var realValue: CGFloat = GRID_UNSPEC
 
     public init(height: CGFloat, weight: CGFloat) {
-        self.height = height
+        self.value = height
         self.weight = weight
+    }
+}
+
+
+fileprivate class CellArray {
+    var array: [CellItem] = []
+
+    let cols: Int
+
+    init(cols: Int) {
+        assert(cols > 0)
+        self.cols = cols
+    }
+
+    var rows: Int {
+        (array.count + cols - 1) / cols
+    }
+
+    subscript(row: Int, col: Int) -> CellItem {
+        get {
+            return array[row * cols + col]
+        }
+        set {
+            array[row * cols + col] = newValue
+        }
     }
 }
