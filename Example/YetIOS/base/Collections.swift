@@ -332,3 +332,46 @@ public class MyArray<Element> {
         array = Array<Element>(repeating: repeatedValue, count: count)
     }
 }
+
+
+public class Array2D<T: Any> {
+    private var array: [T?]
+    public let rows: Int
+    public let cols: Int
+
+    public init(rows: Int, cols: Int) {
+        self.rows = rows
+        self.cols = cols
+        array = .init(repeating: nil, count: rows * cols)
+    }
+
+    public subscript(row: Int, col: Int) -> T? {
+        get {
+            return array[row * cols + col]
+        }
+        set {
+            array[row * cols + col] = newValue
+        }
+    }
+}
+
+public class Array2DValue<T: Any> {
+    private var array: [T]
+    public let rows: Int
+    public let cols: Int
+
+    public init(rows: Int, cols: Int, value: T) {
+        self.rows = rows
+        self.cols = cols
+        array = .init(repeating: value, count: rows * cols)
+    }
+
+    public subscript(row: Int, col: Int) -> T {
+        get {
+            return array[row * cols + col]
+        }
+        set {
+            array[row * cols + col] = newValue
+        }
+    }
+}

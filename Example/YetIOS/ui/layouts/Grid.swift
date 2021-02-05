@@ -39,8 +39,13 @@ public class GridParams {
     public var height: CGFloat = 60
     public var gravityX: GravityX = .none
     public var gravityY: GravityY = .none
-    public var spanX: Int = 0
-    public var spanY: Int = 0
+    @GreatEQ(minValue: 1)
+    public var spanColumns: Int = 1
+    @GreatEQ(minValue: 1)
+    public var spanRows: Int = 1
+
+    public var margins: Edge = Edge()
+
 }
 
 public extension GridParams {
@@ -56,6 +61,12 @@ public extension GridParams {
 }
 
 public class Grid: UIView {
+    public var paddings: Edge = Edge() {
+        didSet {
+            setNeedsLayout()
+        }
+    }
+
     public var axis: LayoutAxis = .vertical {
         didSet {
             setNeedsLayout()
@@ -71,17 +82,23 @@ public class Grid: UIView {
             setNeedsLayout()
         }
     }
+    @GreatEQ(minValue: 1)
     public var columns: Int = 3 {
         didSet {
+            colInfos = [GridColumnInfo](repeating: GridColumnInfo(width: 0, weight: 1), count: columns)
             setNeedsLayout()
         }
     }
+    private var colInfos: [GridColumnInfo] = []
+    private var rowInfos: [Int: GridRowInfo] = [:]
 
+    @GreatEQ(minValue: 0)
     public var hSpace: CGFloat = 0 {
         didSet {
             setNeedsLayout()
         }
     }
+    @GreatEQ(minValue: 0)
     public var vSpace: CGFloat = 0 {
         didSet {
             setNeedsLayout()
@@ -96,6 +113,14 @@ public class Grid: UIView {
         }
     }
 
+    public func setColumnInfo(_ col: Int, _ info: GridColumnInfo) {
+        colInfos[col] = info
+    }
+
+    public func setRowInfo(_ row: Int, _ info: GridRowInfo) {
+        self.rowInfos[row] = info
+    }
+
     public override func didMoveToSuperview() {
         super.didMoveToSuperview()
         processScroll()
@@ -108,19 +133,197 @@ public class Grid: UIView {
     }
 
     public override func layoutSubviews() {
-        let childViews = self.subviews
+        let childViews = self.subviews.filter {
+            $0.gridParams != nil
+        }
         if childViews.isEmpty {
             return
         }
         if axis == .vertical {
-            calcSizeVertical(childViews)
+            let cells: Array2D<CellItem> = calcCellsVertical(childViews)
+            calcWidthsVertical(cells)
         } else {
 
         }
 
     }
 
-    private func calcSizeVertical(_ viewList: [UIView]) {
-        self.intrinsicContentSize
+    private func calcHeightsVertical(_ cells: Array2D<CellItem>) {
+        let totalHeight: CGFloat = self.bounds.height - self.vSpace * (cells.rows - 1)
+        var heightSum: CGFloat = 0
+        var weightSum: CGFloat = 0
+        var leftHeight: CGFloat = totalHeight
+        for (k, v) in self.rowInfos {
+            heightSum += v.height
+            weightSum += v.weight
+            if v.height > 0 {
+                v.realHeight = v.height
+                leftHeight -= v.height
+            }
+        }
+
+    }
+
+    private func calcWidthsVertical(_ cells: Array2D<CellItem>) {
+        let totalWidth: CGFloat = self.bounds.width - self.hSpace * (self.columns - 1)
+        var weightSum: CGFloat = self.colInfos.sumBy {
+            $0.weight
+        }
+
+
+        var leftWidth: CGFloat = totalWidth
+        for ci in self.colInfos {
+            if ci.width > 0 {
+                leftWidth -= ci.width
+                ci.realWidth = ci.width
+            } else if ci.weight > 0 {
+                leftWidth -= ci.minWidth
+            } else {
+                ci.realWidth = ci.minWidth
+                leftWidth -= ci.minWidth
+            }
+        }
+        let lsW = self.colInfos.filter({ $0.realWidth != GRID_UNSPEC && $0.maxWidth > 0 }).sortedAsc({ $0.maxWidth })
+        for ci in lsW {
+            if weightSum > 0 {
+                let wVal = ci.minWidth + leftWidth * ci.weight / weightSum
+                if ci.maxWidth > ci.minWidth && wVal > ci.maxWidth {
+                    weightSum -= ci.weight
+                    leftWidth -= ci.maxWidth
+                    ci.realWidth = ci.maxWidth
+                }
+            }
+        }
+        let ls2 = self.colInfos.filter({ $0.realWidth != GRID_UNSPEC }).sortedAsc({ $0.maxWidth })
+        for ci in ls2 {
+            if ci.weight > 0 && weightSum > 0 {
+                ci.realWidth = ci.minWidth + leftWidth * ci.weight / weightSum
+            }
+        }
+
+
+        for row in 0..<cells.rows {
+            for col in 0..<cells.cols {
+                cells[row, col]?.width = self.colInfos[col].width
+            }
+        }
+
+    }
+
+    private func calcCellsVertical(_ viewList: [UIView]) -> Array2D<CellItem> {
+        let maxRow: Int = viewList.sumBy {
+            $0.gridParams!.spanRows
+        }
+        let cells: Array2D<CellItem> = .init(rows: maxRow, cols: self.columns)
+
+        var row = 0
+        var col = 0
+        for v in viewList {
+            posView(v, cells, &row, &col)
+        }
+
+        row = cells.rows - 1
+        while row >= 0 {
+            var allNull = true
+            for i in 0..<cells.cols {
+                if cells[row, i] != nil {
+                    allNull = false
+                }
+            }
+            if !allNull {
+                break
+            }
+            row -= 1
+        }
+        let newCells: Array2D<CellItem> = .init(rows: row + 1, cols: self.columns)
+        for r in 0...row {
+            for c in 0..<self.columns {
+                newCells[r, c] = cells[r, c]
+            }
+        }
+        return newCells
+    }
+
+    private func posView(_ view: UIView, _ cells: Array2D<CellItem>, _ row: inout Int, _ col: inout Int) {
+        let p = view.gridParams!
+        let colSpan = min(p.spanColumns, self.columns)
+        if col != 0 {
+            if col + colSpan > self.columns {
+                row += 1
+                col = 0
+            }
+        }
+
+        var ok = true
+        for x in 0..<colSpan {
+            for y in 0..<p.spanRows {
+                ok = ok && cells[row + y, col + x] == nil
+            }
+        }
+        if ok {
+            let cell = CellItem(view)
+            for x in 0..<colSpan {
+                for y in 0..<p.spanRows {
+                    cells[row + y, col + x] = cell
+                }
+            }
+            col += colSpan
+            if col >= self.columns {
+                row += 1
+                col = 0
+            }
+        } else {
+            col += 1
+            if col >= self.columns {
+                row += 1
+                col = 0
+            }
+            posView(view, cells, &row, &col)
+        }
+
+    }
+}
+
+fileprivate class CellItem {
+    var view: UIView
+    lazy var param: GridParams = view.gridParams!
+    var left: CGFloat = 0
+    var right: CGFloat = 0
+    var width: CGFloat = 0
+    var height: CGFloat = 0
+
+
+    init(_ v: UIView) {
+        self.view = v
+    }
+}
+
+fileprivate let GRID_UNSPEC: CGFloat = -1
+
+public class GridColumnInfo {
+    public var weight: CGFloat = 0
+    public var width: CGFloat = 0
+    public var minWidth: CGFloat = 0
+    public var maxWidth: CGFloat = 0
+
+    fileprivate var realWidth: CGFloat = GRID_UNSPEC
+
+    public init(width: CGFloat, weight: CGFloat) {
+        self.width = width
+        self.weight = weight
+    }
+}
+
+public class GridRowInfo {
+    public var weight: CGFloat = 0
+    public var height: CGFloat = 0
+//    public var minHeight: CGFloat = 0
+//    public var maxHeight: CGFloat = 0
+
+    fileprivate var realHeight: CGFloat = GRID_UNSPEC
+
+    public init(height: CGFloat, weight: CGFloat) {
+        self.height = height
+        self.weight = weight
     }
 }

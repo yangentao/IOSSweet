@@ -52,20 +52,20 @@ public class LinearParams {
     public var width: CGFloat = 0
     public var height: CGFloat = 0
 
-    @LimitGE(0)
+    @GreatEQ(minValue: 0)
     public var weight: CGFloat = 0
 
     public var gravityX: GravityX = .none
     public var gravityY: GravityY = .none
 
-    @LimitGE(0)
+    @GreatEQ(minValue: 0)
     public var minWidth: CGFloat = 0
-    @LimitGE(0)
+    @GreatEQ(minValue: 0)
     public var minHeight: CGFloat = 0
 
-    @LimitGE(0)
+    @GreatEQ(minValue: 0)
     public var maxWidth: CGFloat = 0
-    @LimitGE(0)
+    @GreatEQ(minValue: 0)
     public var maxHeight: CGFloat = 0
 }
 

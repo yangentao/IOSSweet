@@ -16,16 +16,16 @@ public typealias ULong = UInt64
 
 
 @propertyWrapper
-public struct LimitGE {
-    let minValue: CGFloat
-    var value: CGFloat
+public struct GreatEQ<T: SignedNumeric & Comparable> {
+    let minValue: T
+    var value: T
 
-    public init(wrappedValue: CGFloat, _ minValue: CGFloat) {
+    public init(wrappedValue: T, minValue: T) {
         self.minValue = minValue
         self.value = wrappedValue
     }
 
-    public var wrappedValue: CGFloat {
+    public var wrappedValue: T {
         get {
             if value < minValue {
                 return minValue
@@ -37,6 +37,7 @@ public struct LimitGE {
         }
     }
 }
+
 
 
 public func /(lhs: CGFloat, rhs: Int) -> CGFloat {
