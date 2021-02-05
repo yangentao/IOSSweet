@@ -52,7 +52,7 @@ public class ImageLabelView: RelativeLayout {
 
 
 class ViewController: UIViewController {
-//    lazy var label: UILabel = NamedView(self, "a")
+    lazy var label: UILabel = NamedView(self, "a")
 
 
     override func viewDidLoad() {
@@ -161,7 +161,9 @@ class ViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        log("DidAppear: ", label.frame)
+        logd("DidAppear: ", label.frame)
+        Log.debug("DidAppear: ", label.frame)
+
     }
 
     override func didReceiveMemoryWarning() {
