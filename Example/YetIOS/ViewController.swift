@@ -52,16 +52,17 @@ public class ImageLabelView: RelativeLayout {
 
 
 class ViewController: UIViewController {
-    lazy var label: UILabel = NamedView(self, "a")
+//    lazy var label: UILabel = NamedView(self, "a")
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
 //        testSysConstraint()
 //        testBuildConstraint()
-        testYetLayout()
+//        testYetLayout()
+//        testGrid()
 
-
+        testKeyAny()
 //        let a = self.view.addView(ImageLabelView(frame:  let a = self.view.addView(ImageLabelView(frame: .zero)).layout { L in
 ////            L.centerParent().size(100, 100)
 ////        }
@@ -109,6 +110,30 @@ class ViewController: UIViewController {
         self.view.layoutIfNeeded()
 //        logd(label.frame)
 
+    }
+
+    func testGrid() {
+        let gv = Grid(frame: .zero)
+        view.addSubview(gv)
+        gv.constraintsInstall {
+            $0.edgeXParent().edgeYParent(topConst: 25)
+        }
+        gv.backColor(.blue)
+        gv.columns = 2
+        let cs: [UIColor] = [.green, .red, .cyan, .yellow]
+        gv.setColumnInfo(0, GridColumnInfo(width: 0, weight: 1))
+        gv.setRowInfo(0, GridRowInfo(height: 0, weight: 1))
+        for i in 0..<4 {
+            let lb = UILabel.Primary
+            gv.addSubview(lb)
+            lb.gridParams {
+                $0.width = 100
+                $0.height = 50
+            }
+            lb.text("Text \(i)")
+            lb.align(.center)
+            lb.backColor(cs[i])
+        }
     }
 
     func testYetLayout() {
@@ -161,8 +186,8 @@ class ViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        logd("DidAppear: ", label.frame)
-        Log.debug("DidAppear: ", label.frame)
+//        logd("DidAppear: ", label.frame)
+//        Log.debug("DidAppear: ", label.frame)
 
     }
 

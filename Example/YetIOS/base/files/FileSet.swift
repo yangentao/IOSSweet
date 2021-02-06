@@ -34,14 +34,14 @@ public class FileSet<T: Codable & Hashable>: Sequence {
 
 	private func load() {
 		if let text = self.model.file.readText() {
-			if let ls: Set<T> = Json.decode(text) {
+			if let ls: Set<T> = JSON.decode(text) {
 				self.model.items = ls
 			}
 		}
 	}
 
 	public func save() {
-		if let s = Json.encode(self.model.items) {
+		if let s = JSON.encode(self.model.items) {
 			self.model.file.writeText(text: s)
 		}
 	}

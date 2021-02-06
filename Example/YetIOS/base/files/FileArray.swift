@@ -34,14 +34,14 @@ public class FileArray<T: Codable >: Sequence {
 
 	private func load() {
 		if let text = self.model.file.readText() {
-			if let ls: Array<T> = Json.decode(text) {
+			if let ls: Array<T> = JSON.decode(text) {
 				self.model.items = ls
 			}
 		}
 	}
 
 	public func save() {
-		if let s = Json.encode(self.model.items) {
+		if let s = JSON.encode(self.model.items) {
 			self.model.file.writeText(text: s)
 		}
 	}

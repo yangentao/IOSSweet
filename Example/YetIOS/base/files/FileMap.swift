@@ -32,14 +32,14 @@ public class FileMap<K: Codable & Hashable, V: Codable>: Sequence {
 
 	private func load() {
 		if let text = self.model.file.readText() {
-			if let ls: Dictionary<K, V> = Json.decode(text) {
+			if let ls: Dictionary<K, V> = JSON.decode(text) {
 				self.model.map = ls
 			}
 		}
 	}
 
 	public func save() {
-		if let s = Json.encode(self.model.map) {
+		if let s = JSON.encode(self.model.map) {
 			self.model.file.writeText(text: s)
 		}
 	}

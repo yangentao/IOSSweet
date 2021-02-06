@@ -5,7 +5,7 @@
 
 import Foundation
 
-public class Json {
+public class JSON {
 
 	public static func decode<T:Decodable>(_ json: String?) -> T? {
 		return decode(T.self, json: json)
