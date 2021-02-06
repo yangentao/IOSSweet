@@ -78,6 +78,8 @@ public class LinearParams: Applyable {
     public var maxHeight: CGFloat = 0
 
     public var margins: Edge = Edge()
+
+
 }
 
 public extension LinearParams {
@@ -226,16 +228,22 @@ public class LinearLayout: UIView {
     }
 
     public override func layoutSubviews() {
-        if self.subviews.count == 0 {
+        let viewList = self.subviews.filter {
+            $0.linearParams != nil
+        }
+        if viewList.count == 0 {
             return
         }
         let tmpBounds = bounds
         var sz = tmpBounds.size
         sz.width -= padding.left + padding.right
         sz.height -= padding.top + padding.bottom
+        var cells: [LinearCell] = viewList.map {
+            LinearCell($0)
+        }
         if axis == .vertical {
-            let ls = calcSizesVertical(sz)
-            let maxY = layoutChildrenVertical(ls)
+            calcSizesVertical(sz, cells)
+            let maxY = layoutChildrenVertical(cells)
             contentSize = CGSize(width: tmpBounds.size.width, height: max(0, maxY - tmpBounds.minY))
         } else {
             let ls = calcSizesHor(sz)
@@ -396,155 +404,146 @@ public class LinearLayout: UIView {
 
     //=========
 
-    private func calcSizesVertical(_ size: CGSize) -> [CGSize] {
-        let childViewList = subviews
-        let childCount = childViewList.count
-
-        let unspec: CGFloat = -1
-        let totalHeight = size.height
-        var avaliableHeight = totalHeight
-
-        var matchSum = 0
+    private func calcSizesVertical(_ size: CGSize, _ cells: [LinearCell]) {
+        var avaliableHeight = size.height
         var weightSum: CGFloat = 0
+        var matchSum = 0
 
-        var szList = [CGSize](repeating: CGSize(width: unspec, height: unspec), count: childViewList.count)
-        for (index, chView) in childViewList.enumerated() {
-            guard  let param = chView.linearParams else {
-                szList[index] = Size(width: 0, height: 0)
+        var weightList: [LinearCell] = []
+        var matchList: [LinearCell] = []
+
+        for cell in cells {
+            avaliableHeight -= cell.param.margins.top + cell.param.margins.bottom
+            if cell.param.weight > 0 {
+                weightSum += cell.param.weight
+                if cell.param.height > cell.param.minHeight {
+                    avaliableHeight -= cell.param.height
+                } else {
+                    avaliableHeight -= cell.param.minHeight
+                }
+                weightList += cell
+                if cell.param.maxHeight > 0 {
+                    assert(cell.param.maxHeight >= cell.param.minHeight)
+                }
                 continue
             }
-            avaliableHeight -= chView.marginTop + chView.marginBottom
-            if param.height == MatchParent {
+            if cell.param.height == MatchParent {
                 matchSum += 1
-                avaliableHeight -= param.minHeight
-            } else if param.height == WrapContent {
-                let sz = chView.sizeThatFits(size)
-                szList[index].height = max(0, sz.height)
-                avaliableHeight -= szList[index].height
-            } else if param.height > 0 {
-                szList[index].height = max(0, param.height)
-                avaliableHeight -= szList[index].height
-            } else if param.height == 0 {
-                if param.weight > 0 {
-                    weightSum += param.weight
-                    avaliableHeight -= param.minHeight
-                } else {
-                    szList[index].height = 0
+                avaliableHeight -= cell.param.minHeight
+                matchList += cell
+                if cell.param.maxHeight > 0 {
+                    assert(cell.param.maxHeight >= cell.param.minHeight)
                 }
-
-            } else {
-                fatalError("LinearParam.height < 0 ")
+                continue
             }
+
+            if cell.param.height > 0 {
+                cell.height = cell.param.height
+                avaliableHeight -= cell.height
+                continue
+            }
+            if cell.param.height == WrapContent {
+                let sz = cell.view.sizeThatFits(size)
+                cell.height = max(0, sz.height)
+                avaliableHeight -= cell.height
+                continue
+            }
+
+
+            fatalError("LinearParam.height < 0 ")
         }
+
         if matchSum > 0 && weightSum > 0 {
             fatalError("LinearParam error , Can not use MatchParent and weight in same time!")
         }
-
-        var unspecIndexList: [Int] = []
-        for i in 0..<childCount {
-            if szList[i].height == unspec {
-                unspecIndexList.append(i)
-            }
-        }
-        //每个先分配最小值
-        for i in unspecIndexList {
-            let pm = childViewList[i].linearParamEnsure
-            szList[i].height = pm.minHeight
-        }
-
-
         if matchSum > 0 {
-            let h = max(0, avaliableHeight) / matchSum
-            //先处理最大值小于平均值的
-            var useMaxWidthList: [Int] = []
-            for i in unspecIndexList {
-                let pm = childViewList[i].linearParamEnsure
-                if pm.maxHeight > 0 {
-                    if pm.maxHeight < h {
-                        szList[i].height = pm.maxHeight
-                        useMaxWidthList.append(i)
-                        avaliableHeight -= pm.maxHeight
-                    }
-                }
+            let ls = matchList.sortedAsc {
+                $0.param.maxHeight
             }
-            unspecIndexList.removeAll(useMaxWidthList)
-            //剩下的全是没有设置最大值, 或最大值大于平均值的情况
-            let hh = max(0, avaliableHeight) / max(1, matchSum - useMaxWidthList.count)
-            for i in unspecIndexList {
-                let pm = childViewList[i].linearParamEnsure
-                szList[i].height = pm.minHeight + hh
+            for cell in ls {
+                let h = max(0, avaliableHeight) / matchSum
+                if cell.param.maxHeight > 0 && cell.param.maxHeight < h {
+                    cell.height = cell.param.maxHeight
+                    matchSum -= 1
+                } else {
+                    cell.height = cell.param.minHeight + h
+                }
+                avaliableHeight -= cell.height
             }
         }
         if weightSum > 0 {
-            let a = max(0, avaliableHeight) / weightSum
-            //先处理最大值小于平均值的
-            var useMaxValueList: [Int] = []
-            var fixedWeightSum: CGFloat = 0
-            for i in unspecIndexList {
-                let pm = childViewList[i].linearParamEnsure
-                if pm.maxHeight > 0 {
-                    if pm.maxHeight < pm.weight * a {
-                        fixedWeightSum += pm.weight
-                        szList[i].height = pm.maxHeight
-                        useMaxValueList.append(i)
-                        avaliableHeight -= pm.maxHeight
-                    }
-                }
+            let ls = weightList.sortedAsc {
+                $0.param.maxHeight / $0.param.weight
             }
-            unspecIndexList.removeAll(useMaxValueList)
-            //剩下的全是没有设置最大值, 或最大值大于平均值的情况
-            let aa = max(0, avaliableHeight) / max(1, weightSum - fixedWeightSum)
-            for i in unspecIndexList {
-                let pm = childViewList[i].linearParamEnsure
-                szList[i].height = pm.minHeight + aa * pm.weight
+            for cell in ls {
+                let h = max(0, avaliableHeight) / weightSum
+                let HH = h * cell.param.weight
+                if cell.param.maxHeight > 0 && cell.param.maxHeight < HH {
+                    cell.height = cell.param.maxHeight
+                    weightSum -= cell.param.weight
+                } else {
+                    cell.height = cell.param.minHeight + HH
+                }
+                avaliableHeight -= cell.height
             }
         }
-        return szList
     }
 
-    private func layoutChildrenVertical(_ sizeList: [CGSize]) -> CGFloat {
-        let childViewList = subviews
+    private func layoutChildrenVertical(_ cells: [LinearCell]) -> CGFloat {
+        var fromY = bounds.minY + padding.top
 
-        let boundsSize = bounds.size
-        let totalWidth: CGFloat = boundsSize.width - padding.left - padding.right
-        var fromY = bounds.origin.y + padding.top
-        for (index, chView) in childViewList.enumerated() {
-            let y = fromY + chView.marginTop
-            let h = sizeList[index].height
-            var w: CGFloat = -1
-            let param = chView.linearParams!
-
+        for cell in cells {
+            let param = cell.param
+            let WW = bounds.size.width - padding.left - padding.right - param.margins.left - param.margins.right
+            var w: CGFloat = 0
             if param.width == MatchParent || param.gravityX == .fill {
-                w = totalWidth - chView.marginLeft - chView.marginRight
-            } else if param.width >= 0 {
+                w = WW
+            } else if param.width > 0 {
                 w = param.width
             } else if param.width == WrapContent {
-                let sz = chView.sizeThatFits(Size(width: totalWidth, height: h))
+                let sz = cell.view.sizeThatFits(Size(width: WW, height: cell.height))
                 w = sz.width
             } else {
                 w = 0
             }
             w = max(0, w)
+            cell.width = min(w, WW)
 
-            var x: CGFloat = bounds.origin.x + padding.left + chView.marginLeft
-            if param.width != MatchParent {
-                switch chView.linearParams!.gravityX {
-                case .none, .left, .fill:
-                    break
-                case .right:
-                    x = bounds.maxX - padding.right - chView.marginRight - w
-                case .center:
-                    x = bounds.origin.x + padding.left + (totalWidth - w) / 2
-                    break
-                }
+
+            switch param.gravityX {
+            case .none, .left, .fill:
+                cell.x = bounds.minX + padding.left + param.margins.left
+            case .right:
+                cell.x = bounds.maxX - padding.right - param.margins.right - w
+            case .center:
+                cell.x = bounds.center.x - w / 2
             }
-
-            let r = Rect(x: x, y: y, width: w, height: h)
-            chView.frame = r
-            fromY += chView.marginTop + h + chView.marginBottom
+            cell.y = fromY + cell.param.margins.top
+            let r = cell.rect
+            cell.view.frame = r
+            fromY = r.maxY + cell.param.margins.bottom
         }
+
         fromY += padding.bottom
         return fromY
+    }
+}
 
+fileprivate let LINEAR_UNSPEC: CGFloat = -1
+
+fileprivate class LinearCell {
+    var view: UIView
+    lazy var param: LinearParams = view.linearParams!
+    var x: CGFloat = LINEAR_UNSPEC
+    var y: CGFloat = LINEAR_UNSPEC
+    var width: CGFloat = LINEAR_UNSPEC
+    var height: CGFloat = LINEAR_UNSPEC
+
+    init(_ view: UIView) {
+        self.view = view
+    }
+
+    var rect: Rect {
+        return Rect(x: x, y: y, width: width, height: height)
     }
 }
