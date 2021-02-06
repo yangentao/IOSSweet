@@ -30,7 +30,7 @@ open class BasePage: UIViewController, MsgListener {
 	}
 
 	private func makeEdgeGestureFirst() {
-		guard let sv = self.view.findChildView({
+		guard let sv = self.view.firstView({
 			$0 is UIScrollView
 		}) as? UIScrollView else {
 			return

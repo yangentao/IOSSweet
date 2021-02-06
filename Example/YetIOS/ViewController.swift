@@ -62,6 +62,14 @@ class ViewController: UIViewController {
 //        testYetLayout()
         testGrid()
 
+        view.firstView(UILabel.self)?.apply {
+            logd("first Child")
+            $0.clickView { _ in
+                logd("click ")
+                self.dialog.showAlert("Hello")
+            }
+        }
+
 //        testKeyAny()
 //        let a = self.view.addView(ImageLabelView(frame:  let a = self.view.addView(ImageLabelView(frame: .zero)).layout { L in
 ////            L.centerParent().size(100, 100)
@@ -120,11 +128,8 @@ class ViewController: UIViewController {
         }
         gv.backColor(.gray)
         gv.columns = 3
-        gv.setDefaultColumnInfo(value: 50, weight: 1)
-        gv.setColumnInfo(1, value: 150, weight: 0)
-
-        gv.setDefaultRowInfo(value: 50, weight: 0)
-        gv.setRowInfo(1, value: 150, weight: 0)
+        gv.setColumnInfoDefault(value: 0, weight: 1)
+        gv.setRowInfoDefault(value: 0, weight: 1)
 
         gv += makeLabel(0) { p in
             p.rowSpan = 2

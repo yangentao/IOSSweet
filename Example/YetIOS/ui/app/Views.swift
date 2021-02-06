@@ -85,6 +85,30 @@ public extension UIView {
         return child
     }
 
+    func firstView(_ block: (UIView) -> Bool) -> UIView? {
+        for v in self.subviews {
+            if block(v) {
+                return v
+            }
+            if let vv = v.firstView(block) {
+                return vv
+            }
+        }
+        return nil
+    }
+
+    func firstView<T: UIView>(_ t: T.Type) -> T? {
+        firstView {
+            $0 is T
+        } as? T
+    }
+
+    func firstView<T: UIView>() -> T? {
+        firstView {
+            $0 is T
+        } as? T
+    }
+
     func siblings<T>(_: T.Type) -> [T] {
         self.superview!.subviews.filter {
             $0 != self
@@ -174,18 +198,6 @@ public extension UIView {
         return v
     }
 
-
-    func findChildView(_ block: (UIView) -> Bool) -> UIView? {
-        for v in self.subviews {
-            if block(v) {
-                return v
-            }
-            if let vv = v.findChildView(block) {
-                return vv
-            }
-        }
-        return nil
-    }
 
     func addSepratorLine(_ leftOffset: CGFloat = 0, _ rightOffset: CGFloat = 0) -> UIView {
         let line = UIView(frame: Rect.zero)

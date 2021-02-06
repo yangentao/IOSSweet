@@ -25,6 +25,10 @@ public class DialogAction {
         color = Theme.safeColor
     }
 
+    public func accent() {
+        color = Theme.accent
+    }
+
     public func normal() {
         color = Theme.Text.primaryColor
     }
@@ -59,7 +63,7 @@ public class Dialog: UIViewController {
     }
 
     public var textField: UITextField? {
-        return linearView.findChildView {
+        return linearView.firstView {
             $0 is UITextField
         } as? UITextField
     }

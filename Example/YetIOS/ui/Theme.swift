@@ -129,6 +129,9 @@ public class Dim {
 }
 
 public class Theme {
+    //强调色
+    public static var accent: UIColor = Colors.link
+
     public static var imagePostfix = "-light"
     public static var fadeColor: UIColor = UIColor.whiteF(0.8)
     public static var dangerColor: UIColor = 0xd81e06.rgb

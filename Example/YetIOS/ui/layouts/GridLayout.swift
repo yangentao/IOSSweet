@@ -112,12 +112,12 @@ public class GridLayout: UIView {
     private var columnInfoMap: [Int: GridCellInfo] = [:]
     private var rowInfoMap: [Int: GridCellInfo] = [:]
 
-    public func setDefaultColumnInfo(value: CGFloat, weight: CGFloat) {
+    public func setColumnInfoDefault(value: CGFloat, weight: CGFloat) {
         defaultColumnInfo = GridCellInfo(value: value, weight: weight)
         setNeedsLayout()
     }
 
-    public func setDefaultRowInfo(value: CGFloat, weight: CGFloat) {
+    public func setRowInfoDefault(value: CGFloat, weight: CGFloat) {
         defaultRowInfo = GridCellInfo(value: value, weight: weight)
         setNeedsLayout()
     }
