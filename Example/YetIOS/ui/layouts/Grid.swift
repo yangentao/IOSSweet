@@ -112,26 +112,28 @@ public class Grid: UIView {
         }
     }
 
-    var defaultColumnInfo: GridColumnInfo = GridColumnInfo(width: 0, weight: 1) {
-        didSet {
-            setNeedsLayout()
-        }
-    }
-    var defaultRowInfo: GridRowInfo = GridRowInfo(height: 50, weight: 0) {
-        didSet {
-            setNeedsLayout()
-        }
-    }
-    private var columnInfoMap: [Int: GridColumnInfo] = [:]
-    private var rowInfoMap: [Int: GridRowInfo] = [:]
+    private var defaultColumnInfo: GridCellInfo = GridCellInfo(value: 0, weight: 1)
+    private var defaultRowInfo: GridCellInfo = GridCellInfo(value: 60, weight: 0)
+    private var columnInfoMap: [Int: GridCellInfo] = [:]
+    private var rowInfoMap: [Int: GridCellInfo] = [:]
 
-    public func setColumnInfo(_ col: Int, _ info: GridColumnInfo) {
-        columnInfoMap[col] = info
+    public func setDefaultColumnInfo(value: CGFloat, weight: CGFloat) {
+        defaultColumnInfo = GridCellInfo(value: value, weight: weight)
         setNeedsLayout()
     }
 
-    public func setRowInfo(_ row: Int, _ info: GridRowInfo) {
-        self.rowInfoMap[row] = info
+    public func setDefaultRowInfo(value: CGFloat, weight: CGFloat) {
+        defaultRowInfo = GridCellInfo(value: value, weight: weight)
+        setNeedsLayout()
+    }
+
+    public func setColumnInfo(_ col: Int, value: CGFloat, weight: CGFloat) {
+        columnInfoMap[col] = GridCellInfo(value: value, weight: weight)
+        setNeedsLayout()
+    }
+
+    public func setRowInfo(_ row: Int, value: CGFloat, weight: CGFloat) {
+        self.rowInfoMap[row] = GridCellInfo(value: value, weight: weight)
         setNeedsLayout()
     }
 
@@ -223,15 +225,15 @@ public class Grid: UIView {
     }
 
     private func calcHeightsVertical(_ cells: CellMatrix) {
-        var rowInfos: [GridRowInfo] = .init(repeating: GridRowInfo(other: defaultRowInfo), count: cells.cols)
+        var rowInfos: [GridCellInfo] = .init(repeating: GridCellInfo(other: defaultRowInfo), count: cells.cols)
         for (k, v) in self.rowInfoMap {
             rowInfos[k] = v
         }
 
         let totalValue: CGFloat = self.bounds.height - self.vSpace * (cells.rows - 1) - paddings.top - paddings.bottom
         var weightSum: CGFloat = 0
-        var ls: [GridRowInfo] = []
-        var ls2: [GridRowInfo] = []
+        var ls: [GridCellInfo] = []
+        var ls2: [GridCellInfo] = []
         var leftValue: CGFloat = totalValue
 
         for r in 0..<cells.rows {
@@ -271,7 +273,7 @@ public class Grid: UIView {
 
 
     private func calcWidthsVertical(_ cells: CellMatrix) {
-        var columnInfos: [GridColumnInfo] = .init(repeating: GridColumnInfo(other: defaultColumnInfo), count: cells.cols)
+        var columnInfos: [GridCellInfo] = .init(repeating: GridCellInfo(other: defaultColumnInfo), count: cells.cols)
         for (k, v) in self.columnInfoMap {
             columnInfos[k] = v
         }
@@ -280,8 +282,8 @@ public class Grid: UIView {
         var leftValue: CGFloat = totalValue
 
         var weightSum: CGFloat = 0
-        var ls: [GridColumnInfo] = []
-        var ls2: [GridColumnInfo] = []
+        var ls: [GridCellInfo] = []
+        var ls2: [GridCellInfo] = []
 
         for c in 0..<self.columns {
             let info = columnInfos[c]
@@ -377,7 +379,7 @@ fileprivate class CellItem {
 
 fileprivate let GRID_UNSPEC: CGFloat = -1
 
-public class GridColumnInfo {
+public class GridCellInfo {
     @GreatEQ(minValue: 0)
     public var weight: CGFloat = 0
     @GreatEQ(minValue: 0)
@@ -385,33 +387,16 @@ public class GridColumnInfo {
 
     fileprivate var realValue: CGFloat = GRID_UNSPEC
 
-    public init(width: CGFloat, weight: CGFloat) {
-        self.value = width
+    public init(value: CGFloat, weight: CGFloat) {
+        self.value = value
         self.weight = weight
     }
 
-    public convenience init(other: GridColumnInfo) {
-        self.init(width: other.value, weight: other.weight)
+    public convenience init(other: GridCellInfo) {
+        self.init(value: other.value, weight: other.weight)
     }
 }
 
-public class GridRowInfo {
-    @GreatEQ(minValue: 0)
-    public var weight: CGFloat = 0
-    @GreatEQ(minValue: 0)
-    public var value: CGFloat = 0
-
-    fileprivate var realValue: CGFloat = GRID_UNSPEC
-
-    public init(height: CGFloat, weight: CGFloat) {
-        self.value = height
-        self.weight = weight
-    }
-
-    public convenience init(other: GridRowInfo) {
-        self.init(height: other.value, weight: other.weight)
-    }
-}
 
 fileprivate struct Coords: Hashable {
     let row: Int

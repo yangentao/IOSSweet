@@ -119,15 +119,15 @@ class ViewController: UIViewController {
 //            $0.edgeXParent().edgeYParent(topConst: 25)
             $0.centerParent().widthParent().heightRatio(multi: 1)
         }
-//        gv.backColor(.blue)
+        gv.backColor(.gray)
         gv.paddings = Edge(l: 20, t: 20, r: 20, b: 20)
         gv.columns = 3
-        let cs: [UIColor] = [.green, .red, .cyan, .yellow]
-//        gv.setColumnInfo(0, GridColumnInfo(width: 0, weight: 1))
-        gv.setColumnInfo(1, GridColumnInfo(width: 50, weight: 0))
-        gv.setRowInfo(0, GridRowInfo(height: 0, weight: 1))
-//        gv.setRowInfo(1, GridRowInfo(height: 0, weight: 1))
-        gv.setRowInfo(2, GridRowInfo(height: 0, weight: 1))
+        gv.setDefaultColumnInfo(value: 0, weight: 1)
+        gv.setColumnInfo(1, value: 50, weight: 0)
+
+        gv.setDefaultRowInfo(value: 50, weight: 0)
+        gv.setRowInfo(1, value: 0, weight: 1)
+        gv.setRowInfo(2, value: 100, weight: 0)
 
         gv += makeLabel(0) { p in
             p.width = 100
