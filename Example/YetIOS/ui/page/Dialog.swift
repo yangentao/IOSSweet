@@ -39,9 +39,8 @@ public class Dialog: UIViewController {
     fileprivate var marginX: CGFloat = 30
     fileprivate var corner: CGFloat = 16
     fileprivate var gravityY: GravityY = .center
-    fileprivate let linearView = LinearLayout(.vertical)
 
-    fileprivate var titleText: String = ""
+    fileprivate var titleView: UIView? = nil
     fileprivate var buttons = [DialogAction]()
     fileprivate var bodyView: UIView? = nil
     fileprivate var bodyHeight: CGFloat = 0
@@ -55,7 +54,6 @@ public class Dialog: UIViewController {
         self.modalPresentationStyle = .overFullScreen
         self.modalTransitionStyle = .crossDissolve
         self.superPage = superPage
-        self.linearView.backgroundColor = Colors.fill
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -63,7 +61,7 @@ public class Dialog: UIViewController {
     }
 
     public var textField: UITextField? {
-        return linearView.firstView {
+        return view.firstView {
             $0 is UITextField
         } as? UITextField
     }
@@ -94,13 +92,8 @@ public class Dialog: UIViewController {
 
     @discardableResult
     public func message(_ msg: String) -> Dialog {
-        let v = UILabel(frame: Rect.zero)
-        v.backgroundColor = .white
-        v.textColor = Theme.Text.primaryColor
-        v.text = msg
-        v.numberOfLines = 0
-        v.alignCenter()
-        v.margins(left: 20, top: 20, right: 20, bottom: 20)
+        let v = UILabel.Primary.backColor(Colors.fill).text(msg).lines(0).alignCenter()
+        v.marginsEnsure.all(20)
         body(v)
         return self
     }
@@ -119,7 +112,7 @@ public class Dialog: UIViewController {
 
     @discardableResult
     public func title(_ titleText: String) -> Dialog {
-        self.titleText = titleText
+        self.titleView = UILabel(frame: .zero).text(titleText).align(.center).lines(1).backColor(Theme.themeColor).textColor(.white).font(Fonts.title)
         return self
     }
 
@@ -148,104 +141,58 @@ public class Dialog: UIViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Color.rgba(0, 0, 0, 30)
+        self.view.backgroundColor = Color.rgba(0, 0, 0, 50)
 
-        linearView.roundLayer(self.corner)
-        self.view.addSubview(linearView)
+        let linearView = LinearLayout(.vertical).backColor(Colors.fill).roundLayer(self.corner)
+        view += linearView
 
-        let maxWidth: CGFloat = 350
+        let dialogWidth: CGFloat = min(350, UIScreen.width - 2 * marginX)
 
-        var dialogWidth: CGFloat = UIScreen.width - 2 * marginX
-        if dialogWidth > maxWidth {
-            dialogWidth = maxWidth
+        if let v = titleView {
+            linearView.appendChild(v, MatchParent, 46)
         }
 
-        if !titleText.isEmpty {
-            let lb: UILabel = UILabel(frame: Rect.zero)
-            lb.text = titleText
-            lb.textColor = Color.white
-            lb.backgroundColor = Theme.themeColor
-            lb.numberOfLines = 1
-            lb.alignCenter()
-            lb.font = Fonts.title
-            linearView.appendChild(lb, MatchParent, 46)
-        }
 
         if let bv = bodyView {
-            var bdHeight: CGFloat = bodyHeight
-            if bdHeight <= 0 {
-                var sz = CGSize()
-                sz.width = dialogWidth - bv.marginLeft - bv.marginRight
-                sz.height = 1000
-                let z = bv.sizeThatFits(sz)
-                bdHeight = z.height
+            linearView += bv.linearParams(MatchParent, WrapContent) {
+                $0.minHeight = 100
             }
-            if bdHeight <= 0 {
-                bdHeight = 80
-            }
-            linearView.appendChild(bv, MatchParent, bdHeight)
         }
         if !buttons.isEmpty {
             if bodyView != nil {
-                let v = UIView(frame: Rect.zero)
-                v.backgroundColor = Colors.seprator
-                linearView.appendChild(v, MatchParent, 1)
+                linearView += UIView(frame: .zero).backColor(Colors.separator).linearParams(MatchParent, 1)
             }
-            let btnPanel = UIView(frame: Rect.zero)
-            linearView.appendChild(btnPanel, MatchParent, 46)
-
-            var preV: UIView? = nil
-            for n in buttons.indices {
-                if n != 0 {
-                    let v = UIView(frame: Rect.zero)
-                    v.backgroundColor = Colors.seprator
-                    btnPanel.addSubview(v)
-                    v.layout.width(1).toRightOf(preV!).fillY()
-                    preV = v
-                }
-
-                let item = buttons[n]
-                let b = UIButton(frame: Rect.zero)
-                b.title = item.title
-                b.titleColor = item.color
-                b.click { [weak self] b in
-                    if item.autoClose {
-                        self?.close()
+            linearView += LinearLayout(.horizontal).linearParams(MatchParent, 46).apply { panel in
+                for n in buttons.indices {
+                    if n != 0 {
+                        panel += UIView(frame: .zero).backColor(Colors.separator).linearParams(1, MatchParent)
                     }
-                    item.callback()
+                    let item = buttons[n]
+                    panel += UIButton(frame: Rect.zero).title(item.title).titleColor(item.color).linearParams(0, MatchParent) {
+                        $0.weight = 1
+                    }.click { [weak self] b in
+                        if item.autoClose {
+                            self?.close()
+                        }
+                        item.callback()
+                    }
                 }
-                btnPanel.addSubview(b)
-                let L = b.layout.fillY()
-                L.width.eqParent.divided(buttons.count.f).constant(-1).active()
-                if preV == nil {
-                    L.leftParent()
-                } else {
-                    L.toRightOf(preV!)
-                }
-                preV = b
             }
-
         }
-
-//		roundView.layouts.width(dialogWidth).height(ql.totalHeight).centerParent().install()
-        let L = linearView.layout.height(linearView.heightSumFixed)
-        L.width.eqParent.constant(-marginX * 2).active()
-//		L.width.le(maxWidth).active()
-        L.centerXParent()
-        switch self.gravityY {
-        case .center, .none:
-            L.centerParent()
-        case .bottom:
-            L.bottomParent()
-        case .top:
-//			L.topParent()
-            linearView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        case .fill:
-            break
-        }
-
-
-        linearView.clickView { v in
+        logd("ConSize: ", linearView.contentSize)
+        linearView.constraintsInstall { b in
+            b.centerXParent().widthParent(constant: -marginX * 2)
+//            b.height(linearView.contentSize.height)
+            b.heightRatio(multi: 1)
+            switch self.gravityY {
+            case .center, .none, .fill:
+                b.centerYParent()
+            case .bottom:
+                b.bottomParent()
+            case .top:
+                b.topParent(25)
+//                linearView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+            }
         }
         self.view.clickView { v in
             v.findMyController()?.dismiss(animated: true)

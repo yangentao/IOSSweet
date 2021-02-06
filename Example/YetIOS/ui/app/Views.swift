@@ -117,11 +117,7 @@ public extension UIView {
         }
     }
 
-    @discardableResult
-    static func +=(lhs: UIView, rhs: UIView) -> UIView {
-        lhs.addSubview(rhs)
-        return lhs
-    }
+
 
 }
 
@@ -194,14 +190,14 @@ public extension UIView {
 
     static var SepratorLine: UIView {
         let v = UIView(frame: Rect.zero)
-        v.backgroundColor = Colors.seprator
+        v.backgroundColor = Colors.separator
         return v
     }
 
 
     func addSepratorLine(_ leftOffset: CGFloat = 0, _ rightOffset: CGFloat = 0) -> UIView {
         let line = UIView(frame: Rect.zero)
-        line.backgroundColor = Colors.seprator
+        line.backgroundColor = Colors.separator
         self.addSubview(line)
         line.layout.height(1).fillX(leftOffset, rightOffset)
         return line
@@ -209,7 +205,7 @@ public extension UIView {
 
     func addLineBottom() {
         let line = UIView(frame: Rect.zero)
-        line.backgroundColor = Colors.seprator
+        line.backgroundColor = Colors.separator
         self.addSubview(line)
         line.layout.height(1).fillX().bottomParent(0)
     }

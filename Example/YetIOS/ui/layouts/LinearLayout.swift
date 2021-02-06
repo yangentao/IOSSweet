@@ -27,8 +27,15 @@ public extension UIView {
     }
 
     @discardableResult
-    func linearParams(_ width: CGFloat, _ height: CGFloat) -> LinearParams {
-        return linearParamEnsure.width(width).height(height)
+    func linearParams(_ width: CGFloat, _ height: CGFloat) -> Self {
+        linearParamEnsure.width(width).height(height)
+        return self
+    }
+
+    @discardableResult
+    func linearParams(_ width: CGFloat, _ height: CGFloat, _ block: (LinearParams) -> Void) -> Self {
+        linearParamEnsure.width(width).height(height)
+        return self
     }
 
     @discardableResult
@@ -156,7 +163,7 @@ public class LinearLayout: UIView {
     public var axis: LayoutAxis = .vertical
     public var padding: Edge = Edge()
 
-    private var contentSize: CGSize = .zero {
+    public private(set) var contentSize: CGSize = .zero {
         didSet {
             if oldValue != contentSize {
                 processScroll()

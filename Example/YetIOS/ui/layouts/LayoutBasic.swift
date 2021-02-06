@@ -97,6 +97,13 @@ public extension UIView {
         rhs.installSelfConstraints()
         return lhs
     }
+
+    @discardableResult
+    static func +=(lhs: UIView, rhs: UIView) -> UIView {
+        lhs.addSubview(rhs)
+        rhs.installSelfConstraints()
+        return lhs
+    }
 }
 
 

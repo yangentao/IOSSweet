@@ -57,66 +57,15 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        testSysConstraint()
-//        testBuildConstraint()
-//        testYetLayout()
-        testGrid()
 
-        view.firstView(UILabel.self)?.apply {
-            logd("first Child")
-            $0.clickView { _ in
-                logd("click ")
-                self.dialog.showAlert("Hello")
-            }
+        view += UIButton.Default.title("Hello").backColor(.green).textColorPrimary().constraints {
+            $0.centerParent().width(100).height(50)
+        }.click { b in
+            self.dialog.showAlert(title: "Title", msg: "Message")
         }
 
-//        testKeyAny()
-//        let a = self.view.addView(ImageLabelView(frame:  let a = self.view.addView(ImageLabelView(frame: .zero)).layout { L in
-////            L.centerParent().size(100, 100)
-////        }
-////        a.imageView.namedImage("a.png")
-////        a.labelView.text = "杨恩涛我问问www我问问呜呜呜呜呜呜呜呜"
-//////        a.backColor(.green)
-////
-////        a.imageView.backColor(0x30888888.argb)
-////        a.imageView.roundLayer(6)
-////        a.labelView.backColor(.cyan)
-//////        a.labelView.preferredMaxLayoutWidth = 100
-////        a.labelView.layout.width(100)
-////        a.labelView.numberOfLines = 0 .zero)).layout { L in
-//            L.centerParent().size(100, 100)
-//        }
-//        a.imageView.namedImage("a.png")
-//        a.labelView.text = "杨恩涛我问问www我问问呜呜呜呜呜呜呜呜"
-////        a.backColor(.green)
-//
-//        a.imageView.backColor(0x30888888.argb)
-//        a.imageView.roundLayer(6)
-//        a.labelView.backColor(.cyan)
-////        a.labelView.preferredMaxLayoutWidth = 100
-//        a.labelView.layout.width(100)
-//        a.labelView.numberOfLines = 0
-
-//        self.view.addView(UIScrollView(frame: .zero).backColor(.blue)).apply { sv in
-//            sv.layout.fill()
-//            sv.addView(LinearLayout(.vertical)).apply { rv in
-//                rv.layout.fill().widthOfParent()
-//                rv.buildViews {
-//                    UILabel.Primary.named("a").text("AAA").align(.center).backColor(.green).linearParams {
-//                        $0.width(200).height(200).gravityX(.right)
-//                    }
-//                    UILabel.Primary.named("b").text("BBB").align(.center).backColor(.cyan).linearParams {
-//                        $0.width(200).height(200).gravityX(.fill)
-//                    }
-//                    UILabel.Primary.named("C").text("CCC").align(.center).backColor(.red).linearParams {
-//                        $0.width(200).height(500).gravityX(.left)
-//                    }
-//                }
-//            }
-//        }
-
-        self.view.layoutIfNeeded()
-//        logd(label.frame)
+        view.layoutIfNeeded()
+        logd(view.firstView(UIButton.self)?.frame)
 
     }
 

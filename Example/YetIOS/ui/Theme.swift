@@ -19,7 +19,7 @@ public func makeColor(_ normalColor: UIColor, darkColor: UIColor) -> UIColor {
 }
 
 public class Colors {
-    public static var seprator: UIColor = {
+    public static var separator: UIColor = {
         if #available(iOS 13.0, *) {
             return UIColor.separator
         }
@@ -141,7 +141,7 @@ public class Theme {
 
     public static var themeColor: UIColor = {
         if #available(iOS 13.0, *) {
-            return Colors.background
+            return makeColor(0x4FB29D.rgb, darkColor: Colors.fill)
         }
         return 0x4FB29D.rgb
     }()
