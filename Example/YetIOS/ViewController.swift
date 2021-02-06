@@ -124,9 +124,9 @@ class ViewController: UIViewController {
         gv.columns = 3
         let cs: [UIColor] = [.green, .red, .cyan, .yellow]
 //        gv.setColumnInfo(0, GridColumnInfo(width: 0, weight: 1))
-//        gv.setColumnInfo(1, GridColumnInfo(width: 100, weight: 0))
+        gv.setColumnInfo(1, GridColumnInfo(width: 50, weight: 0))
         gv.setRowInfo(0, GridRowInfo(height: 0, weight: 1))
-        gv.setRowInfo(1, GridRowInfo(height: 0, weight: 1))
+//        gv.setRowInfo(1, GridRowInfo(height: 0, weight: 1))
         gv.setRowInfo(2, GridRowInfo(height: 0, weight: 1))
 
         gv += makeLabel(0) { p in
