@@ -16,8 +16,7 @@ public class DialogX: UIViewController {
     fileprivate var titleView: UIView? = nil
     fileprivate var buttons = [DialogAction]()
     fileprivate var bodyView: UIView = UIView(frame: .zero)
-    fileprivate var bodyHeight: CGFloat = 0
-    fileprivate var bodyEdge: Edge = Edge(left: 20, top: 10, right: 20, bottom: 10)
+    var bodyParams: LinearParams = LinearParams().width(MatchParent).height(WrapContent)
 
     public var onDismiss: BlockVoid = {
     }
@@ -37,6 +36,13 @@ public class DialogX: UIViewController {
     public func title(_ titleText: String) -> Self {
         self.titleView = UILabel.Primary.text(titleText).align(.center).lines(1).backColor(Theme.themeColor).textColor(.white).font(Fonts.title)
         return self
+    }
+
+
+    @discardableResult
+    public func body<T: UIView>(_ bodyView: T) -> T {
+        self.bodyView = bodyView
+        return bodyView
     }
 
 
@@ -60,7 +66,8 @@ public class DialogX: UIViewController {
             if let v = titleView {
                 ll += v.linearParams(MatchParent, 46)
             }
-            ll += bodyView.linearParams(MatchParent, MatchParent)
+            ll.addView(bodyView).linearParams = bodyParams
+            bodyView.backColor(.cyan)
 
             if !buttons.isEmpty {
                 ll += UIView(frame: .zero).backColor(Colors.separator).linearParams(MatchParent, 1)
@@ -134,5 +141,20 @@ public extension DialogX {
         a.callback = block
         dialogAction(a)
         return a
+    }
+}
+
+public extension DialogX {
+    @discardableResult
+    func message(_ msg: String) -> DialogX {
+        let v = UILabel.Primary.text(msg).lines(0).alignCenter()
+        if msg.count > 20 {
+            v.align(.left)
+        }
+
+        bodyView = v
+        bodyParams.minHeight = 80
+        bodyParams.margins = Edge().hor(20).ver(20)
+        return self
     }
 }

@@ -52,7 +52,7 @@ public enum RelativeProp: Int {
 
 fileprivate let UNSPEC: CGFloat = -10000
 
-public class RelativeCondition {
+public class RelativeCondition: Applyable {
     fileprivate weak var view: UIView?
     fileprivate weak var viewOther: UIView? = nil
     public let id: Int = nextId()

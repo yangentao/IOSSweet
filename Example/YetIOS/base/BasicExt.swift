@@ -5,6 +5,18 @@
 import Foundation
 
 
+public protocol Applyable: class {
+
+}
+
+public extension Applyable {
+
+    func apply(_ block: (Self) -> Void) -> Self {
+        block(self)
+        return self
+    }
+}
+
 public func println(_ items: Any?...) {
     for a in items {
         if let v = a ?? nil {

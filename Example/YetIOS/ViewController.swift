@@ -80,6 +80,7 @@ class ViewController: UIViewController {
         p.button(.ok, "OK") {
             logd("OK Click")
         }
+        p.message("多发发额外染发膏温柔发噶释放大二噶说过梵蒂冈电视功夫大师问他")
         p.show()
     }
 

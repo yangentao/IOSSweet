@@ -56,7 +56,7 @@ public extension LinearLayout {
     }
 }
 
-public class LinearParams {
+public class LinearParams: Applyable {
 
     public var width: CGFloat = 0
     public var height: CGFloat = 0
@@ -76,6 +76,8 @@ public class LinearParams {
     public var maxWidth: CGFloat = 0
     @GreatEQ(minValue: 0)
     public var maxHeight: CGFloat = 0
+
+    public var margins: Edge = Edge()
 }
 
 public extension LinearParams {

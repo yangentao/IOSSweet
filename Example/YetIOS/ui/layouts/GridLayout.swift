@@ -34,7 +34,7 @@ public extension UIView {
     }
 }
 
-public class GridParams {
+public class GridParams: Applyable {
 
     @GreatEQ(minValue: 1)
     public var columnSpan: Int = 1
