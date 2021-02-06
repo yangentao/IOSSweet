@@ -63,6 +63,7 @@ public extension GridParams {
     }
 }
 
+//vertical layout only!
 public class Grid: UIView {
     public var paddings: Edge = Edge() {
         didSet {
@@ -98,7 +99,7 @@ public class Grid: UIView {
     }
 
 
-    private var contentSize: CGSize = .zero {
+    public private(set ) var contentSize: CGSize = .zero {
         didSet {
             if oldValue != contentSize {
                 processScroll()
@@ -152,28 +153,18 @@ public class Grid: UIView {
         }
 //        if axis == .vertical {
         let cells: CellMatrix = calcCellsVertical(childViews)
-        logd("MapCount: ", cells.map.count)
-        logd("Cols:", cells.cols)
-        logd("Rows:", cells.rows)
-        logd("Keys:", cells.map.keys)
-        logd("Map:", cells.map)
         calcWidthsVertical(cells)
         calcHeightsVertical(cells)
-        calcRectVertical(cells)
+        let maxY = calcRectVertical(cells)
+        self.contentSize = Size(width: self.bounds.width, height: maxY - self.bounds.minY)
 //        } else {
 
 //        }
 
     }
 
-    private func calcRectVertical(_ cells: CellMatrix) {
-        for row in 0..<cells.rows {
-            for col in 0..<cells.cols {
-//                logd(row, col, " W = ", cells[row, col]?.width, "  H = ", cells[row, col]?.height)
-                print("\(cells[row, col]?.view?.tagS ?? "nil")(", cells[row, col]?.width ?? 0, ", ", cells[row, col]?.height ?? 0, ")", terminator: " ")
-            }
-            print()
-        }
+    private func calcRectVertical(_ cells: CellMatrix) -> CGFloat {
+        var maxY: CGFloat = self.bounds.minY
 
         for row in 0..<cells.rows {
             var y: CGFloat = paddings.top
@@ -210,13 +201,13 @@ public class Grid: UIView {
                 hh -= hSpace
 //                let h = (cell.height + vSpace) * param.spanRows - vSpace
                 let rect = Rect(x: x, y: y, width: ww, height: hh)
-                logd("Rect: ", rect)
-//                cell.view?.frame = rect
                 if let view = cell.view {
                     view.frame = placeView(view, rect)
                 }
+                maxY = max(maxY, rect.maxY)
             }
         }
+        return maxY
     }
 
     private func placeView(_ view: UIView, _ rect: Rect) -> Rect {

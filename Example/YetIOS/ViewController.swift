@@ -114,20 +114,17 @@ class ViewController: UIViewController {
 
     func testGrid() {
         let gv = Grid(frame: .zero)
-        view.addSubview(gv)
+        view += gv
         gv.constraintsInstall {
-//            $0.edgeXParent().edgeYParent(topConst: 25)
             $0.centerParent().widthParent().heightRatio(multi: 1)
         }
         gv.backColor(.gray)
-        gv.paddings = Edge(left: 20, top: 20, right: 20, bottom: 20)
         gv.columns = 3
         gv.setDefaultColumnInfo(value: 50, weight: 1)
-        gv.setColumnInfo(1, value: 100, weight: 0)
+        gv.setColumnInfo(1, value: 150, weight: 0)
 
-        gv.setDefaultRowInfo(value: 50, weight: 1)
-        gv.setRowInfo(1, value: 100, weight: 0)
-//        gv.setRowInfo(2, value: 100, weight: 0)
+        gv.setDefaultRowInfo(value: 50, weight: 0)
+        gv.setRowInfo(1, value: 150, weight: 0)
 
         gv += makeLabel(0) { p in
             p.rowSpan = 2
@@ -141,8 +138,8 @@ class ViewController: UIViewController {
             p.width = 50
             p.height = 50
             p.gravityX = .fill
-            p.gravityY = .none
-            p.margins.ver(20)
+            p.gravityY = .center
+            p.margins.hor(20)
             p.rowSpan = 1
             p.columnSpan = 1
         }
@@ -154,6 +151,8 @@ class ViewController: UIViewController {
             p.rowSpan = 1
             p.columnSpan = 2
         }
+        view.layoutIfNeeded()
+        logd(gv.contentSize)
     }
 
     func makeLabel(_ i: Int, _ block: (GridParams) -> Void) -> UILabel {
