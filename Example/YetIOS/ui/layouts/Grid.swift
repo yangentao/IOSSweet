@@ -40,9 +40,9 @@ public class GridParams {
     public var gravityX: GravityX = .none
     public var gravityY: GravityY = .none
     @GreatEQ(minValue: 1)
-    public var spanColumns: Int = 1
+    public var columnSpan: Int = 1
     @GreatEQ(minValue: 1)
-    public var spanRows: Int = 1
+    public var rowSpan: Int = 1
 
     public var margins: Edge = Edge()
 
@@ -191,14 +191,14 @@ public class Grid: UIView {
                 }
 
                 var ww: CGFloat = 0
-                for c in col..<(col + param.spanColumns) {
+                for c in col..<(col + param.columnSpan) {
                     ww += cells[row, c]?.width ?? 0
                     ww += hSpace
                 }
                 ww -= hSpace
 
                 var hh: CGFloat = 0
-                for r in row..<(row + param.spanRows) {
+                for r in row..<(row + param.rowSpan) {
                     hh += cells[r, col]?.height ?? 0
                     hh += hSpace
                 }
@@ -282,9 +282,9 @@ public class Grid: UIView {
                 col = 0
             }
         }
-        let colSpan = min(self.columns, param.spanColumns)
+        let colSpan = min(self.columns, param.columnSpan)
         if col == 0 || col + colSpan - 1 < self.columns {
-            for r in 0..<param.spanRows {
+            for r in 0..<param.rowSpan {
                 for c in 0..<colSpan {
                     matrix[row + r, col + c] = CellItem(v)
                 }

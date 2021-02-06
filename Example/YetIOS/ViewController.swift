@@ -132,32 +132,32 @@ class ViewController: UIViewController {
         gv += makeLabel(0) { p in
             p.width = 100
             p.height = 100
-            p.spanRows = 2
-            p.spanColumns = 1
+            p.rowSpan = 2
+            p.columnSpan = 1
         }
         gv += makeLabel(1) { p in
             p.width = 100
             p.height = 100
-            p.spanRows = 1
-            p.spanColumns = 2
+            p.rowSpan = 1
+            p.columnSpan = 2
         }
         gv += makeLabel(2) { p in
             p.width = 100
             p.height = 100
-            p.spanRows = 1
-            p.spanColumns = 1
+            p.rowSpan = 1
+            p.columnSpan = 1
         }
         gv += makeLabel(3) { p in
             p.width = 100
             p.height = 100
-            p.spanRows = 2
-            p.spanColumns = 1
+            p.rowSpan = 2
+            p.columnSpan = 1
         }
         gv += makeLabel(4) { p in
             p.width = 100
             p.height = 100
-            p.spanRows = 1
-            p.spanColumns = 2
+            p.rowSpan = 1
+            p.columnSpan = 2
         }
     }
 
