@@ -109,6 +109,7 @@
 		E11E1AD6AAFFE344210A8371 /* TapGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E19B49CB2718BD2C842C6 /* TapGesture.swift */; };
 		E11E1AE7612550678C0B5953 /* VerticalScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E158281AA98D5E44BB212 /* VerticalScrollView.swift */; };
 		E11E1AF38201FF0C8A55DA38 /* TextViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E16FEB1FBEC858433B2CD /* TextViews.swift */; };
+		E11E1B22EF20AA5C7E67A606 /* OperatorCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1DAD24479DAFF1343FF2 /* OperatorCustom.swift */; };
 		E11E1B2E90185D6E3EA02B0E /* GridFixedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E107FD8D45FB55A9D01E1 /* GridFixedView.swift */; };
 		E11E1B88B4B72B5D9CC157E9 /* YsonCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E19F669FBED822697FD58 /* YsonCodable.swift */; };
 		E11E1BB749AF1304FFB80A39 /* SQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1A9E29D430242BB721CA /* SQLite.swift */; };
@@ -297,6 +298,7 @@
 		E11E1D745147BFF6A9FA3681 /* HttpExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpExt.swift; sourceTree = "<group>"; };
 		E11E1D7722074A042ACA3F76 /* PullToRefreshLoadingViewCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshLoadingViewCircle.swift; sourceTree = "<group>"; };
 		E11E1DABFDB38E6E263CA6FD /* TextDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextDetailCell.swift; sourceTree = "<group>"; };
+		E11E1DAD24479DAFF1343FF2 /* OperatorCustom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorCustom.swift; sourceTree = "<group>"; };
 		E11E1DAD6DD553BEEE84CF72 /* a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a.png; sourceTree = "<group>"; };
 		E11E1DCAA588FEE942E3A641 /* QRPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRPage.swift; sourceTree = "<group>"; };
 		E11E1DCEB3651B6DBFEBE922 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
@@ -536,6 +538,7 @@
 				E11E1022776F472DBF47A7EB /* Collections.swift */,
 				E11E19508EC3E9A1E08B56A4 /* UserDefault.swift */,
 				E11E12DB8CFC007CDAB287B4 /* KeyAny.swift */,
+				E11E1DAD24479DAFF1343FF2 /* OperatorCustom.swift */,
 			);
 			path = base;
 			sourceTree = "<group>";
@@ -926,6 +929,7 @@
 				E11E1C3E0644E270ECCED553 /* RelativeLayout.swift in Sources */,
 				E11E190859CE40388C805F5B /* Grid.swift in Sources */,
 				E11E15119BBD5450097A8BF9 /* KeyAny.swift in Sources */,
+				E11E1B22EF20AA5C7E67A606 /* OperatorCustom.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

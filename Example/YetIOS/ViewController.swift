@@ -189,7 +189,7 @@ class ViewController: UIViewController {
     }
 
     func testBuildConstraint() {
-        view.buildViews {
+        view ++= {
             UILabel.Primary.text("AAA").align(.center).named("a").backColor(.green).constraints {
                 $0.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.6)
             }

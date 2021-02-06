@@ -5,7 +5,6 @@
 
 import Foundation
 
-infix operator >>: ComparisonPrecedence
 
 public class KeyAny: CustomStringConvertible {
     public var key: String = ""

@@ -85,6 +85,18 @@ public extension UIView {
         }
         return self
     }
+
+    @discardableResult
+    static func ++=(lhs: UIView, @AnyBuilder _ rhs: AnyBuildBlock) -> UIView {
+        lhs.buildViews(rhs)
+    }
+
+    @discardableResult
+    static func ++=(lhs: UIView, rhs: UIView) -> UIView {
+        lhs.addSubview(rhs)
+        rhs.installSelfConstraints()
+        return lhs
+    }
 }
 
 

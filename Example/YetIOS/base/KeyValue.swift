@@ -39,7 +39,7 @@ public class KeyValue: CustomStringConvertible {
 	}
 }
 
-infix operator =>: ComparisonPrecedence
+
 
 public func =>(k: String, v: Any) -> KeyValue {
 	return KeyValue(k, v)

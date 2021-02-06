@@ -6,10 +6,7 @@
 import Foundation
 
 //append(contentsOf:)
-infix operator ++=: ComparisonPrecedence
 
-infix operator =*: ComparisonPrecedence
-infix operator !=*: ComparisonPrecedence
 
 //IN
 @inlinable
