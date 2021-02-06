@@ -116,35 +116,56 @@ public enum GravityY: Int {
     case fill
 }
 
-public class Edge: Equatable {
-    public var left: CGFloat = 0
-    public var right: CGFloat = 0
-    public var top: CGFloat = 0
-    public var bottom: CGFloat = 0
+public class Edge: Equatable, Codable {
+    public var left: CGFloat
+    public var right: CGFloat
+    public var top: CGFloat
+    public var bottom: CGFloat
 
-    public init() {
 
+    public init(left: CGFloat = 0, top: CGFloat = 0, right: CGFloat = 0, bottom: CGFloat = 0) {
+        self.left = left
+        self.top = top
+        self.right = right
+        self.bottom = bottom
+    }
+}
+
+public extension Edge {
+    @discardableResult
+    func all(_ v: CGFloat) -> Edge {
+        self.left = v
+        self.right = v
+        self.top = v
+        self.bottom = v
+        return self
     }
 
-    public convenience init(l: CGFloat, t: CGFloat, r: CGFloat, b: CGFloat) {
-        self.init()
-        self.left = l
-        self.top = t
-        self.right = r
-        self.bottom = b
+    @discardableResult
+    func hor(_ lr: CGFloat) -> Edge {
+        self.left = lr
+        self.right = lr
+        return self
     }
 
-    public var edgeInsets: UIEdgeInsets {
+    @discardableResult
+    func ver(_ tb: CGFloat) -> Edge {
+        self.top = tb
+        self.bottom = tb
+        return self
+    }
+
+    var edgeInsets: UIEdgeInsets {
         return UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
     }
 
-    public static let zero: Edge = Edge()
+    static let zero: Edge = Edge()
 
-    public static func from(_ edgeInsets: UIEdgeInsets) -> Edge {
-        return Edge(l: edgeInsets.left, t: edgeInsets.top, r: edgeInsets.right, b: edgeInsets.bottom)
+    static func from(_ edgeInsets: UIEdgeInsets) -> Edge {
+        return Edge(left: edgeInsets.left, top: edgeInsets.top, right: edgeInsets.right, bottom: edgeInsets.bottom)
     }
 
-    public static func ==(lhs: Edge, rhs: Edge) -> Bool {
+    static func ==(lhs: Edge, rhs: Edge) -> Bool {
         return lhs.left == rhs.left && lhs.right == rhs.right && lhs.top == rhs.right && lhs.bottom == rhs.bottom
     }
 
@@ -202,12 +223,12 @@ public extension UIView {
         }
     }
 
-    func margins(_ l: CGFloat, _ t: CGFloat, _ r: CGFloat, _ b: CGFloat) {
-        self.margins = Edge(l: l, t: t, r: r, b: b)
+    func margins(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) {
+        self.margins = Edge(left: left, top: top, right: right, bottom: bottom)
     }
 
     func margins(_  m: CGFloat) {
-        self.margins = Edge(l: m, t: m, r: m, b: m)
+        self.margins = Edge(left: m, top: m, right: m, bottom: m)
     }
 
     func marginX(_  m: CGFloat) {

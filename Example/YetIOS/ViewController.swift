@@ -120,42 +120,37 @@ class ViewController: UIViewController {
             $0.centerParent().widthParent().heightRatio(multi: 1)
         }
         gv.backColor(.gray)
-        gv.paddings = Edge(l: 20, t: 20, r: 20, b: 20)
+        gv.paddings = Edge(left: 20, top: 20, right: 20, bottom: 20)
         gv.columns = 3
         gv.setDefaultColumnInfo(value: 50, weight: 1)
-        gv.setColumnInfo(1, value: 50, weight: 0)
+        gv.setColumnInfo(1, value: 100, weight: 0)
 
         gv.setDefaultRowInfo(value: 50, weight: 1)
-        gv.setRowInfo(1, value: 50, weight: 0)
+        gv.setRowInfo(1, value: 100, weight: 0)
 //        gv.setRowInfo(2, value: 100, weight: 0)
 
         gv += makeLabel(0) { p in
-            p.width = 100
-            p.height = 100
             p.rowSpan = 2
             p.columnSpan = 1
         }
         gv += makeLabel(1) { p in
-            p.width = 100
-            p.height = 100
             p.rowSpan = 1
             p.columnSpan = 2
         }
         gv += makeLabel(2) { p in
-            p.width = 100
-            p.height = 100
+            p.width = 50
+            p.height = 50
+            p.gravityX = .fill
+            p.gravityY = .none
+            p.margins.ver(20)
             p.rowSpan = 1
             p.columnSpan = 1
         }
         gv += makeLabel(3) { p in
-            p.width = 100
-            p.height = 100
             p.rowSpan = 2
             p.columnSpan = 1
         }
         gv += makeLabel(4) { p in
-            p.width = 100
-            p.height = 100
             p.rowSpan = 1
             p.columnSpan = 2
         }

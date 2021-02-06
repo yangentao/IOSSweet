@@ -41,7 +41,7 @@ public class Dialog: UIViewController {
     fileprivate var buttons = [DialogAction]()
     fileprivate var bodyView: UIView? = nil
     fileprivate var bodyHeight: CGFloat = 0
-    fileprivate var bodyEdge: Edge = Edge(l: 20, t: 10, r: 20, b: 10)
+    fileprivate var bodyEdge: Edge = Edge(left: 20, top: 10, right: 20, bottom: 10)
 
     public var onDismiss: BlockVoid = {
     }
@@ -83,7 +83,7 @@ public class Dialog: UIViewController {
         edit.text = text
         edit.returnDone()
         bodyHeight = Theme.Edit.height
-        edit.margins(20, 20, 20, 20)
+        edit.margins(left: 20, top: 20, right: 20, bottom: 20)
         self.body(edit)
         return self
     }
@@ -96,7 +96,7 @@ public class Dialog: UIViewController {
         v.text = msg
         v.numberOfLines = 0
         v.alignCenter()
-        v.margins(20, 20, 20, 20)
+        v.margins(left: 20, top: 20, right: 20, bottom: 20)
         body(v)
         return self
     }
@@ -109,7 +109,7 @@ public class Dialog: UIViewController {
     }
 
     public func bodyEdge(_ l: CGFloat, _ t: CGFloat, _ r: CGFloat, _ b: CGFloat) -> Dialog {
-        self.bodyEdge = Edge(l: l, t: t, r: r, b: b)
+        self.bodyEdge = Edge(left: l, top: t, right: r, bottom: b)
         return self
     }
 

@@ -187,7 +187,7 @@ public class LinearLayout: UIView {
     }
 
     public func paddings(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) -> Self {
-        padding = Edge(l: left, t: top, r: right, b: bottom)
+        padding = Edge(left: left, top: top, right: right, bottom: bottom)
         return self
     }
 

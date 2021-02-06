@@ -45,8 +45,8 @@ public class GridParams {
     public var width: CGFloat = 0
     @GreatEQ(minValue: 0)
     public var height: CGFloat = 0
-    public var gravityX: GravityX = .fill
-    public var gravityY: GravityY = .fill
+    public var gravityX: GravityX = .none
+    public var gravityY: GravityY = .none
     public var margins: Edge = Edge()
 
 }
@@ -211,11 +211,58 @@ public class Grid: UIView {
 //                let h = (cell.height + vSpace) * param.spanRows - vSpace
                 let rect = Rect(x: x, y: y, width: ww, height: hh)
                 logd("Rect: ", rect)
-                cell.view?.frame = rect
+//                cell.view?.frame = rect
+                if let view = cell.view {
+                    view.frame = placeView(view, rect)
+                }
             }
         }
+    }
 
+    private func placeView(_ view: UIView, _ rect: Rect) -> Rect {
+        let param = view.gridParamsEnsure
+        let x: CGFloat
+        let y: CGFloat
+        let w: CGFloat
+        let h: CGFloat
 
+        switch param.gravityX {
+        case .none, .fill:
+            w = rect.width
+            x = rect.minX
+            break
+        case .left:
+            w = param.width
+            x = rect.minX
+        case .right:
+            w = param.width
+            x = rect.maxX - w
+            break
+        case .center:
+            w = param.width
+            x = rect.center.x - w / 2
+            break
+        }
+        switch param.gravityY {
+        case .none, .fill:
+            h = rect.height
+            y = rect.minY
+        case .top:
+            h = param.height
+            y = rect.minY
+        case .bottom:
+            h = param.height
+            y = rect.maxY - h
+        case .center:
+            h = param.height
+            y = rect.center.y - h / 2
+        }
+        var r = Rect(x: x, y: y, width: w, height: h)
+        r.origin.x += param.margins.left
+        r.origin.y += param.margins.top
+        r.size.width -= param.margins.left + param.margins.right
+        r.size.height -= param.margins.top + param.margins.bottom
+        return r
     }
 
     private func calcHeightsVertical(_ cells: CellMatrix) {
