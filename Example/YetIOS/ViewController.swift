@@ -57,8 +57,32 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        testLinearVer()
+        testButton()
 
+    }
+
+
+    func testButton() {
+        view += UIButton.Default.title("Hello").backColor(.green).textColorPrimary().constraints {
+            $0.centerParent().width(100).height(50)
+        }.click { [weak self] b in
+            self?.testDialog()
+        }
+
+        view.layoutIfNeeded()
+    }
+
+    func testDialog() {
+        let p = DialogX(self)
+        p.title("Hello Title")
+        p.button(.cancel, "Cancel") {
+            logd("Cancel Click")
+        }
+        p.button(.ok, "OK") {
+            logd("OK Click")
+        }
+        p.message("多发发额外染发膏温柔发噶释放大二噶说过梵蒂冈电视功夫大师问他")
+        p.show()
     }
 
     func testLinearVer() {
@@ -91,29 +115,6 @@ class ViewController: UIViewController {
         }.constraints { c in
             c.centerParent().widthParent(constant: -40).heightRatio(multi: 1)
         }
-    }
-
-    func testButton() {
-        view += UIButton.Default.title("Hello").backColor(.green).textColorPrimary().constraints {
-            $0.centerParent().width(100).height(50)
-        }.click { [weak self] b in
-            self?.testDialog()
-        }
-
-        view.layoutIfNeeded()
-    }
-
-    func testDialog() {
-        let p = DialogX(self)
-        p.title("Hello Title")
-        p.button(.cancel, "Cancel") {
-            logd("Cancel Click")
-        }
-        p.button(.ok, "OK") {
-            logd("OK Click")
-        }
-        p.message("多发发额外染发膏温柔发噶释放大二噶说过梵蒂冈电视功夫大师问他")
-        p.show()
     }
 
     func testLinear() {

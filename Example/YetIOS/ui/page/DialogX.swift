@@ -57,11 +57,11 @@ public class DialogX: UIViewController {
         view += LinearLayout(.vertical).backColor(Theme.dialogBack).roundLayer(self.corner).apply { ll in
             ll.constraints {
                 $0.centerParent()
-                $0.heightRatio(multi: 1)
                 $0.width.geConst(200)
                 $0.width.leConst(350)
                 $0.width.eqParent(constant: -marginX * 2).priority(.defaultHigh)
             }
+            ll.keepContent(.vertical)
 
             if let v = titleView {
                 ll += v.linearParams(MatchParent, 46)
@@ -87,6 +87,8 @@ public class DialogX: UIViewController {
                     }
                 }
             }
+
+
         }.clickView { _ in
         }
 

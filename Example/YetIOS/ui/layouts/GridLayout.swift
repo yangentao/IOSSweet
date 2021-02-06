@@ -103,8 +103,13 @@ public class GridLayout: UIView {
         didSet {
             if oldValue != contentSize {
                 processScroll()
+                invalidateIntrinsicContentSize()
             }
         }
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        return contentSize
     }
 
     private var defaultColumnInfo: GridCellInfo = GridCellInfo(value: 0, weight: 1)

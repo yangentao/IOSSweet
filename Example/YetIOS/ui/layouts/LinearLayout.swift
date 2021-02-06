@@ -181,6 +181,7 @@ public class LinearLayout: UIView {
         didSet {
             if oldValue != contentSize {
                 processScroll()
+                invalidateIntrinsicContentSize()
             }
         }
     }
@@ -188,6 +189,10 @@ public class LinearLayout: UIView {
     convenience init(_ axis: LayoutAxis) {
         self.init(frame: .zero)
         self.axis = axis
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        return contentSize
     }
 
     public override func didMoveToSuperview() {

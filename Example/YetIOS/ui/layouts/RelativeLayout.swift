@@ -408,8 +408,12 @@ public class RelativeLayout: UIView {
         didSet {
             if oldValue != contentSize {
                 processScroll()
+                invalidateIntrinsicContentSize()
             }
         }
+    }
+    public override var intrinsicContentSize: CGSize {
+        return contentSize
     }
 
     public override func didMoveToSuperview() {
