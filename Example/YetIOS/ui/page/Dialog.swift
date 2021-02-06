@@ -378,12 +378,12 @@ public class DialogGrid<T> {
         return nil
     }
     private let panel = UIView(frame: Rect.zero)
-    private let gl: GridLayout
+    private let gl: GridLayoutConstraint
 
     public init(_ dlg: Dialog, _ items: [T]) {
         self.dlg = dlg
         self.items = items
-        self.gl = panel.layoutGrid
+        self.gl = panel.layoutGridConstraint
         self.gl.columns = 3
     }
 

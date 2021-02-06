@@ -50,7 +50,7 @@ open class GridPage<T>: ScrollPage {
 
 	}
 
-	open func onConfigGrid(_ L: GridLayout) {
+	open func onConfigGrid(_ L: GridLayoutConstraint) {
 
 	}
 

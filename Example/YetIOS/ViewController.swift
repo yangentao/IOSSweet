@@ -113,7 +113,7 @@ class ViewController: UIViewController {
     }
 
     func testGrid() {
-        let gv = Grid(frame: .zero)
+        let gv = GridLayout(frame: .zero)
         view += gv
         gv.constraintsInstall {
             $0.centerParent().widthParent().heightRatio(multi: 1)

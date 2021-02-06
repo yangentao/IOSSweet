@@ -46,8 +46,8 @@ open class VerticalScrollView: UIScrollView {
 //		L.install(true)
 //	}
 
-    open func layoutScrollGrid(_ block: (GridLayout) -> Void) {
-        let L = GridLayout(self.contentVertical)
+    open func layoutScrollGrid(_ block: (GridLayoutConstraint) -> Void) {
+        let L = GridLayoutConstraint(self.contentVertical)
         block(L)
         L.install(true)
     }
