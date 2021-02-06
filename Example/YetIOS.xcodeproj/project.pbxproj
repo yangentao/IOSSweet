@@ -77,6 +77,7 @@
 		E11E16DAD5553DF14F9C032D /* SQLiteExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1AE0227DE849EC2AAF6C /* SQLiteExt.swift */; };
 		E11E16DDF014876FB54E8DD2 /* MyNavPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E138FAC63DAB23B538DE9 /* MyNavPage.swift */; };
 		E11E16EC3564DA34E63E232F /* PhotoPerm.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E122ECE4DFED2645DDD66 /* PhotoPerm.swift */; };
+		E11E16F197AB9509160D3DD6 /* DialogX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1723404D5C01DB29FC20 /* DialogX.swift */; };
 		E11E17245B7211F0DF35668B /* FileSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E10E3C923699D79AC8977 /* FileSet.swift */; };
 		E11E174734E3A05FB0135E8B /* WeakRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1576DE8CABC95D2EBC76 /* WeakRef.swift */; };
 		E11E17727E2EF3346AE666C4 /* YsonArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1B502ACF201C0BE38BE5 /* YsonArray.swift */; };
@@ -233,6 +234,7 @@
 		E11E16FEB1FBEC858433B2CD /* TextViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViews.swift; sourceTree = "<group>"; };
 		E11E170FC7390EBDA89B4D79 /* GridPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridPage.swift; sourceTree = "<group>"; };
 		E11E1720328A0CACE4E2257E /* GridItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridItemView.swift; sourceTree = "<group>"; };
+		E11E1723404D5C01DB29FC20 /* DialogX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogX.swift; sourceTree = "<group>"; };
 		E11E176EA4443BF613B8FB82 /* GridLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutConstraint.swift; sourceTree = "<group>"; };
 		E11E178B49F03351EC477862 /* ImageText4Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageText4Cell.swift; sourceTree = "<group>"; };
 		E11E1796B39777FBF68004FF /* QRScaner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRScaner.swift; sourceTree = "<group>"; };
@@ -600,6 +602,7 @@
 				E11E1C15ACBF32127B318D52 /* WebViewPage.swift */,
 				E11E1CEA1FD6E316F6337FCC /* MyTabBarPage.swift */,
 				E11E1837CCBE8E7E5ABD1044 /* ImagePickPage.swift */,
+				E11E1723404D5C01DB29FC20 /* DialogX.swift */,
 			);
 			path = page;
 			sourceTree = "<group>";
@@ -930,6 +933,7 @@
 				E11E190859CE40388C805F5B /* GridLayout.swift in Sources */,
 				E11E15119BBD5450097A8BF9 /* KeyAny.swift in Sources */,
 				E11E1B22EF20AA5C7E67A606 /* OperatorCustom.swift in Sources */,
+				E11E16F197AB9509160D3DD6 /* DialogX.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

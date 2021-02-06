@@ -57,16 +57,46 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        testButton()
 
+    }
+
+    func testButton() {
         view += UIButton.Default.title("Hello").backColor(.green).textColorPrimary().constraints {
             $0.centerParent().width(100).height(50)
-        }.click { b in
-            self.dialog.showAlert(title: "Title", msg: "Message")
+        }.click { [weak self] b in
+            self?.testDialog()
         }
 
         view.layoutIfNeeded()
-        logd(view.firstView(UIButton.self)?.frame)
+    }
 
+    func testDialog() {
+        let p = DialogX(self)
+        p.title("Hello Title")
+        p.button(.cancel, "Cancel") {
+            logd("Cancel Click")
+        }
+        p.button(.ok, "OK") {
+            logd("OK Click")
+        }
+        p.show()
+    }
+
+    func testLinear() {
+
+        view += LinearLayout(.horizontal).apply { ll in
+            ll.constraints {
+                $0.centerParent().widthParent(constant: -20).heightRatio(multi: 1)
+            }
+            ll.backColor(.green)
+            ll += UIButton.Default.title("Hello").titleColor(Theme.dangerColor).linearParams(0, MatchParent) {
+                $0.weight = 1
+            }
+            ll += UIButton.Default.title("Entao").titleColor(Theme.accent).linearParams(0, MatchParent) {
+                $0.weight = 1
+            }
+        }
     }
 
     func testGrid() {

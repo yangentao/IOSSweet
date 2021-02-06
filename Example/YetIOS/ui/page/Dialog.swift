@@ -6,6 +6,10 @@
 import Foundation
 import UIKit
 
+public enum ActionStyle {
+    case normal, cancel, ok, safe, danger, risk, accent
+}
+
 public class DialogAction {
     public var autoClose: Bool = true
     public var title: String
@@ -15,6 +19,21 @@ public class DialogAction {
 
     public init(_ title: String) {
         self.title = title
+    }
+
+    public func theme(_ style: ActionStyle) {
+        switch style {
+        case .cancel, .normal:
+            color = Theme.Text.primaryColor
+        case .ok:
+            color = Colors.link
+        case .safe:
+            color = Theme.safeColor
+        case .risk, .danger:
+            color = Theme.dangerColor
+        case .accent:
+            color = Theme.accent
+        }
     }
 
     public func risk() {

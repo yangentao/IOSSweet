@@ -137,6 +137,12 @@ public class Theme {
     public static var dangerColor: UIColor = 0xd81e06.rgb
     public static var safeColor: UIColor = 0x36ab60.rgb
     public static var grayBackColor: UIColor = Color.whiteF(0.85)
+    public static var dialogBack: UIColor = {
+        if #available(iOS 13.0, *) {
+            return makeColor(.white, darkColor: Color.whiteF(0.3))
+        }
+        return .white
+    }()
 
 
     public static var themeColor: UIColor = {

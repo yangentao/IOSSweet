@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 
+//TODO weight 优先
 
 public extension UIView {
     var linearParams: LinearParams? {
@@ -34,7 +35,8 @@ public extension UIView {
 
     @discardableResult
     func linearParams(_ width: CGFloat, _ height: CGFloat, _ block: (LinearParams) -> Void) -> Self {
-        linearParamEnsure.width(width).height(height)
+        let a = linearParamEnsure.width(width).height(height)
+        block(a)
         return self
     }
 
@@ -160,8 +162,16 @@ public extension LinearParams {
 
 
 public class LinearLayout: UIView {
-    public var axis: LayoutAxis = .vertical
-    public var padding: Edge = Edge()
+    public var axis: LayoutAxis = .vertical {
+        didSet {
+            setNeedsLayout()
+        }
+    }
+    public var padding: Edge = Edge() {
+        didSet {
+            setNeedsLayout()
+        }
+    }
 
     public private(set) var contentSize: CGSize = .zero {
         didSet {

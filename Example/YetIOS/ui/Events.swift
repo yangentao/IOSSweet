@@ -140,9 +140,11 @@ public extension UIView {
         self.clickBlock?(self)
     }
 
-    func clickView(_ block: @escaping ViewClickBlock) {
+    @discardableResult
+    func clickView(_ block: @escaping ViewClickBlock) -> Self {
         self.clickBlock = block
         addTapPress(self, #selector(onClickView(r:)))
+        return self
     }
 
     @discardableResult
