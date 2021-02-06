@@ -60,9 +60,9 @@ class ViewController: UIViewController {
 //        testSysConstraint()
 //        testBuildConstraint()
 //        testYetLayout()
-//        testGrid()
+        testGrid()
 
-        testKeyAny()
+//        testKeyAny()
 //        let a = self.view.addView(ImageLabelView(frame:  let a = self.view.addView(ImageLabelView(frame: .zero)).layout { L in
 ////            L.centerParent().size(100, 100)
 ////        }
@@ -116,24 +116,60 @@ class ViewController: UIViewController {
         let gv = Grid(frame: .zero)
         view.addSubview(gv)
         gv.constraintsInstall {
-            $0.edgeXParent().edgeYParent(topConst: 25)
+//            $0.edgeXParent().edgeYParent(topConst: 25)
+            $0.centerParent().widthParent().heightRatio(multi: 1)
         }
-        gv.backColor(.blue)
-        gv.columns = 2
+//        gv.backColor(.blue)
+        gv.paddings = Edge(l: 20, t: 20, r: 20, b: 20)
+        gv.columns = 3
         let cs: [UIColor] = [.green, .red, .cyan, .yellow]
-        gv.setColumnInfo(0, GridColumnInfo(width: 0, weight: 1))
+//        gv.setColumnInfo(0, GridColumnInfo(width: 0, weight: 1))
+//        gv.setColumnInfo(1, GridColumnInfo(width: 100, weight: 0))
         gv.setRowInfo(0, GridRowInfo(height: 0, weight: 1))
-        for i in 0..<4 {
-            let lb = UILabel.Primary
-            gv.addSubview(lb)
-            lb.gridParams {
-                $0.width = 100
-                $0.height = 50
-            }
-            lb.text("Text \(i)")
-            lb.align(.center)
-            lb.backColor(cs[i])
+        gv.setRowInfo(1, GridRowInfo(height: 0, weight: 1))
+        gv.setRowInfo(2, GridRowInfo(height: 0, weight: 1))
+
+        gv += makeLabel(0) { p in
+            p.width = 100
+            p.height = 100
+            p.spanRows = 2
+            p.spanColumns = 1
         }
+        gv += makeLabel(1) { p in
+            p.width = 100
+            p.height = 100
+            p.spanRows = 1
+            p.spanColumns = 2
+        }
+        gv += makeLabel(2) { p in
+            p.width = 100
+            p.height = 100
+            p.spanRows = 1
+            p.spanColumns = 1
+        }
+        gv += makeLabel(3) { p in
+            p.width = 100
+            p.height = 100
+            p.spanRows = 2
+            p.spanColumns = 1
+        }
+        gv += makeLabel(4) { p in
+            p.width = 100
+            p.height = 100
+            p.spanRows = 1
+            p.spanColumns = 2
+        }
+    }
+
+    func makeLabel(_ i: Int, _ block: (GridParams) -> Void) -> UILabel {
+        let cs: [UIColor] = [.green, .red, .cyan, .yellow, .blue, .gray]
+        let lb = UILabel.Primary
+        lb.tagS = "Label:\(i)"
+        lb.text("Text \(i)")
+        lb.align(.center)
+        lb.backColor(cs[i])
+        block(lb.gridParamsEnsure)
+        return lb
     }
 
     func testYetLayout() {

@@ -162,30 +162,49 @@ public class Grid: UIView {
     }
 
     private func calcRectVertical(_ cells: CellMatrix) {
+        for row in 0..<cells.rows {
+            for col in 0..<cells.cols {
+//                logd(row, col, " W = ", cells[row, col]?.width, "  H = ", cells[row, col]?.height)
+                print("\(cells[row, col]?.view?.tagS ?? "nil")(", cells[row, col]?.width ?? 0, ", ", cells[row, col]?.height ?? 0, ")", terminator: " ")
+            }
+            print()
+        }
 
         for row in 0..<cells.rows {
             var y: CGFloat = paddings.top
             for i in 0..<row {
-                y += (cells[row, 0]?.height ?? 0) + vSpace
+                y += (cells[i, 0]?.height ?? 0) + vSpace
             }
             for col in 0..<cells.cols {
                 guard let cell = cells[row, col], let view = cell.view, let param = view.gridParams else {
                     continue
                 }
-                if col > 0 && cell === cells[row, col - 1] {
+                if col > 0 && cell.view === cells[row, col - 1]?.view {
                     continue
                 }
-                if row > 0 && cell === cells[row - 1, col] {
+                if row > 0 && cell.view === cells[row - 1, col]?.view {
                     continue
                 }
                 var x: CGFloat = paddings.left // (cell.width + hSpace) * cell.view.gridParams!.spanColumns
                 for i in 0..<col {
-                    x += (cells[row, col]?.width ?? 0) + hSpace
+                    x += (cells[row, i]?.width ?? 0) + hSpace
                 }
 
-                let w = (cell.width + hSpace) * param.spanColumns - hSpace
-                let h = (cell.height + vSpace) * param.spanRows - vSpace
-                let rect = Rect(x: x, y: y, width: w, height: h)
+                var ww: CGFloat = 0
+                for c in col..<(col + param.spanColumns) {
+                    ww += cells[row, c]?.width ?? 0
+                    ww += hSpace
+                }
+                ww -= hSpace
+
+                var hh: CGFloat = 0
+                for r in row..<(row + param.spanRows) {
+                    hh += cells[r, col]?.height ?? 0
+                    hh += hSpace
+                }
+                hh -= hSpace
+//                let h = (cell.height + vSpace) * param.spanRows - vSpace
+                let rect = Rect(x: x, y: y, width: ww, height: hh)
                 logd("Rect: ", rect)
                 cell.view?.frame = rect
             }

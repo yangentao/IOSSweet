@@ -93,6 +93,12 @@ public extension UIView {
         }
     }
 
+    @discardableResult
+    static func +=(lhs: UIView, rhs: UIView) -> UIView {
+        lhs.addSubview(rhs)
+        return lhs
+    }
+
 }
 
 public extension UIView {
