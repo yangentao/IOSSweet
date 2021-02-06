@@ -86,13 +86,13 @@ public class Grid: UIView {
 
 
     @GreatEQ(minValue: 0)
-    public var hSpace: CGFloat = 0 {
+    public var spaceHor: CGFloat = 0 {
         didSet {
             setNeedsLayout()
         }
     }
     @GreatEQ(minValue: 0)
-    public var vSpace: CGFloat = 0 {
+    public var spaceVer: CGFloat = 0 {
         didSet {
             setNeedsLayout()
         }
@@ -169,7 +169,7 @@ public class Grid: UIView {
         for row in 0..<cells.rows {
             var y: CGFloat = paddings.top
             for i in 0..<row {
-                y += (cells[i, 0]?.height ?? 0) + vSpace
+                y += (cells[i, 0]?.height ?? 0) + spaceVer
             }
             for col in 0..<cells.cols {
                 guard let cell = cells[row, col], let view = cell.view, let param = view.gridParams else {
@@ -183,22 +183,22 @@ public class Grid: UIView {
                 }
                 var x: CGFloat = paddings.left // (cell.width + hSpace) * cell.view.gridParams!.spanColumns
                 for i in 0..<col {
-                    x += (cells[row, i]?.width ?? 0) + hSpace
+                    x += (cells[row, i]?.width ?? 0) + spaceHor
                 }
 
                 var ww: CGFloat = 0
                 for c in col..<(col + param.columnSpan) {
                     ww += cells[row, c]?.width ?? 0
-                    ww += hSpace
+                    ww += spaceHor
                 }
-                ww -= hSpace
+                ww -= spaceHor
 
                 var hh: CGFloat = 0
                 for r in row..<(row + param.rowSpan) {
                     hh += cells[r, col]?.height ?? 0
-                    hh += hSpace
+                    hh += spaceHor
                 }
-                hh -= hSpace
+                hh -= spaceHor
 //                let h = (cell.height + vSpace) * param.spanRows - vSpace
                 let rect = Rect(x: x, y: y, width: ww, height: hh)
                 if let view = cell.view {
@@ -262,7 +262,7 @@ public class Grid: UIView {
             rowInfos[k] = v
         }
 
-        let totalValue: CGFloat = self.bounds.height - self.vSpace * (cells.rows - 1) - paddings.top - paddings.bottom
+        let totalValue: CGFloat = self.bounds.height - self.spaceVer * (cells.rows - 1) - paddings.top - paddings.bottom
         var weightSum: CGFloat = 0
         var ls: [GridCellInfo] = []
         var ls2: [GridCellInfo] = []
@@ -310,7 +310,7 @@ public class Grid: UIView {
             columnInfos[k] = v
         }
 
-        let totalValue: CGFloat = self.bounds.width - self.hSpace * (self.columns - 1) - paddings.left - paddings.right
+        let totalValue: CGFloat = self.bounds.width - self.spaceHor * (self.columns - 1) - paddings.left - paddings.right
         var leftValue: CGFloat = totalValue
 
         var weightSum: CGFloat = 0
@@ -446,7 +446,6 @@ fileprivate class CellMatrix {
     }
 
     var rows: Int {
-        map.keys
         if let a = map.keySet.max(by: { a, b in
             a.row < b.row
         }) {
