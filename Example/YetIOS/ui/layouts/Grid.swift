@@ -35,15 +35,18 @@ public extension UIView {
 }
 
 public class GridParams {
-    public var width: CGFloat = 60
-    public var height: CGFloat = 60
+
     @GreatEQ(minValue: 1)
     public var columnSpan: Int = 1
     @GreatEQ(minValue: 1)
     public var rowSpan: Int = 1
 
-    public var gravityX: GravityX = .none
-    public var gravityY: GravityY = .none
+    @GreatEQ(minValue: 0)
+    public var width: CGFloat = 0
+    @GreatEQ(minValue: 0)
+    public var height: CGFloat = 0
+    public var gravityX: GravityX = .fill
+    public var gravityY: GravityY = .fill
     public var margins: Edge = Edge()
 
 }
@@ -67,21 +70,12 @@ public class Grid: UIView {
         }
     }
 
-    public var axis: LayoutAxis = .vertical {
-        didSet {
-            setNeedsLayout()
-        }
-    }
-    public var gravityX: GravityX = .fill {
-        didSet {
-            setNeedsLayout()
-        }
-    }
-    public var gravityY: GravityY = .fill {
-        didSet {
-            setNeedsLayout()
-        }
-    }
+//    public var axis: LayoutAxis = .vertical {
+//        didSet {
+//            setNeedsLayout()
+//        }
+//    }
+
     @GreatEQ(minValue: 1)
     public var columns: Int = 3 {
         didSet {
@@ -156,19 +150,19 @@ public class Grid: UIView {
         if childViews.isEmpty {
             return
         }
-        if axis == .vertical {
-            let cells: CellMatrix = calcCellsVertical(childViews)
-            logd("MapCount: ", cells.map.count)
-            logd("Cols:", cells.cols)
-            logd("Rows:", cells.rows)
-            logd("Keys:", cells.map.keys)
-            logd("Map:", cells.map)
-            calcWidthsVertical(cells)
-            calcHeightsVertical(cells)
-            calcRectVertical(cells)
-        } else {
+//        if axis == .vertical {
+        let cells: CellMatrix = calcCellsVertical(childViews)
+        logd("MapCount: ", cells.map.count)
+        logd("Cols:", cells.cols)
+        logd("Rows:", cells.rows)
+        logd("Keys:", cells.map.keys)
+        logd("Map:", cells.map)
+        calcWidthsVertical(cells)
+        calcHeightsVertical(cells)
+        calcRectVertical(cells)
+//        } else {
 
-        }
+//        }
 
     }
 

@@ -122,12 +122,12 @@ class ViewController: UIViewController {
         gv.backColor(.gray)
         gv.paddings = Edge(l: 20, t: 20, r: 20, b: 20)
         gv.columns = 3
-        gv.setDefaultColumnInfo(value: 0, weight: 1)
+        gv.setDefaultColumnInfo(value: 50, weight: 1)
         gv.setColumnInfo(1, value: 50, weight: 0)
 
-        gv.setDefaultRowInfo(value: 50, weight: 0)
-        gv.setRowInfo(1, value: 0, weight: 1)
-        gv.setRowInfo(2, value: 100, weight: 0)
+        gv.setDefaultRowInfo(value: 50, weight: 1)
+        gv.setRowInfo(1, value: 50, weight: 0)
+//        gv.setRowInfo(2, value: 100, weight: 0)
 
         gv += makeLabel(0) { p in
             p.width = 100
