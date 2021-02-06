@@ -57,8 +57,40 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        testButton()
+        testLinearVer()
 
+    }
+
+    func testLinearVer() {
+        view += LinearLayout(.horizontal).backColor(.gray).apply { ll in
+            ll += UILabel.Primary.text("AAA").backColor(.green).align(.center).linearParams { p in
+                p.width(100).height(50).weight(0)
+                p.margins.hor(20).ver(10)
+                p.gravityX = .center
+                p.gravityY = .center
+            }
+            ll += UILabel.Primary.text("BBB").backColor(.red).align(.center).linearParams { p in
+                p.width(100).height(50).weight(0)
+                p.margins.hor(10).ver(20)
+                p.gravityX = .fill
+                p.gravityY = .fill
+            }
+        }.constraints { c in
+            c.centerParent().widthParent(constant: -40).heightRatio(multi: 1)
+        }
+    }
+
+    func testLinearHor() {
+        view += LinearLayout(.horizontal).backColor(.gray).apply { ll in
+            ll += UILabel.Primary.text("AAA").backColor(.green).align(.center).linearParams { p in
+                p.height(MatchParent).weight(1).width(40)
+            }
+            ll += UILabel.Primary.text("BBB").backColor(.red).align(.center).linearParams { p in
+                p.height(MatchParent).weight(1).width(40)
+            }
+        }.constraints { c in
+            c.centerParent().widthParent(constant: -40).heightRatio(multi: 1)
+        }
     }
 
     func testButton() {

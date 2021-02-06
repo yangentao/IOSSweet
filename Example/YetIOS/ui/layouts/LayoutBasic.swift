@@ -178,77 +178,77 @@ public extension Edge {
 
 }
 
-
-public extension UIView {
-
-    var marginLeft: CGFloat {
-        get {
-            return margins?.left ?? 0
-        }
-        set {
-            marginsEnsure.left = newValue
-        }
-    }
-    var marginTop: CGFloat {
-        get {
-            return margins?.top ?? 0
-        }
-        set {
-            marginsEnsure.top = newValue
-        }
-    }
-    var marginBottom: CGFloat {
-        get {
-            return margins?.bottom ?? 0
-        }
-        set {
-            marginsEnsure.bottom = newValue
-        }
-    }
-    var marginRight: CGFloat {
-        get {
-            return margins?.right ?? 0
-        }
-        set {
-            marginsEnsure.right = newValue
-        }
-    }
-    var marginsEnsure: Edge {
-        if let m = margins {
-            return m
-        }
-        let e = Edge()
-        margins = e
-        return e
-    }
-    var margins: Edge? {
-        get {
-            return getAttr("__margins__") as? Edge
-        }
-        set {
-            setAttr("__margins__", newValue)
-        }
-    }
-
-    func margins(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) {
-        self.margins = Edge(left: left, top: top, right: right, bottom: bottom)
-    }
-
-    func margins(_  m: CGFloat) {
-        self.margins = Edge(left: m, top: m, right: m, bottom: m)
-    }
-
-    func marginX(_  m: CGFloat) {
-        self.marginLeft = m
-        self.marginRight = m
-    }
-
-    func marginY(_  m: CGFloat) -> Self {
-        self.marginTop = m
-        self.marginBottom = m
-        return self
-    }
-}
+//
+//public extension UIView {
+//
+//    var marginLeft: CGFloat {
+//        get {
+//            return margins?.left ?? 0
+//        }
+//        set {
+//            marginsEnsure.left = newValue
+//        }
+//    }
+//    var marginTop: CGFloat {
+//        get {
+//            return margins?.top ?? 0
+//        }
+//        set {
+//            marginsEnsure.top = newValue
+//        }
+//    }
+//    var marginBottom: CGFloat {
+//        get {
+//            return margins?.bottom ?? 0
+//        }
+//        set {
+//            marginsEnsure.bottom = newValue
+//        }
+//    }
+//    var marginRight: CGFloat {
+//        get {
+//            return margins?.right ?? 0
+//        }
+//        set {
+//            marginsEnsure.right = newValue
+//        }
+//    }
+//    var marginsEnsure: Edge {
+//        if let m = margins {
+//            return m
+//        }
+//        let e = Edge()
+//        margins = e
+//        return e
+//    }
+//    var margins: Edge? {
+//        get {
+//            return getAttr("__margins__") as? Edge
+//        }
+//        set {
+//            setAttr("__margins__", newValue)
+//        }
+//    }
+//
+//    func margins(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) {
+//        self.margins = Edge(left: left, top: top, right: right, bottom: bottom)
+//    }
+//
+//    func margins(_  m: CGFloat) {
+//        self.margins = Edge(left: m, top: m, right: m, bottom: m)
+//    }
+//
+//    func marginX(_  m: CGFloat) {
+//        self.marginLeft = m
+//        self.marginRight = m
+//    }
+//
+//    func marginY(_  m: CGFloat) -> Self {
+//        self.marginTop = m
+//        self.marginBottom = m
+//        return self
+//    }
+//}
 
 
 

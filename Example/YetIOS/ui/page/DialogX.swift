@@ -71,12 +71,12 @@ public class DialogX: UIViewController {
 
             if !buttons.isEmpty {
                 ll += UIView(frame: .zero).backColor(Colors.separator).linearParams(MatchParent, 1)
-                ll += LinearLayout(.horizontal).linearParams(MatchParent, 46).apply { panel in
+                ll += LinearLayout(.horizontal).linearParams(MatchParent, 46).backColor(.blue).apply { panel in
                     for (idx, item) in buttons.enumerated() {
                         if idx != 0 {
                             panel += UIView(frame: .zero).backColor(Colors.separator).linearParams(1, MatchParent)
                         }
-                        panel += UIButton.Default.title(item.title).titleColor(item.color).linearParams(0, MatchParent) {
+                        panel += UIButton.Default.title(item.title).backColor(.green).titleColor(item.color).linearParams(0, MatchParent) {
                             $0.weight = 1
                         }.click { [weak self] b in
                             if item.autoClose {

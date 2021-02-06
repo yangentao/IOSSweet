@@ -48,18 +48,15 @@ public extension UIView {
 
     func itemStyle(_ height: CGFloat = Dim.itemHeightNormal) {
         self.linearParams(MatchParent, height)
-        self.marginX(Dim.edge)
         self.ivBottomLine = true
         self.ivBottomLineOffsetLeft = Dim.edge
     }
 
     func itemStyleInput(_ height: CGFloat = Dim.itemHeightNormal) {
         self.linearParams(MatchParent, height)
-        self.marginX(Dim.edgeInput)
         self.ivBottomLine = false
         if self is TextDetailView {
             self.ivMoreArrow = true
-            self.marginRight = 0
         }
     }
 }
@@ -159,17 +156,14 @@ open class ItemPage: TitlePage, UITableViewDataSource, UITableViewDelegate {
         let w = lp?.width ?? MatchParent
         let h = lp?.height ?? rowHeight
 
-        let M = item.margins
 
         let LL = item.layout
         if (w <= 0) {
-            LL.fillX(M?.left ?? 0, -(M?.right ?? 0))
         } else {
             LL.width(w)
             if lp?.gravityX == .center {
                 LL.centerXParent()
             } else {
-                LL.leftParent(M?.left ?? 0)
             }
         }
         if h > 0 {
@@ -177,7 +171,7 @@ open class ItemPage: TitlePage, UITableViewDataSource, UITableViewDelegate {
         } else {
             LL.height(rowHeight)
         }
-        LL.topParent(M?.top ?? 0)
+        LL.topParent(  0)
 
         if item.ivBottomLine {
             let lineView = UIView(frame: Rect.zero)
@@ -208,7 +202,7 @@ open class ItemPage: TitlePage, UITableViewDataSource, UITableViewDelegate {
     open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let v = getItem(indexPath.row)
         let h = v.linearParams?.height ?? rowHeight
-        return h + v.marginTop + v.marginBottom
+        return h
     }
 
     open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -248,9 +242,6 @@ public extension ItemPage {
         b.linearParams(MatchParent, Theme.Button.heightLarge) {
             $0.gravityX(.center)
         }
-        b.marginTop = 20
-        b.marginBottom = 20
-        b.marginX(Dim.edgeInput)
         addItem(b)
         return b
     }
@@ -262,9 +253,6 @@ public extension ItemPage {
         b.linearParams(MatchParent, Theme.Button.heightLarge) {
             $0.gravityX(.center)
         }
-        b.marginTop = 20
-        b.marginBottom = 20
-        b.marginX(Dim.edgeInput)
         addItem(b)
         return b
     }

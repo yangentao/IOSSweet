@@ -104,7 +104,6 @@ public class Dialog: UIViewController {
         edit.text = text
         edit.returnDone()
         bodyHeight = Theme.Edit.height
-        edit.margins(left: 20, top: 20, right: 20, bottom: 20)
         self.body(edit)
         return self
     }
@@ -112,16 +111,12 @@ public class Dialog: UIViewController {
     @discardableResult
     public func message(_ msg: String) -> Dialog {
         let v = UILabel.Primary.backColor(Colors.fill).text(msg).lines(0).alignCenter()
-        v.marginsEnsure.all(20)
         body(v)
         return self
     }
 
     public func body(_ bodyView: UIView) {
         self.bodyView = bodyView
-        if self.bodyView?.margins == nil {
-            self.bodyView?.margins = self.bodyEdge
-        }
     }
 
     public func bodyEdge(_ l: CGFloat, _ t: CGFloat, _ r: CGFloat, _ b: CGFloat) -> Dialog {
@@ -436,7 +431,6 @@ public class DialogList<T> {
             v.textView.text = title
             v.iconView.image = img
             v.textView.textAlignment = self.align
-            v.marginX(0)
             return v
         } else {
             let v = UILabel.Primary
