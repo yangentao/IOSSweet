@@ -23,7 +23,7 @@ public class TextDetailView: UIView {
 		textView.stretchContent(.horizontal)
 		detailView.keepContent(.horizontal)
 
-		detailView.alignRight()
+		detailView.align(.right)
 		self.itemStyle(Dim.itemHeightNormal)
 	}
 

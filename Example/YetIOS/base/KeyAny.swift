@@ -25,21 +25,7 @@ public class KeyAny: CustomStringConvertible {
         }
         return nil
     }
-    public var intValue: Int {
-        return value as! Int
-    }
-    public var longValue: Long {
-        return value as! Long
-    }
-    public var doubleValue: Double {
-        return value as! Double
-    }
-    public var floatValue: Float {
-        return value as! Float
-    }
-    public var boolValue: Bool {
-        return value as! Bool
-    }
+
 
     public var description: String {
         if let v = value ?? nil {

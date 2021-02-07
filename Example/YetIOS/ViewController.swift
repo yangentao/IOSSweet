@@ -15,41 +15,6 @@ extension MsgID {
     static let labelTextChanged = MsgID("msg.label.text.changed")
 }
 
-public class ImageLabelView: RelativeLayout {
-    public private(set) lazy var imageView: UIImageView = NamedView(self, "imageView")
-    public private(set) lazy var labelView: UILabel = NamedView(self, "labelView")
-    public var textImageSpace: CGFloat = 0 {
-        didSet {
-            imageView.relativeParams?.updateConstant(.bottom, -textImageSpace)
-        }
-    }
-
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        buildViews {
-            UIImageView.Default.named("imageView").relativeParams { p in
-                p.centerXParent().topParent(0).above("labelView", -textImageSpace).widthEQSelf(.height)
-            }
-            UILabel.Minor.named("labelView").align(.center).clipsToBounds(false).relativeParams { p in
-//                p.centerXParent().bottomParent().height(30).widthEQParent()
-                p.centerXParent().bottomParent().height(30).widthWrap(30)
-            }
-        }
-        WatchCenter.listen(obj: labelView, keyPath: "text", actionTarget: self, action: #selector(Self.onLabelChanged))
-    }
-
-    @objc
-    func onLabelChanged() {
-        self.setNeedsLayout()
-
-    }
-
-
-    public required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-}
-
 
 class ViewController: UIViewController {
 //    lazy var label: UILabel = NamedView(self, "a")
@@ -58,7 +23,26 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        testButton()
-        testYson()
+//        testYson()
+        view.addView(ImageLabelView()).apply { v in
+            v.constraintsInstall { b in
+                b.centerParent().width(300).heightRatio(multi: 1)
+            }
+
+            v.buildVer { c in
+                c.topOffset = 3
+                c.bottomOffset = 5
+                c.midSpace = 3
+            }
+            v.backColor(.cyan)
+            v.imageView.backColor(.grayF(0.2))
+            v.labelView.backColor(.blue)
+
+            v.imageView.namedImage("a.png")
+            v.labelView.text("杨恩涛")
+//            v.labelView.lines(1)
+//            v.labelView.text("恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛涛杨恩涛杨恩涛杨恩涛杨杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩")
+        }
 
     }
 

@@ -48,7 +48,7 @@ public class Toast {
 
 		lb.roundLayer(4)
 		lb.backgroundColor = Color.grayF(0.8)
-		lb.alignCenter()
+		lb.align(.center)
 		lb.textColor = Color.white
 		lb.shadow(offset: 6)
 

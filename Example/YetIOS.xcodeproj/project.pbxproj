@@ -156,6 +156,7 @@
 		E11E1FDC1E91E650770741C9 /* PropertyEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E15036C5430226A1E0FBE /* PropertyEx.swift */; };
 		E11E1FE289893CA2967F94D5 /* SQLQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1A4519202883B711A750 /* SQLQuery.swift */; };
 		E11E1FE3712A94B85605FBCB /* ViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E14F0703A106DDFCAC8F4 /* ViewBuilder.swift */; };
+		E11E1FFA34CD0B8B028917B1 /* ImageLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E116052965B9010807E52 /* ImageLabelView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -181,6 +182,7 @@
 		E11E10FD5089C1849289CB47 /* Consts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
 		E11E11139967C28A33C05063 /* QR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QR.swift; sourceTree = "<group>"; };
 		E11E113464E40D40892D0CFE /* FileArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileArray.swift; sourceTree = "<group>"; };
+		E11E116052965B9010807E52 /* ImageLabelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLabelView.swift; sourceTree = "<group>"; };
 		E11E1161D33446F738AFDE64 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		E11E11B12A3EDCD5594A8D67 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		E11E11C328BEC99F75E04338 /* ProtoResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtoResult.swift; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 				E11E1720328A0CACE4E2257E /* GridItemView.swift */,
 				E11E107FD8D45FB55A9D01E1 /* GridFixedView.swift */,
 				E11E158281AA98D5E44BB212 /* VerticalScrollView.swift */,
+				E11E116052965B9010807E52 /* ImageLabelView.swift */,
 			);
 			path = custom;
 			sourceTree = "<group>";
@@ -934,6 +937,7 @@
 				E11E15119BBD5450097A8BF9 /* KeyAny.swift in Sources */,
 				E11E1B22EF20AA5C7E67A606 /* OperatorCustom.swift in Sources */,
 				E11E16F197AB9509160D3DD6 /* DialogX.swift in Sources */,
+				E11E1FFA34CD0B8B028917B1 /* ImageLabelView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

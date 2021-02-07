@@ -50,23 +50,6 @@ public extension UILabel {
         return sz.width
     }
 
-    @discardableResult
-    func alignRight() -> Self {
-        self.textAlignment = .right
-        return self
-    }
-
-    @discardableResult
-    func alignCenter() -> Self {
-        self.textAlignment = .center
-        return self
-    }
-
-    @discardableResult
-    func alignLeft() -> Self {
-        self.textAlignment = .left
-        return self
-    }
 
     @discardableResult
     func align(_ a: NSTextAlignment) -> Self {

@@ -149,7 +149,7 @@ public extension DialogX {
 public extension DialogX {
     @discardableResult
     func message(_ msg: String) -> DialogX {
-        let v = UILabel.Primary.text(msg).lines(0).alignCenter()
+        let v = UILabel.Primary.text(msg).lines(0).align(.center)
         if msg.count > 20 {
             v.align(.left)
         }

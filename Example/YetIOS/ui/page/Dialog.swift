@@ -110,7 +110,7 @@ public class Dialog: UIViewController {
 
     @discardableResult
     public func message(_ msg: String) -> Dialog {
-        let v = UILabel.Primary.backColor(Colors.fill).text(msg).lines(0).alignCenter()
+        let v = UILabel.Primary.backColor(Colors.fill).text(msg).lines(0).align(.center)
         body(v)
         return self
     }

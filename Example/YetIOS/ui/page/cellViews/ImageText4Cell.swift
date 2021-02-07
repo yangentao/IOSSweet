@@ -73,8 +73,8 @@ public class ImageText4Cell: UITableViewCell {
 
 		textView.stylePrimary()
 		msgView.styleMinor()
-		timeView.alignRight().styleMinor()
-		statusView.alignRight().styleMinor()
+		timeView.align(.right).styleMinor()
+		statusView.align(.right).styleMinor()
 
 	}
 

@@ -118,7 +118,6 @@ public extension UIView {
     }
 
 
-
 }
 
 public extension UIView {
@@ -159,11 +158,6 @@ public extension UIView {
         return self
     }
 
-    @discardableResult
-    func contentMode(_ m: UIView.ContentMode) -> Self {
-        self.contentMode = m
-        return self
-    }
 
     @discardableResult
     func tintColor(_ c: UIColor) -> Self {
@@ -180,6 +174,12 @@ public extension UIView {
     @discardableResult
     func translatesAutoresizingMaskIntoConstraints(_ b: Bool) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = b
+        return self
+    }
+
+    @discardableResult
+    func contMode(_ m: UIView.ContentMode) -> Self {
+        self.contentMode = m
         return self
     }
 

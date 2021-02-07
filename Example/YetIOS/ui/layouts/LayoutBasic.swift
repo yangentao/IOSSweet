@@ -59,13 +59,18 @@ public extension UIView {
     }
 
     //resist larger than intrinsic content size
-    func stretchContent(_ axis: NSLayoutConstraint.Axis) {
+    @discardableResult
+    func stretchContent(_ axis: NSLayoutConstraint.Axis) -> Self {
         setContentHuggingPriority(UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue - 1), for: axis)
+        return self
     }
 
+
     //resist smaller than intrinsic content size
-    func keepContent(_ axis: NSLayoutConstraint.Axis) {
+    @discardableResult
+    func keepContent(_ axis: NSLayoutConstraint.Axis) -> Self {
         setContentCompressionResistancePriority(UILayoutPriority(rawValue: UILayoutPriority.defaultHigh.rawValue + 1), for: axis)
+        return self
     }
 }
 
