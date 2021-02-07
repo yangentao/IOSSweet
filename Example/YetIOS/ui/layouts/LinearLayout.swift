@@ -165,7 +165,7 @@ public extension LinearParams {
 }
 
 
-public class LinearLayout: UIView {
+public class LinearLayout: BaseLayout {
     public var axis: LayoutAxis = .vertical {
         didSet {
             setNeedsLayout()
@@ -177,34 +177,12 @@ public class LinearLayout: UIView {
         }
     }
 
-    public private(set) var contentSize: CGSize = .zero {
-        didSet {
-            if oldValue != contentSize {
-                processScroll()
-                invalidateIntrinsicContentSize()
-            }
-        }
-    }
 
     convenience init(_ axis: LayoutAxis) {
         self.init(frame: .zero)
         self.axis = axis
     }
 
-    public override var intrinsicContentSize: CGSize {
-        return contentSize
-    }
-
-    public override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        processScroll()
-    }
-
-    private func processScroll() {
-        if let pv = self.superview as? UIScrollView {
-            pv.contentSize = contentSize
-        }
-    }
 
     @discardableResult
     public func axis(_ ax: LayoutAxis) -> Self {
@@ -219,7 +197,7 @@ public class LinearLayout: UIView {
 
     public var heightSumFixed: CGFloat {
         let ls = self.subviews
-        var total: CGFloat = 0
+        var total: CGFloat = self.padding.top + self.padding.bottom
         for v in ls {
             if let p = v.linearParams {
                 if p.height > 0 {
@@ -227,12 +205,15 @@ public class LinearLayout: UIView {
                 } else if p.minHeight > 0 {
                     total += p.minHeight
                 }
+                total += p.margins.top + p.margins.bottom
             }
         }
         return total
     }
 
     public override func layoutSubviews() {
+        super.layoutSubviews()
+
         let viewList = self.subviews.filter {
             $0.linearParams != nil
         }
@@ -243,7 +224,7 @@ public class LinearLayout: UIView {
         var sz = tmpBounds.size
         sz.width -= padding.left + padding.right
         sz.height -= padding.top + padding.bottom
-        var cells: [LinearCell] = viewList.map {
+        let cells: [LinearCell] = viewList.map {
             LinearCell($0)
         }
         if axis == .vertical {
@@ -370,7 +351,9 @@ public class LinearLayout: UIView {
             }
             cell.x = fromX + cell.param.margins.left
             let r = cell.rect
-            cell.view.frame = r
+            if cell.view.frame != r {
+                cell.view.customLayoutConstraintParams.update(r)
+            }
             fromX = r.maxX + cell.param.margins.right
         }
 
@@ -493,7 +476,9 @@ public class LinearLayout: UIView {
             }
             cell.y = fromY + cell.param.margins.top
             let r = cell.rect
-            cell.view.frame = r
+            if cell.view.frame != r {
+                cell.view.customLayoutConstraintParams.update(r)
+            }
             fromY = r.maxY + cell.param.margins.bottom
         }
 
@@ -501,6 +486,7 @@ public class LinearLayout: UIView {
         return fromY
     }
 }
+
 
 fileprivate let LINEAR_UNSPEC: CGFloat = -1
 

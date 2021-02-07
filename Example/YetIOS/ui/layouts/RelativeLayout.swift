@@ -29,12 +29,14 @@ public extension UIView {
         }
     }
 
+    @discardableResult
     func relativeConditions(@AnyBuilder _ block: AnyBuildBlock) -> Self {
         let ls: [RelativeCondition] = block().itemsTyped(true)
         self.relativeParamsEnsure.conditions.append(contentsOf: ls)
         return self
     }
 
+    @discardableResult
     func relativeParams(_ block: (RelativeParamsBuilder) -> Void) -> Self {
         let b = RelativeParamsBuilder()
         block(b)
@@ -403,33 +405,12 @@ public extension RelativeParamsBuilder {
 }
 
 
-public class RelativeLayout: UIView {
-    private var contentSize: CGSize = .zero {
-        didSet {
-            if oldValue != contentSize {
-                processScroll()
-                invalidateIntrinsicContentSize()
-            }
-        }
-    }
-    public override var intrinsicContentSize: CGSize {
-        return contentSize
-    }
-
-    public override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        processScroll()
-    }
-
-    private func processScroll() {
-        if let pv = self.superview as? UIScrollView {
-            logd(contentSize)
-            pv.contentSize = self.contentSize
-        }
-    }
+public class RelativeLayout: BaseLayout {
 
 
     public override func layoutSubviews() {
+        super.layoutSubviews()
+
         let childList = self.subviews
         if childList.isEmpty {
             return
@@ -537,7 +518,9 @@ public class RelativeLayout: UIView {
 
         for vr in vrList.items {
             if vr.OK {
-                vr.view.frame = vr.rect
+//                vr.view.frame = vr.rect
+                vr.view.customLayoutConstraintParams.update(vr.rect)
+
                 maxX = max(maxX, vr.right)
                 maxY = max(maxY, vr.bottom)
             }

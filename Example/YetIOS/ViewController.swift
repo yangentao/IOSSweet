@@ -23,8 +23,74 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backColor(.white)
-        testButton()
-//        testJson()
+//        testButton()
+
+
+//        testRelNew()
+        testGrid()
+    }
+
+    func testRelNew() {
+        view += RelativeLayout(frame: .zero).apply { rl in
+            rl.constraints { c in
+                c.centerParent()
+                c.widthParent()
+                c.heightRatio(multi: 1)
+            }
+            rl.backColor(.blue)
+            rl += ImageLabelView(frame: .zero).horizontal().apply { v in
+                v.relativeParams { p in
+                    p.centerParent()
+                    p.widthEQParent(constant: -20)
+                    p.height(100)
+                }
+                v.labelView.text("Hello")
+                v.imageView.image = UIImage.namedImage("a.png")//.scaledTo(50)
+                v.backColor(.gray)
+                v.labelView.backColor(.cyan)
+                v.imageView.backColor(.green)
+            }
+        }
+    }
+
+    func testLinearNew() {
+        view += LinearLayout(.vertical).apply { ll in
+            ll.constraints { p in
+                p.centerParent().widthParent().height(200)
+            }
+            ll.backColor(.yellow)
+
+//            ll += UIView(frame: .zero).apply { v in
+////                v.constraints { c  in
+////                    c.centerParent().widthParent(constant: -20).height(80)
+////                }
+//                v.linearParams { p in
+//                    p.widthFill().height(80)
+//                }
+//                v += UILabel.Primary.apply { lb in
+//                    lb.constraints { c in
+//                        c.edgesParent(leftConst: 10, rightConst: -10, topConst: 10, bottomConst: -10)
+//                    }
+//                    lb.text = "Hello"
+//
+//                    lb.backColor(.green)
+//                }
+//                v.backColor(.red)
+//            }
+
+            ll += ImageLabelView(frame: .zero).horizontal().apply { v in
+                v.linearParams { p in
+                    p.widthFill().height(120)
+                    p.margins.ver(20)
+                }
+                v.labelView.text("Hello")
+                v.imageView.image = UIImage.namedImage("a.png")//.scaledTo(50)
+                v.backColor(.gray)
+                v.labelView.backColor(.cyan)
+                v.imageView.backColor(.green)
+            }
+
+        }
     }
 
     func testJson() {
@@ -55,16 +121,13 @@ class ViewController: UIViewController {
     }
 
     func testDialog() {
-        let p = DialogX(self)
-        p.title("Hello Title")
-        p.button(.cancel, "Cancel") {
-            logd("Cancel Click")
+
+        let items: [String] = (0...1).map {
+            "杨恩涛 \($0)"
         }
-        p.button(.ok, "OK") {
-            logd("OK Click")
+        DialogX(self).list(items).imageName({ _ in "a.png" }).show { s in
+            logd(s)
         }
-        p.message("多发发额外染发膏温柔发噶释放大二噶说过梵蒂冈电视功夫大师问他")
-        p.show()
     }
 
     func testLinearVer() {

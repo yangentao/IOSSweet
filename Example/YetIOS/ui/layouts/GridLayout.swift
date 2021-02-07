@@ -64,7 +64,7 @@ public extension GridParams {
 }
 
 //vertical layout only!
-public class GridLayout: UIView {
+public class GridLayout: BaseLayout {
     public var paddings: Edge = Edge() {
         didSet {
             setNeedsLayout()
@@ -99,19 +99,6 @@ public class GridLayout: UIView {
     }
 
 
-    public private(set ) var contentSize: CGSize = .zero {
-        didSet {
-            if oldValue != contentSize {
-                processScroll()
-                invalidateIntrinsicContentSize()
-            }
-        }
-    }
-
-    public override var intrinsicContentSize: CGSize {
-        return contentSize
-    }
-
     private var defaultColumnInfo: GridCellInfo = GridCellInfo(value: 0, weight: 1)
     private var defaultRowInfo: GridCellInfo = GridCellInfo(value: 60, weight: 0)
     private var columnInfoMap: [Int: GridCellInfo] = [:]
@@ -138,18 +125,8 @@ public class GridLayout: UIView {
     }
 
 
-    public override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        processScroll()
-    }
-
-    private func processScroll() {
-        if let pv = self.superview as? UIScrollView {
-            pv.contentSize = contentSize
-        }
-    }
-
     public override func layoutSubviews() {
+        super.layoutSubviews()
         let childViews = self.subviews.filter {
             $0.gridParams != nil
         }
@@ -207,7 +184,9 @@ public class GridLayout: UIView {
 //                let h = (cell.height + vSpace) * param.spanRows - vSpace
                 let rect = Rect(x: x, y: y, width: ww, height: hh)
                 if let view = cell.view {
-                    view.frame = placeView(view, rect)
+                    let rect = placeView(view, rect)
+                    view.customLayoutConstraintParams.update(rect)
+//                    view.frame = rect
                 }
                 maxY = max(maxY, rect.maxY)
             }

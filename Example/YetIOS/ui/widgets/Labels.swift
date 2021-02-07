@@ -35,7 +35,6 @@ public extension UILabel {
 
     @discardableResult
     func stylePrimary() -> Self {
-        self.backgroundColor = Colors.fill
         self.textColor = Theme.Text.primaryColor
         self.font = Theme.Text.primaryFont
         return self

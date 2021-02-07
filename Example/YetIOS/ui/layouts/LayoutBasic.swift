@@ -183,77 +183,86 @@ public extension Edge {
 
 }
 
-//
-//public extension UIView {
-//
-//    var marginLeft: CGFloat {
-//        get {
-//            return margins?.left ?? 0
-//        }
-//        set {
-//            marginsEnsure.left = newValue
-//        }
-//    }
-//    var marginTop: CGFloat {
-//        get {
-//            return margins?.top ?? 0
-//        }
-//        set {
-//            marginsEnsure.top = newValue
-//        }
-//    }
-//    var marginBottom: CGFloat {
-//        get {
-//            return margins?.bottom ?? 0
-//        }
-//        set {
-//            marginsEnsure.bottom = newValue
-//        }
-//    }
-//    var marginRight: CGFloat {
-//        get {
-//            return margins?.right ?? 0
-//        }
-//        set {
-//            marginsEnsure.right = newValue
-//        }
-//    }
-//    var marginsEnsure: Edge {
-//        if let m = margins {
-//            return m
-//        }
-//        let e = Edge()
-//        margins = e
-//        return e
-//    }
-//    var margins: Edge? {
-//        get {
-//            return getAttr("__margins__") as? Edge
-//        }
-//        set {
-//            setAttr("__margins__", newValue)
-//        }
-//    }
-//
-//    func margins(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) {
-//        self.margins = Edge(left: left, top: top, right: right, bottom: bottom)
-//    }
-//
-//    func margins(_  m: CGFloat) {
-//        self.margins = Edge(left: m, top: m, right: m, bottom: m)
-//    }
-//
-//    func marginX(_  m: CGFloat) {
-//        self.marginLeft = m
-//        self.marginRight = m
-//    }
-//
-//    func marginY(_  m: CGFloat) -> Self {
-//        self.marginTop = m
-//        self.marginBottom = m
-//        return self
-//    }
-//}
+
+internal class CustomLayoutConstraintParams {
+    unowned let view: UIView
+    var left: NSLayoutConstraint!
+    var top: NSLayoutConstraint!
+    var width: NSLayoutConstraint!
+    var height: NSLayoutConstraint!
+    var inited = false
+
+    init(_ view: UIView) {
+        self.view = view
+    }
+
+    func update(_ rect: Rect) {
+        if let parent = view.superview {
+            if !inited {
+                inited = true
+                left = NSLayoutConstraint(item: view, attribute: .left, relatedBy: .equal, toItem: parent, attribute: .left, multiplier: 1, constant: 0)
+                top = NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: parent, attribute: .top, multiplier: 1, constant: 0)
+                width = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0)
+                height = NSLayoutConstraint(item: view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0)
+            }
+            left.constant = rect.minX
+            top.constant = rect.minY
+            width.constant = rect.width
+            height.constant = rect.height
+            left.isActive = true
+            top.isActive = true
+            width.isActive = true
+            height.isActive = true
+            view.setNeedsUpdateConstraints()
+            parent.setNeedsUpdateConstraints()
+        }
+
+    }
+
+}
+
+internal extension UIView {
+    var customLayoutConstraintParams: CustomLayoutConstraintParams {
+        if let ls = getAttr("_CustomLayoutLinearConstraintParams_") as? CustomLayoutConstraintParams {
+            return ls
+        }
+        let c = CustomLayoutConstraintParams(self)
+        setAttr("_CustomLayoutLinearConstraintParams_", c)
+        return c
+    }
+}
+
+public class BaseLayout: UIView {
+
+    public internal (set) var contentSize: CGSize = .zero {
+        didSet {
+            if oldValue != contentSize {
+                processScroll()
+                invalidateIntrinsicContentSize()
+            }
+        }
+    }
 
 
+    public override var intrinsicContentSize: CGSize {
+        return contentSize
+    }
 
+    public override func addSubview(_ view: UIView) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.autoresizesSubviews = false
+        super.addSubview(view)
+    }
+
+    public override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        processScroll()
+    }
+
+    private func processScroll() {
+        if let pv = self.superview as? UIScrollView {
+            pv.contentSize = contentSize
+        }
+    }
+
+}

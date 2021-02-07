@@ -81,7 +81,7 @@ public class ConstraintItem {
 
     @discardableResult
     public func install() {
-        view.translatesAutoresizingMaskIntoConstraints(false)
+        view.translatesAutoresizeIntoConstraints(false)
         let cp = NSLayoutConstraint(item: view as Any, attribute: attr, relatedBy: relation, toItem: makeOtherView(), attribute: otherAttr, multiplier: multiplier, constant: constant)
         cp.priority = priority
         cp.identifier = identifierValue

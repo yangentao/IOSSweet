@@ -6,52 +6,7 @@
 import Foundation
 import UIKit
 
-public enum ActionStyle {
-    case normal, cancel, ok, safe, danger, risk, accent
-}
 
-public class DialogAction {
-    public var autoClose: Bool = true
-    public var title: String
-    public var color: UIColor = Theme.Text.primaryColor
-    public var callback: BlockVoid = {
-    }
-
-    public init(_ title: String) {
-        self.title = title
-    }
-
-    public func theme(_ style: ActionStyle) {
-        switch style {
-        case .cancel, .normal:
-            color = Theme.Text.primaryColor
-        case .ok:
-            color = Colors.link
-        case .safe:
-            color = Theme.safeColor
-        case .risk, .danger:
-            color = Theme.dangerColor
-        case .accent:
-            color = Theme.accent
-        }
-    }
-
-    public func risk() {
-        color = Theme.dangerColor
-    }
-
-    public func safe() {
-        color = Theme.safeColor
-    }
-
-    public func accent() {
-        color = Theme.accent
-    }
-
-    public func normal() {
-        color = Theme.Text.primaryColor
-    }
-}
 
 public class Dialog: UIViewController {
     fileprivate weak var superPage: UIViewController? = nil
@@ -189,6 +144,8 @@ public class Dialog: UIViewController {
                             self?.close()
                         }
                         item.callback()
+                        item.callback = {
+                        }
                     }
                 }
             }
@@ -304,7 +261,7 @@ public extension Dialog {
         self.cancel()
         self.button("确定") {
             okCallback(self.textField?.text?.trimed ?? "")
-        }.safe()
+        }.accent()
         self.show()
     }
 

@@ -172,7 +172,7 @@ public extension UIView {
     }
 
     @discardableResult
-    func translatesAutoresizingMaskIntoConstraints(_ b: Bool) -> Self {
+    func translatesAutoresizeIntoConstraints(_ b: Bool) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = b
         return self
     }
