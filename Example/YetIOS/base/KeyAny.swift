@@ -77,24 +77,6 @@ func testKeyAny() {
     logd(c)
 }
 
-public protocol JsonValueTypes {
-
-}
-
-extension NSNull: JsonValueTypes {
-}
-
-extension String: JsonValueTypes {
-}
-
-extension NSNumber: JsonValueTypes {
-}
-
-extension Bool: JsonValueTypes {
-}
-
-extension Data: JsonValueTypes {
-}
 
 //array 会不同类型混排, 且 element可能是nil
 //extension Array: JsonValueTypes where Element: JsonValueTypes {

@@ -18,7 +18,7 @@ public class YsonArray: YsonValue, ExpressibleByArrayLiteral {
 	}
 
 	public required init(arrayLiteral elements: ArrayLiteralElement...) {
-		data = arrayLiteral2ArrayYson(es: elements)
+		data = arrayValueToArrayYson(es: elements)
 		super.init()
 	}
 
