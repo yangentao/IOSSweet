@@ -108,23 +108,28 @@ func anyValueToYsonValue(_ value: Any?) -> YsonValue {
     }
 }
 
-func dicValueToDicYson(_ es: [String: Any]) -> [String: YsonValue] {
+func dicValueToDicYson(_ es: [String: Any?]) -> [String: YsonValue] {
     var dic = [String: YsonValue]()
     dic.reserveCapacity(es.count)
-
     for (k, v) in es {
-        let yv = anyValueToYsonValue(v)
-        dic[k] = yv
+        if let vv = v ?? nil {
+            dic[k] = anyValueToYsonValue(vv)
+        } else {
+            dic[k] = YsonNull.inst
+        }
     }
     return dic
 }
 
-func arrayValueToArrayYson(es: [Any]) -> [YsonValue] {
+func arrayValueToArrayYson(es: [Any?]) -> [YsonValue] {
     var data = [YsonValue]()
     data.reserveCapacity(es.count)
     for e in es {
-        let yv = anyValueToYsonValue(e)
-        data.append(yv)
+        if let v = e ?? nil {
+            data.append(anyValueToYsonValue(v))
+        } else {
+            data.append(YsonNull.inst)
+        }
     }
     return data
 }
@@ -149,3 +154,22 @@ func arrayValueToArrayYson(es: [Any]) -> [YsonValue] {
 //extension Data: JsonValueTypes {
 //}
 
+
+func testYson() {
+    let a = yson {
+        "Children" >> [1, "a", nil, [2, "b", nil, yson {
+            "dev" >> ["mac", "android"]
+        }]]
+    }
+    logd(a)
+    let b = ysonArray([
+        [1, "a", nil,
+         [2, "b", nil,
+          yson {
+              "dev" >> ["mac", "android"]
+          }
+         ]
+        ]
+    ])
+    logd(b)
+}

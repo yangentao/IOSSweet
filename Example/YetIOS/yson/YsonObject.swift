@@ -9,7 +9,7 @@ import UIKit
 @dynamicMemberLookup
 public class YsonObject: YsonValue, ExpressibleByDictionaryLiteral {
     public typealias Key = String
-    public typealias Value = Any
+    public typealias Value = Any?
 
     public var data: [String: YsonValue] = [String: YsonValue]()
 
@@ -21,7 +21,7 @@ public class YsonObject: YsonValue, ExpressibleByDictionaryLiteral {
     }
 
     public required init(dictionaryLiteral elements: (Key, Value)...) {
-        let d = [String: Any](uniqueKeysWithValues: elements)
+        let d = [String: Any?](uniqueKeysWithValues: elements)
         self.data = dicValueToDicYson(d)
         super.init()
     }

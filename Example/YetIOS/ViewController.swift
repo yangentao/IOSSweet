@@ -58,33 +58,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        testButton()
-        testJson()
+        testYson()
 
-    }
-
-    func testJson() {
-        let a = yson {
-            "name" >> "Entao"
-            "addr" >> {
-                "prov" >> "ShanDong"
-                "city" >> "JiNan"
-            }
-            "age" >> 99
-            "Children" >> [1, "a", nil, [2, "b", nil, yson {
-                "dev" >> ["mac", "android"]
-            }]]
-        }
-        logd(a)
-        let b = ysonArray([
-            [1, "a", nil,
-             [2, "b", nil,
-              yson {
-                  "dev" >> ["mac", "android"]
-              }
-             ]
-            ]
-        ])
-        logd(b)
     }
 
 
