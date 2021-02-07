@@ -22,8 +22,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        testButton()
-        testJson()
+        view.backColor(.white)
+        testButton()
+//        testJson()
     }
 
     func testJson() {
