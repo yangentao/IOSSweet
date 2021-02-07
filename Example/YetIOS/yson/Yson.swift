@@ -155,21 +155,37 @@ func arrayValueToArrayYson(es: [Any?]) -> [YsonValue] {
 //}
 
 
-func testYson() {
-    let a = yson {
-        "Children" >> [1, "a", nil, [2, "b", nil, yson {
-            "dev" >> ["mac", "android"]
-        }]]
-    }
-    logd(a)
-    let b = ysonArray([
-        [1, "a", nil,
-         [2, "b", nil,
-          yson {
-              "dev" >> ["mac", "android"]
-          }
-         ]
-        ]
-    ])
-    logd(b)
-}
+//func testYson() {
+//    let a = yson {
+//        "Children" >> [1, "a", nil, [2, "b", nil, yson {
+//            "dev" >> ["mac", "android"]
+//        }]]
+//    }
+//    logd(a)
+//    let b = ysonArray([
+//        [1, "a", nil,
+//         [2, "b", nil,
+//          yson {
+//              "dev" >> ["mac", "android"]
+//          }
+//         ]
+//        ]
+//    ])
+//    logd(b)
+//}
+
+//func testJson() {
+//    let a = yson {
+//        "child" >> [1, [2, "b", yson {
+//            "dev" >> ["mac", "android"]
+//        }]]
+//    }
+//    logd(a)
+//    logd(a["child"][1][2]["dev"][0])
+//    let b = ysonArray([1, "a", nil, yson {
+//        "dev" >> ["mac", "android"]
+//    }
+//    ])
+//    logd(b)
+//    logd(b[3]["dev"][1])
+//}

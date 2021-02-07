@@ -36,9 +36,10 @@ public class KeyAny: CustomStringConvertible {
 }
 
 func testKeyAny() {
+    let f: Double = 99.9
     let b = "user" >> {
         "name" >> "Entao"
-        "age" >> 99
+        "age" >> f
         "some" >> [1, 2, 3]
         "children" >> {
             "person" >> {
@@ -83,6 +84,10 @@ public func >>(k: String, v: String) -> KeyAny {
 }
 
 public func >>(k: String, v: NSNumber) -> KeyAny {
+    return KeyAny(k, v)
+}
+
+public func >><T: Numeric>(k: String, v: T) -> KeyAny {
     return KeyAny(k, v)
 }
 

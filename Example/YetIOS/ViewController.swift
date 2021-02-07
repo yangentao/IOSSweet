@@ -23,27 +23,23 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        testButton()
-//        testYson()
-        view.addView(ImageLabelView()).apply { v in
-            v.constraintsInstall { b in
-                b.centerParent().width(300).heightRatio(multi: 1)
-            }
+        testJson()
+    }
 
-            v.buildVer { c in
-                c.topOffset = 3
-                c.bottomOffset = 5
-                c.midSpace = 3
-            }
-            v.backColor(.cyan)
-            v.imageView.backColor(.grayF(0.2))
-            v.labelView.backColor(.blue)
-
-            v.imageView.namedImage("a.png")
-            v.labelView.text("杨恩涛")
-//            v.labelView.lines(1)
-//            v.labelView.text("恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛涛杨恩涛杨恩涛杨恩涛杨杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩涛杨恩")
+    func testJson() {
+        let a = yson {
+            "child" >> [1, [2, "b", yson {
+                "dev" >> ["mac", "android"]
+            }]]
         }
-
+        logd(a)
+        logd(a["child"][1][2]["dev"][0])
+        let b = ysonArray([1, "a", nil, yson {
+            "dev" >> ["mac", "android"]
+        }
+        ])
+        logd(b)
+        logd(b[3]["dev"][1])
     }
 
 

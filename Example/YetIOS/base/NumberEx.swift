@@ -39,13 +39,72 @@ public struct GreatEQ<T: SignedNumeric & Comparable> {
 }
 
 
-
 public func /(lhs: CGFloat, rhs: Int) -> CGFloat {
     lhs / CGFloat(rhs)
 }
 
 public func *(lhs: CGFloat, rhs: Int) -> CGFloat {
     lhs * CGFloat(rhs)
+}
+
+public extension Numeric {
+    var isIntegers: Bool {
+        switch self {
+        case is Int, is Int8, is Int16, is Int32, is Int64, is UInt, is UInt8, is UInt16, is UInt32, is UInt64:
+            return true
+        default:
+            return false
+        }
+    }
+    var isReals: Bool {
+        switch self {
+        case is Float, is Double, is Float32, is Float64, is CGFloat, is Decimal:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var toNSNumber: NSNumber {
+        switch self {
+        case let a as Int:
+            return NSNumber(value: a)
+        case let a as Int8:
+            return NSNumber(value: a)
+        case let a as Int16:
+            return NSNumber(value: a)
+        case let a as Int32:
+            return NSNumber(value: a)
+        case let a as Int64:
+            return NSNumber(value: a)
+
+        case let a as UInt:
+            return NSNumber(value: a)
+        case let a as UInt8:
+            return NSNumber(value: a)
+        case let a as UInt16:
+            return NSNumber(value: a)
+        case let a as UInt32:
+            return NSNumber(value: a)
+        case let a as UInt64:
+            return NSNumber(value: a)
+
+        case let a as Float:
+            return NSNumber(value: a)
+        case let a as Double:
+            return NSNumber(value: a)
+        case let a as Float32:
+            return NSNumber(value: a)
+        case let a as Float64:
+            return NSNumber(value: a)
+        case let a as CGFloat:
+            return NSNumber(value: Double(a))
+        case let a as Decimal:
+            return NSDecimalNumber(decimal: a)
+        default:
+            fatalError("unknown number : \(self)")
+        }
+    }
 }
 
 extension BinaryInteger {
@@ -122,62 +181,31 @@ public extension BinaryFloatingPoint {
     }
 }
 
-public extension Int8 {
-    var num: NSNumber {
-        NSNumber(value: self)
+public extension FixedWidthInteger {
+    var f: CGFloat {
+        CGFloat(self)
     }
     var s: String {
         "\(self)"
     }
-    var f: CGFloat {
-        CGFloat(self)
+}
+
+
+public extension NSNumber {
+    var isInteger: Bool {
+        !stringValue.contains(".")
     }
 }
 
 public extension Int64 {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
 
     var date: Date {
         Date(timeIntervalSince1970: Double(self / 1000))
     }
 }
 
-public extension UInt32 {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var s: String {
-        "\(self)"
-    }
-
-    var f: CGFloat {
-        CGFloat(self)
-    }
-
-}
-
-public extension Float {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var s: String {
-        "\(self)"
-    }
-}
 
 public extension Double {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var s: String {
-        "\(self)"
-    }
-    var f: CGFloat {
-        CGFloat(self)
-    }
-
     func keepDot(_ n: Int) -> String {
         String(format: "%.\(n)f", arguments: [self])
     }
@@ -193,104 +221,6 @@ public extension Double {
         return f.string(from: NSNumber(value: self)) ?? ""
     }
 
-}
-
-public extension CGFloat {
-
-    var num: NSNumber {
-        NSNumber(value: Double(self))
-    }
-    var s: String {
-        "\(self)"
-    }
-
-}
-
-public extension NSNumber {
-    var isInteger: Bool {
-        !stringValue.contains(".")
-    }
-}
-
-public extension Int16 {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var f: CGFloat {
-        CGFloat(self)
-    }
-    var s: String {
-        "\(self)"
-    }
-}
-
-public extension Int32 {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var f: CGFloat {
-        CGFloat(self)
-    }
-    var s: String {
-        "\(self)"
-    }
-
-}
-
-public extension Int {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var f: CGFloat {
-        CGFloat(self)
-    }
-    var s: String {
-        "\(self)"
-    }
-
-}
-
-public extension UInt {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var f: CGFloat {
-        CGFloat(self)
-    }
-    var s: String {
-        "\(self)"
-    }
-}
-
-public extension UInt8 {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var f: CGFloat {
-        CGFloat(self)
-    }
-    var s: String {
-        "\(self)"
-    }
-
-}
-
-public extension UInt16 {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
-    var f: CGFloat {
-        CGFloat(self)
-    }
-    var s: String {
-        "\(self)"
-    }
-}
-
-public extension UInt64 {
-    var num: NSNumber {
-        NSNumber(value: self)
-    }
 }
 
 
