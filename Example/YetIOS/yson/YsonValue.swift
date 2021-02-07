@@ -192,6 +192,9 @@ public class YsonString: YsonValue, ExpressibleByStringLiteral, ExpressibleByExt
 public class YsonArray: YsonValue, ExpressibleByArrayLiteral {
     public typealias ArrayLiteralElement = Any?
     public var data: [YsonValue] = [YsonValue]()
+    var count: Int {
+        data.count
+    }
 
     public init(_ capcity: Int = 16) {
         if capcity > 4 {
@@ -241,6 +244,38 @@ public class YsonArray: YsonValue, ExpressibleByArrayLiteral {
         }
         buf.append("]")
     }
+
+    @discardableResult
+    public func add<T: Numeric>(_ value: T) -> Self {
+        data.append(YsonNum(value))
+        return self
+    }
+
+    @discardableResult
+    public func add(_ value: YsonValue) -> Self {
+        data.append(value)
+        return self
+    }
+
+    @discardableResult
+    public func add(_ value: Any?) -> Self {
+        if let v = value ?? nil {
+            if let yv = v as? YsonValue {
+                self.data += yv
+            } else {
+                self.data += anyValueToYsonValue(v)
+            }
+        } else {
+            self.data += YsonNull.inst
+        }
+        return self
+    }
+
+    @discardableResult
+    public static func +=(lhs: YsonArray, rhs: Any) -> YsonArray {
+        lhs.add(rhs)
+        return lhs
+    }
 }
 
 extension YsonArray: Sequence {
@@ -250,40 +285,6 @@ extension YsonArray: Sequence {
 }
 
 public extension YsonArray {
-
-    var count: Int {
-        data.count
-    }
-
-    func append<T: Numeric>(_ value: T) {
-        data.append(YsonNum(value))
-    }
-
-
-    func append(_ value: NSNumber) {
-        data.append(YsonNum(value))
-    }
-
-    func append(_ value: Bool) {
-        data.append(YsonBool(value))
-    }
-
-    func append(_ value: String) {
-        data.append(YsonString(value))
-    }
-
-    func appendNull() {
-        data.append(YsonNull.inst)
-    }
-
-    func append(_ value: YsonValue) {
-        data.append(value)
-    }
-
-    func add(_ v: YsonValue) {
-        data.append(v)
-    }
-
     var firstObject: YsonObject? {
         if !self.data.isEmpty {
             return self[0] as? YsonObject
@@ -291,10 +292,6 @@ public extension YsonArray {
         return nil
     }
 
-}
-
-
-public extension YsonArray {
     var arrayInt: [Int] {
         self.data.map {
             ($0 as! YsonNum).data.intValue
@@ -327,7 +324,6 @@ public extension YsonArray {
     }
 
 }
-
 
 
 @dynamicMemberLookup

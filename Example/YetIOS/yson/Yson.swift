@@ -47,8 +47,7 @@ public func ysonArray(_ items: [Any?]) -> YsonArray {
     let ya = YsonArray()
     ya.data.reserveCapacity(items.count)
     for item in items {
-        let v = anyValueToYsonValue(item)
-        ya.data.append(v)
+        ya += anyValueToYsonValue(item)
     }
     return ya
 }
@@ -74,6 +73,8 @@ func anyValueToYsonValue(_ value: Any?) -> YsonValue {
         return YsonNum(Double(f))
     case let num as NSNumber:
         return YsonNum(num)
+    case let dec as Decimal:
+        return YsonNum(NSDecimalNumber(decimal: dec))
     case let data as Data:
         return YsonBlob(data)
     case let data as NSData:
