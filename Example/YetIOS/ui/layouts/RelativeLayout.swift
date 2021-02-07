@@ -408,8 +408,7 @@ public extension RelativeParamsBuilder {
 public class RelativeLayout: BaseLayout {
 
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
+    override func layoutChildren() {
 
         let childList = self.subviews
         if childList.isEmpty {

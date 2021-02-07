@@ -125,8 +125,7 @@ public class GridLayout: BaseLayout {
     }
 
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
+    override func layoutChildren() {
         let childViews = self.subviews.filter {
             $0.gridParams != nil
         }

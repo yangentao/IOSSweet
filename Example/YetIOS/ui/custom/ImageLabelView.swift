@@ -10,38 +10,21 @@ import UIKit
 public class ImageLabelView: UIView {
     public private(set) lazy var imageView: UIImageView = NamedView(self, "imageView")
     public private(set) lazy var labelView: UILabel = NamedView(self, "labelView")
-    public private(set) var configVer: ConfigVer = ConfigVer()
-    public private(set) var configHor: Edge = Edge().hor(10).ver(8)
-    public var space: CGFloat = -1
 
-    public func space(_ n: CGFloat) -> Self {
-        space = n
-        return self
-    }
 
     @discardableResult
-    public func vertical(_ block: (ConfigVer) -> Void) -> Self {
-        block(configVer)
-        vertical()
-        return self
-    }
-
-    @discardableResult
-    public func vertical() -> Self {
-        if space < 0 {
-            space = 2
-        }
+    public func vertical(margins: Edge = Edge(left: 0, top: 2, right: 0, bottom: 1), space: CGFloat = 2) -> Self {
         buildViews {
             UIImageView.Default.named("imageView").contMode(.scaleAspectFill).roundLayer(6).constraints { p in
                 p.centerXParent()
-                p.topParent(configVer.topOffset)
+                p.topParent(margins.top)
                 p.bottom.eq("labelView", otherAttr: .top, constant: -space).ident("spaceIdent")
                 p.widthRatio(multi: 1)
             }
             UILabel.Minor.named("labelView").align(.center).lines(0).clipsToBounds(false).constraints { p in
                 p.centerXParent()
-                p.height(configVer.labelHeight).priority(.defaultHigh)
-                p.top.eqParent(otherAttr: .bottom, constant: -configVer.labelHeight - configVer.bottomOffset)
+                p.height(26).priority(.defaultHigh)
+                p.top.eqParent(otherAttr: .bottom, constant: -26 - margins.bottom)
 //                p.bottomParent(-config.bottomOffset)
                 p.width.leParent(constant: -20)
                 p.width.geConst(30)
@@ -54,22 +37,17 @@ public class ImageLabelView: UIView {
     }
 
     @discardableResult
-    public func horizontal() -> Self {
-        if space < 0 {
-            space = 8
-        }
+    public func horizontal(margins: Edge = Edge(left: 12, top: 8, right: 16, bottom: 8), space: CGFloat = 8) -> Self {
         buildViews {
             UIImageView.Default.named("imageView").contMode(.scaleAspectFill).constraints { p in
-                p.edgeYParent(topConst: configHor.top, bottomConst: -configHor.bottom)
-                p.leftParent(configHor.left)
-//                p.centerYParent()
-//                p.heightParent(constant: -configHor.top - configHor.bottom)
+                p.edgeYParent(topConst: margins.top, bottomConst: -margins.bottom)
+                p.leftParent(margins.left)
                 p.widthRatio(multi: 1)
             }
             UILabel.Primary.named("labelView").align(.left).lines(0).clipsToBounds(false).constraints { p in
-                p.edgeYParent(topConst: configHor.top, bottomConst: -configHor.bottom)
+                p.edgeYParent(topConst: margins.top, bottomConst: -margins.bottom)
                 p.left.eq("imageView", otherAttr: .right, constant: space)
-                p.rightParent(-configHor.right)
+                p.rightParent(-margins.right)
             }//.keepContent(.vertical)
         }
         self.clipsToBounds = true
@@ -77,9 +55,4 @@ public class ImageLabelView: UIView {
     }
 
 
-    public class ConfigVer {
-        var topOffset: CGFloat = 0
-        var bottomOffset: CGFloat = 0
-        var labelHeight: CGFloat = 26
-    }
 }

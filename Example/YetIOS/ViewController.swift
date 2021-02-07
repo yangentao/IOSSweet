@@ -23,11 +23,22 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backColor(.white)
-//        testButton()
+        testButton()
 
 
-//        testRelNew()
-        testGrid()
+    }
+
+    func testDialog() {
+
+        let items: [String] = (0...20).map {
+            "杨恩涛 \($0)"
+        }
+//        DialogX(self).list(items).show { s in
+//            logd(s)
+//        }
+        DialogX(self).list(items).imageName({ _ in "a.png" }).show { s in
+            logd(s)
+        }
     }
 
     func testRelNew() {
@@ -120,15 +131,6 @@ class ViewController: UIViewController {
         view.layoutIfNeeded()
     }
 
-    func testDialog() {
-
-        let items: [String] = (0...1).map {
-            "杨恩涛 \($0)"
-        }
-        DialogX(self).list(items).imageName({ _ in "a.png" }).show { s in
-            logd(s)
-        }
-    }
 
     func testLinearVer() {
         view += LinearLayout(.horizontal).backColor(.gray).apply { ll in

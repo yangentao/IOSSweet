@@ -265,4 +265,17 @@ public class BaseLayout: UIView {
         }
     }
 
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        if self.bounds.width == 0 && self.bounds.height == 0 {
+            superview?.setNeedsLayout()
+            return
+        }
+        layoutChildren()
+    }
+
+    internal func layoutChildren() {
+
+    }
+
 }

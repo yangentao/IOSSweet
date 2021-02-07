@@ -211,8 +211,7 @@ public class LinearLayout: BaseLayout {
         return total
     }
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
+    override func layoutChildren() {
 
         let viewList = self.subviews.filter {
             $0.linearParams != nil
