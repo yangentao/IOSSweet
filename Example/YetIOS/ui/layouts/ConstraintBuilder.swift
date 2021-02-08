@@ -7,18 +7,13 @@ import UIKit
 
 
 public extension UIView {
-    //superview不能为空的情况
-    //系统约束布局, 添加布局时, superview不能为空(只有width/height属性且是常量除外)
-    @discardableResult
-    func constraintsInstall(_ block: (ConstraintBuilder) -> Void) -> Self {
-        block(ConstraintBuilder(self))
-        installSelfConstraints()
-        return self
-    }
 
     @discardableResult
     func constraints(_ block: (ConstraintBuilder) -> Void) -> Self {
         block(ConstraintBuilder(self))
+        if self.superview != nil {
+            installSelfConstraints()
+        }
         return self
     }
 

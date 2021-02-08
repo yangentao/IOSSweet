@@ -120,6 +120,13 @@ public class GridLayout: BaseLayout {
         setNeedsLayout()
     }
 
+    @discardableResult
+    public func spaces(_ hor: CGFloat, _ ver: CGFloat) -> Self {
+        self.spaceHor = hor
+        self.spaceVer = ver
+        return self
+    }
+
     var fixedHeight: CGFloat {
         var fh: CGFloat = paddings.top + paddings.bottom
         let childViews = self.subviews
@@ -136,8 +143,8 @@ public class GridLayout: BaseLayout {
 //                    if p.height > 0 {
 //                        hh = p.height
 //                    } else {
-                        let a = self.rowInfoMap[r] ?? self.defaultRowInfo
-                        hh = a.value
+                    let a = self.rowInfoMap[r] ?? self.defaultRowInfo
+                    hh = a.value
 //                    }
                     rowH = max(rowH, (hh + p.margins.top + p.margins.bottom))
                 }

@@ -279,7 +279,7 @@ public extension DialogX.DialogGrid {
 //            sv.constraintsInstall{ c in
 //                c.edgesParent()
 //            }
-            panel.constraintsInstall { c in
+            panel.constraints { c in
                 c.edgesParent()
                 c.widthParent()
             }
@@ -336,7 +336,7 @@ public extension DialogX.DialogListX {
         } else {
             let sv = UIScrollView(frame: .zero)
             sv.addSubview(panel)
-            panel.constraintsInstall { p in
+            panel.constraints { p in
                 p.edgesParent()
                 p.widthParent()
             }

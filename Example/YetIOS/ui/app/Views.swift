@@ -75,6 +75,7 @@ public extension UIView {
     @discardableResult
     func addView<T: UIView>(_ child: T) -> T {
         self.addSubview(child)
+        child.installSelfConstraints()
         return child
     }
 
@@ -82,6 +83,7 @@ public extension UIView {
     func addView<T: UIView>(_ child: T, _ block: (T) -> Void) -> T {
         self.addSubview(child)
         block(child)
+        child.installSelfConstraints()
         return child
     }
 

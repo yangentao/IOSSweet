@@ -15,8 +15,23 @@ extension MsgID {
     static let labelTextChanged = MsgID("msg.label.text.changed")
 }
 
+class HelloGridPage: GridPage<String> {
+    override func onCreateContent() {
+        super.onCreateContent()
+        itemClickCallback = { [weak self]  item in
+            logd(item)
+            self?.close()
+        }
+        let items: [String] = (0...40).map {
+            "杨恩涛 \($0)"
+        }
 
-class ViewController: UIViewController {
+        setItems(items)
+    }
+}
+
+
+class ViewController: BasePage {
 //    lazy var label: UILabel = NamedView(self, "a")
 
 
@@ -27,6 +42,23 @@ class ViewController: UIViewController {
 
 //        testGrid()
 
+    }
+
+    func testGridPage() {
+        let p = HelloGridPage(nibName: nil, bundle: nil)
+//        self.pushPage(p)
+        self.present(p)
+
+    }
+
+    func testButton() {
+        view += UIButton.Default.title("Hello").backColor(.green).textColorPrimary().constraints {
+            $0.centerParent().width(100).height(50)
+        }.click { [weak self] b in
+            self?.testGridPage()
+        }
+
+        view.layoutIfNeeded()
     }
 
     func testDialog() {
@@ -127,17 +159,6 @@ class ViewController: UIViewController {
     }
 
 
-    func testButton() {
-        view += UIButton.Default.title("Hello").backColor(.green).textColorPrimary().constraints {
-            $0.centerParent().width(100).height(50)
-        }.click { [weak self] b in
-            self?.testDialog()
-        }
-
-        view.layoutIfNeeded()
-    }
-
-
     func testLinearVer() {
         view += LinearLayout(.horizontal).backColor(.gray).apply { ll in
             ll += UILabel.Primary.text("AAA").backColor(.green).align(.center).linearParams { p in
@@ -189,7 +210,7 @@ class ViewController: UIViewController {
     func testGrid() {
         let gv = GridLayout(frame: .zero)
         view += gv
-        gv.constraintsInstall {
+        gv.constraints {
             $0.centerParent().widthParent().heightRatio(multi: 1)
         }
         gv.backColor(.gray)
@@ -271,12 +292,12 @@ class ViewController: UIViewController {
 
     func testSysConstraint() {
         self.view.addView(UILabel.Primary).named("a").text("AAA").backColor(.green).align(.center).lines(0).apply { lb in
-            lb.constraintsInstall {
+            lb.constraints {
                 $0.centerParent().widthParent(multi: 0.8).heightRatio(multi: 0.5).ident("heightId")
             }
         }
         self.view.addView(UILabel.Primary).text("BBBBBB").backColor(.cyan).align(.center).apply { lb in
-            lb.constraintsInstall { b in
+            lb.constraints { b in
                 b.centerX.eq("a")
                 b.width.eq("a")
                 b.top.eq("a", otherAttr: .bottom)

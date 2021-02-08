@@ -72,6 +72,18 @@ public extension UIView {
         setContentCompressionResistancePriority(UILayoutPriority(rawValue: UILayoutPriority.defaultHigh.rawValue + 1), for: axis)
         return self
     }
+
+    @discardableResult
+    func topAnchorParentSafeArea() -> Self {
+        self.topAnchor.constraint(equalTo: self.superview!.safeAreaLayoutGuide.topAnchor).isActive = true
+        return self
+    }
+
+    @discardableResult
+    func bottomAnchorParentSafeArea() -> Self {
+        self.bottomAnchor.constraint(equalTo: self.superview!.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        return self
+    }
 }
 
 public extension UIView {
