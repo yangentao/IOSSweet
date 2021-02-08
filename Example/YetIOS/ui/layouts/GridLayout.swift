@@ -8,28 +8,24 @@ import UIKit
 
 
 public extension UIView {
-    var gridParams: GridParams? {
+    //不需要指定gridParams, 默认值, 也可以布局, GridLayout有默认的行和列参数
+    var gridParams: GridParams {
         get {
-            return getAttr("__gridParam__") as? GridParams
+            if let p = getAttr("__gridParam__") as? GridParams {
+                return p
+            }
+            let p = GridParams()
+            setAttr("__gridParam__", p)
+            return p
         }
         set {
             setAttr("__gridParam__", newValue)
         }
     }
 
-    var gridParamsEnsure: GridParams {
-        if let L = self.gridParams {
-            return L
-        } else {
-            let a = GridParams()
-            self.gridParams = a
-            return a
-        }
-    }
-
     @discardableResult
     func gridParams(_ block: (GridParams) -> Void) -> Self {
-        block(gridParamsEnsure)
+        block(gridParams)
         return self
     }
 }
@@ -124,16 +120,43 @@ public class GridLayout: BaseLayout {
         setNeedsLayout()
     }
 
+    var fixedHeight: CGFloat {
+        var fh: CGFloat = paddings.top + paddings.bottom
+        let childViews = self.subviews
+        if childViews.isEmpty {
+            return fh
+        }
+        let cells: CellMatrix = calcCellsVertical(childViews)
+        for r in 0..<cells.rows {
+            var rowH: CGFloat = 0
+            for c in 0..<cells.cols {
+                let cell = cells[r, c]
+                if let p = cell?.param {
+                    var hh: CGFloat = 0
+                    if p.height > 0 {
+                        hh = p.height
+                    } else {
+                        let a = self.rowInfoMap[r] ?? self.defaultRowInfo
+                        hh = a.value
+                    }
+                    rowH = max(rowH, (hh + p.margins.top + p.margins.bottom))
+                }
+            }
+            fh += rowH
+        }
+        fh += spaceVer * (cells.rows - 1)
+        return fh
+    }
+
 
     override func layoutChildren() {
-        let childViews = self.subviews.filter {
-            $0.gridParams != nil
-        }
+        let childViews = self.subviews
         if childViews.isEmpty {
             return
         }
 //        if axis == .vertical {
         let cells: CellMatrix = calcCellsVertical(childViews)
+        logd("Cells: ", cells.rows, cells.cols)
         calcWidthsVertical(cells)
         calcHeightsVertical(cells)
         let maxY = calcRectVertical(cells)
@@ -153,7 +176,7 @@ public class GridLayout: BaseLayout {
                 y += (cells[i, 0]?.height ?? 0) + spaceVer
             }
             for col in 0..<cells.cols {
-                guard let cell = cells[row, col], let view = cell.view, let param = view.gridParams else {
+                guard let cell = cells[row, col], let view = cell.view else {
                     continue
                 }
                 if col > 0 && cell.view === cells[row, col - 1]?.view {
@@ -162,6 +185,7 @@ public class GridLayout: BaseLayout {
                 if row > 0 && cell.view === cells[row - 1, col]?.view {
                     continue
                 }
+                let param = view.gridParams
                 var x: CGFloat = paddings.left // (cell.width + hSpace) * cell.view.gridParams!.spanColumns
                 for i in 0..<col {
                     x += (cells[row, i]?.width ?? 0) + spaceHor
@@ -183,7 +207,7 @@ public class GridLayout: BaseLayout {
 //                let h = (cell.height + vSpace) * param.spanRows - vSpace
                 let rect = Rect(x: x, y: y, width: ww, height: hh)
                 if let view = cell.view {
-                    let rect = placeView(view, rect)
+                    let rect = placeView(view, rect, row, col)
                     view.customLayoutConstraintParams.update(rect)
 //                    view.frame = rect
                 }
@@ -193,8 +217,8 @@ public class GridLayout: BaseLayout {
         return maxY
     }
 
-    private func placeView(_ view: UIView, _ rect: Rect) -> Rect {
-        let param = view.gridParamsEnsure
+    private func placeView(_ view: UIView, _ rect: Rect, _ row: Int, _ col: Int) -> Rect {
+        let param = view.gridParams
         let x: CGFloat
         let y: CGFloat
         let w: CGFloat
@@ -206,14 +230,29 @@ public class GridLayout: BaseLayout {
             x = rect.minX
             break
         case .left:
-            w = param.width
+            if param.width > 0 {
+                w = param.width
+            } else {
+                let a = self.columnInfoMap[col] ?? self.defaultColumnInfo
+                w = a.value
+            }
             x = rect.minX
         case .right:
-            w = param.width
+            if param.width > 0 {
+                w = param.width
+            } else {
+                let a = self.columnInfoMap[col] ?? self.defaultColumnInfo
+                w = a.value
+            }
             x = rect.maxX - w
             break
         case .center:
-            w = param.width
+            if param.width > 0 {
+                w = param.width
+            } else {
+                let a = self.columnInfoMap[col] ?? self.defaultColumnInfo
+                w = a.value
+            }
             x = rect.center.x - w / 2
             break
         }
@@ -222,13 +261,28 @@ public class GridLayout: BaseLayout {
             h = rect.height
             y = rect.minY
         case .top:
-            h = param.height
+            if param.height > 0 {
+                h = param.height
+            } else {
+                let a = self.rowInfoMap[row] ?? self.defaultRowInfo
+                h = a.value
+            }
             y = rect.minY
         case .bottom:
-            h = param.height
+            if param.height > 0 {
+                h = param.height
+            } else {
+                let a = self.rowInfoMap[row] ?? self.defaultRowInfo
+                h = a.value
+            }
             y = rect.maxY - h
         case .center:
-            h = param.height
+            if param.height > 0 {
+                h = param.height
+            } else {
+                let a = self.rowInfoMap[row] ?? self.defaultRowInfo
+                h = a.value
+            }
             y = rect.center.y - h / 2
         }
         var r = Rect(x: x, y: y, width: w, height: h)
@@ -240,7 +294,7 @@ public class GridLayout: BaseLayout {
     }
 
     private func calcHeightsVertical(_ cells: CellMatrix) {
-        var rowInfos: [GridCellInfo] = .init(repeating: GridCellInfo(other: defaultRowInfo), count: cells.cols)
+        var rowInfos: [GridCellInfo] = .init(repeating: GridCellInfo(other: defaultRowInfo), count: cells.rows)
         for (k, v) in self.rowInfoMap {
             rowInfos[k] = v
         }
@@ -350,7 +404,7 @@ public class GridLayout: BaseLayout {
     }
 
     private func pos(_ v: UIView, matrix: CellMatrix, row: inout Int, col: inout Int) {
-        let param = v.gridParams!
+        let param = v.gridParams
         while matrix[row, col] != nil {
             col += 1
             if col >= self.columns {

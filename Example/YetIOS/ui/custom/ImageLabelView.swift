@@ -11,9 +11,8 @@ public class ImageLabelView: UIView {
     public private(set) lazy var imageView: UIImageView = NamedView(self, "imageView")
     public private(set) lazy var labelView: UILabel = NamedView(self, "labelView")
 
-
     @discardableResult
-    public func vertical(margins: Edge = Edge(left: 0, top: 2, right: 0, bottom: 1), space: CGFloat = 2) -> Self {
+    public func vertical(margins: Edge = Edge(left: 0, top: 1, right: 0, bottom: 1), space: CGFloat = 1, labelHeight: CGFloat = 18) -> Self {
         buildViews {
             UIImageView.Default.named("imageView").contMode(.scaleAspectFill).roundLayer(6).constraints { p in
                 p.centerXParent()
@@ -23,10 +22,10 @@ public class ImageLabelView: UIView {
             }
             UILabel.Minor.named("labelView").align(.center).lines(0).clipsToBounds(false).constraints { p in
                 p.centerXParent()
-                p.height(26).priority(.defaultHigh)
-                p.top.eqParent(otherAttr: .bottom, constant: -26 - margins.bottom)
+                p.height(labelHeight).priority(.defaultHigh)
+                p.top.eqParent(otherAttr: .bottom, constant: -labelHeight - margins.bottom)
 //                p.bottomParent(-config.bottomOffset)
-                p.width.leParent(constant: -20)
+                p.width.leParent(constant: -2)
                 p.width.geConst(30)
             }.keepContent(.vertical)
         }

@@ -7,7 +7,6 @@ import Foundation
 import UIKit
 
 
-
 public class Dialog: UIViewController {
     fileprivate weak var superPage: UIViewController? = nil
     fileprivate var marginX: CGFloat = 30
@@ -15,7 +14,7 @@ public class Dialog: UIViewController {
     fileprivate var gravityY: GravityY = .center
 
     fileprivate var titleView: UIView? = nil
-    fileprivate var buttons = [DialogAction]()
+    fileprivate var buttons = [DialogX.DialogAction]()
     fileprivate var bodyView: UIView? = nil
     fileprivate var bodyHeight: CGFloat = 0
     fileprivate var bodyEdge: Edge = Edge(left: 20, top: 10, right: 20, bottom: 10)
@@ -85,20 +84,20 @@ public class Dialog: UIViewController {
         return self
     }
 
-    public func dialogAction(_ a: DialogAction) {
+    public func dialogAction(_ a: DialogX.DialogAction) {
         buttons.append(a)
     }
 
     @discardableResult
-    public func cancel(_ text: String = "取消") -> DialogAction {
+    public func cancel(_ text: String = "取消") -> DialogX.DialogAction {
         let a = button(text) {
         }
         return a
     }
 
     @discardableResult
-    public func button(_ text: String, _ block: @escaping BlockVoid) -> DialogAction {
-        let a = DialogAction(text)
+    public func button(_ text: String, _ block: @escaping BlockVoid) -> DialogX.DialogAction {
+        let a = DialogX.DialogAction(text)
         a.callback = block
         dialogAction(a)
         return a

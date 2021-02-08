@@ -13,10 +13,10 @@ public class DialogX: UIViewController {
     fileprivate var corner: CGFloat = 12
     fileprivate var gravityY: GravityY = .center
 
-    fileprivate var titleView: UIView? = nil
     fileprivate var buttons = [DialogAction]()
-    fileprivate var bodyView: UIView = UIView(frame: .zero)
-    var bodyParams: LinearParams = LinearParams().width(MatchParent).height(WrapContent)
+    public var titleView: UIView? = nil
+    public var bodyView: UIView = UIView(frame: .zero)
+    public var bodyParams: LinearParams = LinearParams().width(MatchParent).height(WrapContent)
 
     public var onDismiss: BlockVoid = {
     }
@@ -34,7 +34,9 @@ public class DialogX: UIViewController {
 
     @discardableResult
     public func title(_ titleText: String) -> Self {
-        self.titleView = UILabel.Primary.text(titleText).align(.center).lines(1).backColor(Colors.backgroundTertiary).textColor(.white).font(Fonts.title)
+        if !titleText.isEmpty {
+            self.titleView = UILabel.Primary.text(titleText).align(.center).lines(1).backColor(Colors.backgroundTertiary).textColor(.white).font(Fonts.title)
+        }
         return self
     }
 
@@ -148,6 +150,37 @@ public class DialogX: UIViewController {
         }
     }
 
+    public enum ActionStyle {
+        case normal, cancel, ok, safe, danger, risk, accent
+    }
+
+    public class DialogAction {
+        public var autoClose: Bool = true
+        public var title: String
+        public var color: UIColor = Theme.Text.primaryColor
+        public var callback: BlockVoid = {
+        }
+
+        public init(_ title: String) {
+            self.title = title
+        }
+
+        public convenience init(_ style: ActionStyle, _ title: String) {
+            self.init(title)
+            switch style {
+            case .cancel, .normal:
+                color = Theme.Text.primaryColor
+            case .ok:
+                color = Colors.link
+            case .safe:
+                color = Theme.safeColor
+            case .risk, .danger:
+                color = Theme.dangerColor
+            case .accent:
+                color = Theme.accent
+            }
+        }
+    }
 
     public class DialogListX<T> {
         private var dlg: DialogX
@@ -165,7 +198,7 @@ public class DialogX: UIViewController {
             let title = self.transform(item)
             if let block = self.imageBlock {
                 let img = block(item) //?.scaledTo(40)
-                let v = ImageLabelView(frame: .zero).horizontal()
+                let v = ImageLabelView(frame: .zero).horizontal(margins:Edge().all(0),space: 1)
                 v.labelView.text = title
                 v.imageView.image = img
                 return v
@@ -181,6 +214,101 @@ public class DialogX: UIViewController {
         private lazy var transform: (T) -> String = {
             return "\($0)"
         }
+    }
+
+    public class DialogGrid<T> {
+        private var dlg: DialogX
+        private var items: [T]
+        private let panel = GridLayout(frame: .zero)
+        private lazy var binder: (T) -> UIView = { item in
+            if let imgBlock = self.imageBlock {
+                let b = ImageLabelView(frame: .zero).vertical(margins: Edge().all(0), space: 1, labelHeight: 18)
+                b.labelView.text = self.transform(item)
+                b.imageView.image = imgBlock(item)
+                return b
+            } else {
+                let b = TextItemView(frame: .zero).align(.center).stylePrimary()
+                b.text = self.transform(item)
+                return b
+            }
+        }
+
+        private lazy var transform: (T) -> String = {
+            return "\($0)"
+        }
+        private var imageBlock: ((T) -> UIImage)? = nil
+
+        public init(_ dlg: DialogX, _ items: [T]) {
+            self.dlg = dlg
+            self.items = items
+            self.panel.columns = 3
+            self.panel.paddings = Edge().hor(8).ver(12)
+            self.panel.spaceHor = 1
+            self.panel.spaceVer = 8
+        }
+
+
+    }
+}
+
+public extension DialogX.DialogGrid {
+    func show(_ block: @escaping (T) -> Void) {
+        for item in items {
+            let v = self.binder(item)
+            v.clickView { a in
+                a.findMyController()?.close()
+                block(item)
+            }
+            v.gridParams { p in
+//                p.height = 50
+//                p.width = 50
+                p.gravityX = .fill
+                p.gravityY = .center
+                p.rowSpan = 1
+                p.columnSpan = 1
+            }
+            panel += v
+        }
+
+        let totalH: CGFloat = panel.fixedHeight
+        if totalH < 500 {
+            self.dlg.body(self.panel)
+            self.dlg.bodyParams.height = totalH
+        } else {
+            let sv = UIScrollView(frame: .zero)
+            sv.addSubview(panel)
+//            sv.constraintsInstall{ c in
+//                c.edgesParent()
+//            }
+            panel.constraintsInstall { c in
+                c.edgesParent()
+                c.widthParent()
+            }
+            self.dlg.body(sv)
+            self.dlg.bodyParams.height = 500
+
+        }
+        self.dlg.show()
+    }
+
+    func columns(_ n: Int) -> Self {
+        self.panel.columns = n
+        return self
+    }
+
+    func bind(_ block: @escaping (T) -> UIView) -> Self {
+        self.binder = block
+        return self
+    }
+
+    func map(_ block: @escaping (T) -> String) -> Self {
+        self.transform = block
+        return self
+    }
+
+    func image(_ block: @escaping (T) -> UIImage) -> Self {
+        self.imageBlock = block
+        return self
     }
 }
 
@@ -264,6 +392,10 @@ public extension DialogX {
     func list<T>(_ items: [T]) -> DialogListX<T> {
         return DialogX.DialogListX(self, items)
     }
+
+    func grid<T>(_ items: [T]) -> DialogX.DialogGrid<T> {
+        return DialogX.DialogGrid(self, items)
+    }
 }
 
 public extension DialogX {
@@ -285,7 +417,7 @@ public extension DialogX {
 
     @discardableResult
     func cancel(_ text: String = "取消") -> DialogAction {
-        let a = button(text) {
+        let a = button(.cancel, text) {
         }
         return a
     }
@@ -300,8 +432,7 @@ public extension DialogX {
 
     @discardableResult
     func button(_ style: ActionStyle, _ text: String, _ block: @escaping BlockVoid) -> DialogAction {
-        let a = DialogAction(text)
-        a.theme(style)
+        let a = DialogAction(style, text)
         a.callback = block
         dialogAction(a)
         return a
@@ -383,50 +514,21 @@ public extension DialogX {
 }
 
 
-public enum ActionStyle {
-    case normal, cancel, ok, safe, danger, risk, accent
-}
+public extension DialogX.DialogAction {
 
-public class DialogAction {
-    public var autoClose: Bool = true
-    public var title: String
-    public var color: UIColor = Theme.Text.primaryColor
-    public var callback: BlockVoid = {
-    }
-
-    public init(_ title: String) {
-        self.title = title
-    }
-
-
-    public func theme(_ style: ActionStyle) {
-        switch style {
-        case .cancel, .normal:
-            color = Theme.Text.primaryColor
-        case .ok:
-            color = Colors.link
-        case .safe:
-            color = Theme.safeColor
-        case .risk, .danger:
-            color = Theme.dangerColor
-        case .accent:
-            color = Theme.accent
-        }
-    }
-
-    public func risk() {
+    func risk() {
         color = Theme.dangerColor
     }
 
-    public func safe() {
+    func safe() {
         color = Theme.safeColor
     }
 
-    public func accent() {
+    func accent() {
         color = Theme.accent
     }
 
-    public func normal() {
+    func normal() {
         color = Theme.Text.primaryColor
     }
 }

@@ -25,19 +25,25 @@ class ViewController: UIViewController {
         view.backColor(.white)
         testButton()
 
+//        testGrid()
 
     }
 
     func testDialog() {
 
-        let items: [String] = (0...20).map {
+        let items: [String] = (0...40).map {
             "杨恩涛 \($0)"
         }
 //        DialogX(self).list(items).show { s in
 //            logd(s)
 //        }
-        DialogX(self).list(items).imageName({ _ in "a.png" }).show { s in
-            logd(s)
+//        DialogX(self).list(items).imageName({ _ in "a.png" }).show { s in
+//            logd(s)
+//        }
+        DialogX(self).grid(items).columns(3).image { _ in
+            UIImage.namedImage("a.png")
+        }.show {
+            logd($0)
         }
     }
 
@@ -227,7 +233,7 @@ class ViewController: UIViewController {
         lb.text("Text \(i)")
         lb.align(.center)
         lb.backColor(cs[i])
-        block(lb.gridParamsEnsure)
+        block(lb.gridParams)
         return lb
     }
 
