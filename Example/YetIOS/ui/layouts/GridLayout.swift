@@ -133,12 +133,12 @@ public class GridLayout: BaseLayout {
                 let cell = cells[r, c]
                 if let p = cell?.param {
                     var hh: CGFloat = 0
-                    if p.height > 0 {
-                        hh = p.height
-                    } else {
+//                    if p.height > 0 {
+//                        hh = p.height
+//                    } else {
                         let a = self.rowInfoMap[r] ?? self.defaultRowInfo
                         hh = a.value
-                    }
+//                    }
                     rowH = max(rowH, (hh + p.margins.top + p.margins.bottom))
                 }
             }

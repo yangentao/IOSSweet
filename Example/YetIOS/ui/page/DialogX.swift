@@ -263,9 +263,7 @@ public extension DialogX.DialogGrid {
 //                p.height = 50
 //                p.width = 50
                 p.gravityX = .fill
-                p.gravityY = .center
-                p.rowSpan = 1
-                p.columnSpan = 1
+                p.gravityY = .fill
             }
             panel += v
         }
