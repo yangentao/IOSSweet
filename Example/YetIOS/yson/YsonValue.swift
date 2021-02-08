@@ -6,7 +6,7 @@
 import Foundation
 import UIKit
 
-public class YsonValue {
+public class YsonValue: CustomStringConvertible, Equatable {
     public func writeTo(_ buf: inout String) {
         fatalError()
     }
@@ -26,9 +26,10 @@ public class YsonValue {
     public subscript(key: String) -> YsonValue {
         YsonNull.inst
     }
-}
 
-extension YsonValue: Equatable {
+    public var description: String {
+        self.yson
+    }
 
     public static func ==(lhs: YsonValue, rhs: YsonValue) -> Bool {
         if lhs === rhs {
@@ -57,9 +58,24 @@ extension YsonValue: Equatable {
 
 }
 
-extension YsonValue: CustomStringConvertible {
-    public var description: String {
-        self.yson
+public extension YsonValue {
+    var boolValue: Bool? {
+        (self as? YsonBool)?.data
+    }
+    var stringValue: String? {
+        (self as? YsonString)?.data
+    }
+    var intValue: Int? {
+        (self as? YsonNum)?.data.intValue
+    }
+    var doubleValue: Double? {
+        (self as? YsonNum)?.data.doubleValue
+    }
+    var blobValue: Data? {
+        (self as? YsonBlob)?.data
+    }
+    var isNull: Bool {
+        self is YsonNull
     }
 }
 
