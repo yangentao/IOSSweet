@@ -156,7 +156,6 @@ public class GridLayout: BaseLayout {
         }
 //        if axis == .vertical {
         let cells: CellMatrix = calcCellsVertical(childViews)
-        logd("Cells: ", cells.rows, cells.cols)
         calcWidthsVertical(cells)
         calcHeightsVertical(cells)
         let maxY = calcRectVertical(cells)

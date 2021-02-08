@@ -198,7 +198,7 @@ public class DialogX: UIViewController {
             let title = self.transform(item)
             if let block = self.imageBlock {
                 let img = block(item) //?.scaledTo(40)
-                let v = ImageLabelView(frame: .zero).horizontal(margins:Edge().all(0),space: 1)
+                let v = ImageLabelView(frame: .zero).horizontal(margins:Edge().all(0), space: 1)
                 v.labelView.text = title
                 v.imageView.image = img
                 return v
@@ -245,6 +245,7 @@ public class DialogX: UIViewController {
             self.panel.paddings = Edge().hor(8).ver(12)
             self.panel.spaceHor = 1
             self.panel.spaceVer = 8
+            self.panel.setRowInfoDefault(value: 66, weight: 0)
         }
 
 
@@ -531,3 +532,16 @@ public extension DialogX.DialogAction {
     }
 }
 
+public extension UIViewController {
+    var dialog: DialogX {
+        return DialogX(self)
+    }
+
+    func alert(_ msg: String) {
+        self.dialog.showAlert(msg)
+    }
+
+    func alert(_ msg: String, _ block: @escaping BlockVoid) {
+        self.dialog.showAlert(msg: msg, block)
+    }
+}

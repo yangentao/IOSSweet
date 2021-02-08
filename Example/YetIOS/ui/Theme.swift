@@ -161,7 +161,7 @@ public class Theme {
         public static var disabledColor: UIColor = Color.rgb(135, 154, 168)
 
         public static var primaryFont: UIFont = Font.sys(16)  // Font.sys(UIFont.labelFontSize) //
-        public static var minorFont: UIFont = Font.sys(14)
+        public static var minorFont: UIFont = Font.sys(13)
         public static var height: CGFloat = 25
         public static var height2: CGFloat = 30
         public static var heightMinor: CGFloat = 20

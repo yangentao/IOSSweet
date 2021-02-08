@@ -33,7 +33,6 @@
 		E11E127BDB626299836AE853 /* AnyBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1BBB212A03C1CE1FC66A /* AnyBuilder.swift */; };
 		E11E1292B537DE9946E261EC /* HttpCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FECF43AB461E1D70F79 /* HttpCodes.swift */; };
 		E11E129F056366B3F747B33B /* TextDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1DABFDB38E6E263CA6FD /* TextDetailCell.swift */; };
-		E11E12A8B1E074BE87F91795 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E135111723B2F2B966C2B /* Dialog.swift */; };
 		E11E12ADEA004CF303C5F938 /* TextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E14B0DE2177A0E370A449 /* TextFields.swift */; };
 		E11E12B3BF8F63C11EA20ECD /* ViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E14A60DFAE0AE0E0AA3BE /* ViewControllers.swift */; };
 		E11E12BF8F8EE22B79409597 /* IconTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1445F61D41AC84577461 /* IconTextView.swift */; };
@@ -184,7 +183,6 @@
 		E11E123689DFAEFDE9CF5B88 /* MyLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyLabel.swift; sourceTree = "<group>"; };
 		E11E12DB8CFC007CDAB287B4 /* KeyAny.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyAny.swift; sourceTree = "<group>"; };
 		E11E12E467DE85BAF1C023B2 /* ColorEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorEx.swift; sourceTree = "<group>"; };
-		E11E135111723B2F2B966C2B /* Dialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
 		E11E138FAC63DAB23B538DE9 /* MyNavPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNavPage.swift; sourceTree = "<group>"; };
 		E11E13AA8495DBBA47B1D19E /* LayoutBasic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutBasic.swift; sourceTree = "<group>"; };
 		E11E140A09E376AFF7FF817E /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -567,7 +565,6 @@
 			children = (
 				E11E13AA869BD406BDF4936A /* cellViews */,
 				E11E153421B80721323F8F76 /* itemViews */,
-				E11E135111723B2F2B966C2B /* Dialog.swift */,
 				E11E170FC7390EBDA89B4D79 /* GridPage.swift */,
 				E11E1A5005909BD8387276CE /* ItemPage.swift */,
 				E11E1D09EAB7E60C791026FE /* ListPage.swift */,
@@ -838,7 +835,6 @@
 				E11E19F5C9CBB747B030377A /* UserInfoView.swift in Sources */,
 				E11E1F827D0ED43C61E939E8 /* TextImageView.swift in Sources */,
 				E11E1A11D48B9A37EA2E9FDC /* TextDetailView.swift in Sources */,
-				E11E12A8B1E074BE87F91795 /* Dialog.swift in Sources */,
 				E11E13567445FC94E0A97B42 /* GridPage.swift in Sources */,
 				E11E143A58851E4A7D85C608 /* ItemPage.swift in Sources */,
 				E11E194D582F67D72A343F03 /* ListPage.swift in Sources */,
