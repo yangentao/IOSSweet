@@ -40,3 +40,5 @@ Manifest.lock
 /Example/Pods/Target Support Files/*
 YetIOS.podspec.json
 *.xcscheme
+
+.idea/

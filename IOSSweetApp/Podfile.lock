@@ -1,0 +1,16 @@
+PODS:
+  - SwiftSweet (0.1.2)
+
+DEPENDENCIES:
+  - SwiftSweet (from `../../SwiftSweet/`)
+
+EXTERNAL SOURCES:
+  SwiftSweet:
+    :path: "../../SwiftSweet/"
+
+SPEC CHECKSUMS:
+  SwiftSweet: 5ab2d26821e99a40911615e47a27a70ac2070083
+
+PODFILE CHECKSUM: 1760670f3a86e408d1631cc963eb6b0c854e5834
+
+COCOAPODS: 1.10.1
