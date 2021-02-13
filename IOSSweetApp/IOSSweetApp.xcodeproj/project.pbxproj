@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0237667E0D9411E26318BE94 /* Pods_IOSSweetApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE7F28DBC1DB3B039A90F98 /* Pods_IOSSweetApp.framework */; };
 		E11E100775505CA25BE70862 /* TextImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FE9133157683A5BD2F3 /* TextImageView.swift */; };
-		E11E107F08A91E30CCD274FB /* ProtoResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E13607660EB11B7072F9B /* ProtoResult.swift */; };
 		E11E108B31F53C2EAFFA0795 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FF4910E7BC208A907EB /* AppDelegate.swift */; };
 		E11E109C1830FD60A1FB94A8 /* ImagePickPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E135B94F75DAC0300288A /* ImagePickPage.swift */; };
 		E11E10A5BCACEFD97A5730D3 /* ImageText4Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1AC6BF352E4E0EAC1A48 /* ImageText4Cell.swift */; };
@@ -32,14 +31,12 @@
 		E11E14A002178EBF22355785 /* ViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1A11CD278AC469DCCD3E /* ViewBuilder.swift */; };
 		E11E14A062B81C46EF240E60 /* QRPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E12D84FCE26B543C5119E /* QRPage.swift */; };
 		E11E14A982A432DF1E83A594 /* TitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FACDE7CCB676C70FCC4 /* TitleBar.swift */; };
-		E11E14B2607C7A5A60741CF3 /* HttpExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1469D8A3658355C75655 /* HttpExt.swift */; };
 		E11E14D056174EF26AEE62F7 /* TextItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E14306ECDF8D271477C61 /* TextItemView.swift */; };
 		E11E14F35A56F3B0A1DFAF68 /* SheetPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E15D2FAD8B41FE3649B59 /* SheetPage.swift */; };
 		E11E14FD5362BB7747E7DA8B /* PullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1DB8320DBD9938F5602B /* PullToRefreshView.swift */; };
 		E11E154CEE7B2588588F4A55 /* TextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E13139B66167DA7F85B75 /* TextFields.swift */; };
 		E11E159DDB30C07625850E3B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E176E0BD9DFFB9C10E8F9 /* ViewController.swift */; };
 		E11E15B7F0C64F8A237F3F25 /* TextDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E13988B510FF029238B92 /* TextDetailView.swift */; };
-		E11E16177BCA7272431B53F5 /* Rects.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1BF956B2EF59DAB0B82F /* Rects.swift */; };
 		E11E1684B4E7F77272D7BFF0 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E18A4ED8A1E0DABCF388E /* Images.swift */; };
 		E11E1687256D8DA89B24BC74 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1717AD5A702E7008071A /* Events.swift */; };
 		E11E16F0746AD714EF23B602 /* ActionBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E13A4C9A284C068EBE4CD /* ActionBlock.swift */; };
@@ -65,7 +62,6 @@
 		E11E1A972B6C9C45D9B87D3F /* GridPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E133ED8D394DEB911E09C /* GridPage.swift */; };
 		E11E1ADFCBA572B8798D2C5F /* TitlePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E169A83F6A7562F4FEE9E /* TitlePage.swift */; };
 		E11E1AE00330516D35347338 /* ItemPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E199A5C04B4D59BEA71E9 /* ItemPage.swift */; };
-		E11E1AEB0539E323DEADE2DF /* StringUIEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1172335C99D02F9E894C /* StringUIEx.swift */; };
 		E11E1B97BB34F709514A20BD /* PullToRefreshLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1F94AEBE5327869832DD /* PullToRefreshLoadingView.swift */; };
 		E11E1BB93C091F205A2B32E6 /* Res.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E128403494C9320898486 /* Res.swift */; };
 		E11E1C8101F0EF4ED7F04C46 /* GridItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E197D3513E73F1BEBD2D4 /* GridItemView.swift */; };
@@ -73,14 +69,12 @@
 		E11E1CE2A86813F286226AEA /* GridFixedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E191B1384DD86AB1C5C8C /* GridFixedView.swift */; };
 		E11E1D01DFC42D811576487A /* TableViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E10D4BB946D4988F3DD50 /* TableViews.swift */; };
 		E11E1D4750F61A7FA5E5021F /* AppDele.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FAB001EFB9CEDE77736 /* AppDele.swift */; };
-		E11E1D92110377A21C2AA241 /* HttpImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1662251717A6329CA352 /* HttpImage.swift */; };
 		E11E1DF9F590F7158BEE45C0 /* MyNavPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E113B7F4F91099C9C52C1 /* MyNavPage.swift */; };
 		E11E1E28BF10A07B214B932A /* TextDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E19BA79A5CF53A731AD73 /* TextDetailCell.swift */; };
 		E11E1E368BB0211CF0346047 /* ViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E183C6D74B1F58C183862 /* ViewControllers.swift */; };
 		E11E1E4C600FAD40BEC3A3DA /* InputPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E18A484808C76785F0200 /* InputPage.swift */; };
 		E11E1E54CD2E051F4B76C53F /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1A83CDF166580A53ADCE /* URLs.swift */; };
 		E11E1EF1F46F47CC0A2E97C4 /* PhotoPerm.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E127D606B98EAC8C7C185 /* PhotoPerm.swift */; };
-		E11E1F0D2C856E7B989D5368 /* Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E15D97203FE8F2E4D9D05 /* Sizes.swift */; };
 		E11E1FB146A7981A3A7E1F85 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1E4FA3D404CA2A8E5245 /* ScanView.swift */; };
 /* End PBXBuildFile section */
 
@@ -92,7 +86,6 @@
 		E11E10D4BB946D4988F3DD50 /* TableViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViews.swift; sourceTree = "<group>"; };
 		E11E1111A84A171FE2096672 /* TapGesture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapGesture.swift; sourceTree = "<group>"; };
 		E11E113B7F4F91099C9C52C1 /* MyNavPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNavPage.swift; sourceTree = "<group>"; };
-		E11E1172335C99D02F9E894C /* StringUIEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUIEx.swift; sourceTree = "<group>"; };
 		E11E11D0B2EC177C2E42EE71 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		E11E11FE4BE375B59989B705 /* IOSSweetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IOSSweetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E11E1205901CD4004E540DF7 /* ColorEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorEx.swift; sourceTree = "<group>"; };
@@ -105,20 +98,16 @@
 		E11E133ED8D394DEB911E09C /* GridPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridPage.swift; sourceTree = "<group>"; };
 		E11E134AB56A184E1ED6EE27 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E11E135B94F75DAC0300288A /* ImagePickPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickPage.swift; sourceTree = "<group>"; };
-		E11E13607660EB11B7072F9B /* ProtoResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtoResult.swift; sourceTree = "<group>"; };
 		E11E138A9F1051769DE4BF80 /* QR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QR.swift; sourceTree = "<group>"; };
 		E11E13988B510FF029238B92 /* TextDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextDetailView.swift; sourceTree = "<group>"; };
 		E11E13A4C9A284C068EBE4CD /* ActionBlock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionBlock.swift; sourceTree = "<group>"; };
 		E11E14306ECDF8D271477C61 /* TextItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextItemView.swift; sourceTree = "<group>"; };
 		E11E143196422EA2B0C64098 /* Consts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consts.swift; sourceTree = "<group>"; };
-		E11E1469D8A3658355C75655 /* HttpExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpExt.swift; sourceTree = "<group>"; };
 		E11E14DA41F1CAEEF229D24F /* Windows.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Windows.swift; sourceTree = "<group>"; };
 		E11E14DD8182E736E3BFDD95 /* TextViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViews.swift; sourceTree = "<group>"; };
 		E11E15247A99FF067604FA80 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		E11E1564C0701565E76CBEC0 /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		E11E15D2FAD8B41FE3649B59 /* SheetPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetPage.swift; sourceTree = "<group>"; };
-		E11E15D97203FE8F2E4D9D05 /* Sizes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sizes.swift; sourceTree = "<group>"; };
-		E11E1662251717A6329CA352 /* HttpImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpImage.swift; sourceTree = "<group>"; };
 		E11E1681F2BA04A4AD5A80BE /* Views.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
 		E11E169A83F6A7562F4FEE9E /* TitlePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitlePage.swift; sourceTree = "<group>"; };
 		E11E16E521D8906C9858A448 /* ScaleAnim.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleAnim.swift; sourceTree = "<group>"; };
@@ -145,7 +134,6 @@
 		E11E1B4302706DCDEE02E227 /* a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = a.png; sourceTree = "<group>"; };
 		E11E1B6A5617096D7DF256F4 /* TablePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TablePage.swift; sourceTree = "<group>"; };
 		E11E1B8338D82003AD5D0E11 /* SelectPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPage.swift; sourceTree = "<group>"; };
-		E11E1BF956B2EF59DAB0B82F /* Rects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rects.swift; sourceTree = "<group>"; };
 		E11E1D8B029111D58289F559 /* Labels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Labels.swift; sourceTree = "<group>"; };
 		E11E1DA42C90CE09691658E3 /* IconTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconTextView.swift; sourceTree = "<group>"; };
 		E11E1DB8320DBD9938F5602B /* PullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshView.swift; sourceTree = "<group>"; };
@@ -206,7 +194,6 @@
 			isa = PBXGroup;
 			children = (
 				E11E11B374E49660F82A3876 /* app */,
-				E11E1B407CF2CB3630780945 /* net */,
 				E11E16655EEE60893F90563A /* page */,
 				E11E1E5B74563A0E42EFF1D5 /* basic */,
 				E11E1348C6AEC9FBC1E9FE17 /* custom */,
@@ -333,16 +320,6 @@
 			path = itemViews;
 			sourceTree = "<group>";
 		};
-		E11E1B407CF2CB3630780945 /* net */ = {
-			isa = PBXGroup;
-			children = (
-				E11E1469D8A3658355C75655 /* HttpExt.swift */,
-				E11E1662251717A6329CA352 /* HttpImage.swift */,
-				E11E13607660EB11B7072F9B /* ProtoResult.swift */,
-			);
-			path = net;
-			sourceTree = "<group>";
-		};
 		E11E1CDB43CD0607D24E2E52 /* qr */ = {
 			isa = PBXGroup;
 			children = (
@@ -358,12 +335,9 @@
 			isa = PBXGroup;
 			children = (
 				E11E134AB56A184E1ED6EE27 /* Fonts.swift */,
-				E11E1BF956B2EF59DAB0B82F /* Rects.swift */,
-				E11E15D97203FE8F2E4D9D05 /* Sizes.swift */,
 				E11E18A4ED8A1E0DABCF388E /* Images.swift */,
 				E11E1205901CD4004E540DF7 /* ColorEx.swift */,
 				E11E11D0B2EC177C2E42EE71 /* Globals.swift */,
-				E11E1172335C99D02F9E894C /* StringUIEx.swift */,
 			);
 			path = basic;
 			sourceTree = "<group>";
@@ -501,9 +475,6 @@
 				E11E1A0C9D83D3753205D1F3 /* Windows.swift in Sources */,
 				E11E110D383526B27A410572 /* TapGesture.swift in Sources */,
 				E11E1E368BB0211CF0346047 /* ViewControllers.swift in Sources */,
-				E11E14B2607C7A5A60741CF3 /* HttpExt.swift in Sources */,
-				E11E1D92110377A21C2AA241 /* HttpImage.swift in Sources */,
-				E11E107F08A91E30CCD274FB /* ProtoResult.swift in Sources */,
 				E11E10A5BCACEFD97A5730D3 /* ImageText4Cell.swift in Sources */,
 				E11E1E28BF10A07B214B932A /* TextDetailCell.swift in Sources */,
 				E11E19BB0A71BFE665E49E24 /* TextTimeMsgStatusCell.swift in Sources */,
@@ -526,12 +497,9 @@
 				E11E1A56E5B23241A81E6DFD /* MyTabBarPage.swift in Sources */,
 				E11E109C1830FD60A1FB94A8 /* ImagePickPage.swift in Sources */,
 				E11E185097EC5F19362E8391 /* Fonts.swift in Sources */,
-				E11E16177BCA7272431B53F5 /* Rects.swift in Sources */,
-				E11E1F0D2C856E7B989D5368 /* Sizes.swift in Sources */,
 				E11E1684B4E7F77272D7BFF0 /* Images.swift in Sources */,
 				E11E198291C52E682764476E /* ColorEx.swift in Sources */,
 				E11E1A21AEEA314A2985277C /* Globals.swift in Sources */,
-				E11E1AEB0539E323DEADE2DF /* StringUIEx.swift in Sources */,
 				E11E1CA8CFFD56F8B97F9B70 /* MyLabel.swift in Sources */,
 				E11E1C8101F0EF4ED7F04C46 /* GridItemView.swift in Sources */,
 				E11E14D056174EF26AEE62F7 /* TextItemView.swift in Sources */,
