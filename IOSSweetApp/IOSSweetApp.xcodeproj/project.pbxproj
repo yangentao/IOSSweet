@@ -44,7 +44,6 @@
 				CC29F00395B69DA786CC5D0B /* Pods-IOSSweetApp.debug.xcconfig */,
 				FC78F45B67DA97B35A185216 /* Pods-IOSSweetApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -113,12 +112,20 @@
 /* Begin PBXProject section */
 		E11E112D98D7D2B026EC8240 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				TargetAttributes = {
+					E11E10A74E0E0AEB8C8D1874 = {
+						DevelopmentTeam = HPA69P8D2K;
+					};
+				};
+			};
 			buildConfigurationList = E11E1CFFCDBA1822934B9348 /* Build configuration list for PBXProject "IOSSweetApp" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = E11E1967611CB73096B5264B;
 			productRefGroup = E11E1F43C9F2ABF0624A0D6B /* Products */;
@@ -310,8 +317,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -322,6 +328,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				DEVELOPMENT_TEAM = HPA69P8D2K;
 				INFOPLIST_FILE = IOSSweetApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.entao.IOSSweetApp;
@@ -337,6 +344,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				DEVELOPMENT_TEAM = HPA69P8D2K;
 				INFOPLIST_FILE = IOSSweetApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.entao.IOSSweetApp;
@@ -365,6 +373,7 @@
 				E11E1E833EA4B35A40EC09B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

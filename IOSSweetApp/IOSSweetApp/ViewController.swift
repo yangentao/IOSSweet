@@ -38,7 +38,7 @@ class ViewController: UIViewController {
             self.toast.show("Hello \(IDGen()) ")
         }
 
-        let p = GridPage<String> (nibName: nil, bundle: nil)
+//        let p = GridPage<String> (nibName: nil, bundle: nil)
 
 
     }

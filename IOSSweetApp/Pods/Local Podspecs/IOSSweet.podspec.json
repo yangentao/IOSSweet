@@ -23,7 +23,7 @@
     "5.2",
     "5.3"
   ],
-  "source_files": "IOSSweet/Classes/**/**/**",
+  "source_files": "IOSSweet/Classes/**/*",
   "resources": [
     "IOSSweet/Assets/*"
   ],
