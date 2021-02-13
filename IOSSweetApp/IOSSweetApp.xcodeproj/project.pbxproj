@@ -51,7 +51,6 @@
 		E11E185097EC5F19362E8391 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E134AB56A184E1ED6EE27 /* Fonts.swift */; };
 		E11E188A8B914B53B962B29E /* AppExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1EE6FDBAA3563CF0FC3F /* AppExt.swift */; };
 		E11E18B0C3957328903D41DB /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FDFFF5D98952EE76627 /* Theme.swift */; };
-		E11E18D71BA9157459C3A205 /* AttrText.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1907507EF9FA59A725B9 /* AttrText.swift */; };
 		E11E18E77171500B9A0B71EE /* ImageViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E108B28F4A349F98E5E6A /* ImageViews.swift */; };
 		E11E1953153C4DE642F71D7D /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E198959F4368EB1345427 /* Toast.swift */; };
 		E11E1966E8CAB3F26CD03187 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E15247A99FF067604FA80 /* Alert.swift */; };
@@ -132,7 +131,6 @@
 		E11E18A484808C76785F0200 /* InputPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputPage.swift; sourceTree = "<group>"; };
 		E11E18A4ED8A1E0DABCF388E /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		E11E18E3970E79C18651F28A /* UserInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
-		E11E1907507EF9FA59A725B9 /* AttrText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttrText.swift; sourceTree = "<group>"; };
 		E11E191B1384DD86AB1C5C8C /* GridFixedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridFixedView.swift; sourceTree = "<group>"; };
 		E11E197D3513E73F1BEBD2D4 /* GridItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridItemView.swift; sourceTree = "<group>"; };
 		E11E198959F4368EB1345427 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
@@ -365,7 +363,6 @@
 				E11E18A4ED8A1E0DABCF388E /* Images.swift */,
 				E11E1205901CD4004E540DF7 /* ColorEx.swift */,
 				E11E11D0B2EC177C2E42EE71 /* Globals.swift */,
-				E11E1907507EF9FA59A725B9 /* AttrText.swift */,
 				E11E1172335C99D02F9E894C /* StringUIEx.swift */,
 			);
 			path = basic;
@@ -534,7 +531,6 @@
 				E11E1684B4E7F77272D7BFF0 /* Images.swift in Sources */,
 				E11E198291C52E682764476E /* ColorEx.swift in Sources */,
 				E11E1A21AEEA314A2985277C /* Globals.swift in Sources */,
-				E11E18D71BA9157459C3A205 /* AttrText.swift in Sources */,
 				E11E1AEB0539E323DEADE2DF /* StringUIEx.swift in Sources */,
 				E11E1CA8CFFD56F8B97F9B70 /* MyLabel.swift in Sources */,
 				E11E1C8101F0EF4ED7F04C46 /* GridItemView.swift in Sources */,

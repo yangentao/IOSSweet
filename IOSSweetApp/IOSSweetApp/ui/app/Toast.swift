@@ -22,84 +22,71 @@ public extension UIViewController {
 public class Toast {
     private weak var page: UIViewController?
 
-    private let lb = UILabel(frame: Rect.zero)
-    private var msgList = [String]()
+    private let labelView = UILabel(frame: Rect.zero)
+    private var msgList: [String] = []
     private let DELAY: Double = 4
     private var scheduleItem: ScheduleItem? = nil
 
     public init(_ c: UIViewController) {
         self.page = c
+        labelView.roundLayer(6)
+        labelView.backgroundColor = Color.grayF(0.8)
+        labelView.align(.center)
+        labelView.textColor = Color.white
+        labelView.shadow(offset: 6)
+    }
+
+    private func next() {
+        guard let p = self.page else {
+            return
+        }
+        if labelView.superview != nil {
+            return
+        }
+        guard let text = msgList.popFirst() else {
+            closeMe()
+            return
+        }
+        labelView.text = text
+        p.view.addSubview(labelView)
+        p.view.bringSubviewToFront(labelView)
+        let sz = labelView.sizeThatFits(Size.zero)
+        labelView.constraints { c in
+            c.centerParent()
+            c.width.geConst(150)
+            c.width.leConst(300)
+            c.height.geConst(60)
+            c.height.leConst(100)
+            c.width.eqConst(sz.width + 30).priority(.defaultHigh)
+            c.height.eqConst(sz.height + 24).priority(.defaultHigh)
+        }
+        labelView.alpha = 0
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.labelView.alpha = 1
+        }
+        labelView.clickView { [weak self] v in
+            self?.closeMe()
+        }
+        Task.foreDelay(seconds: DELAY) { [weak self] in
+            self?.closeMe()
+        }
     }
 
     public func show(_ msg: String) {
-        guard  let p = self.page else {
-            return
-        }
-        if lb.superview != nil {
-            if lb.superview === p.view {
-                msgList.append(msg)
-                return
-            } else {
-                lb.removeFromSuperview()
-            }
-        }
-        lb.alpha = 0
-        p.view.addSubview(lb)
-        p.view.bringSubviewToFront(lb)
-
-        lb.roundLayer(4)
-        lb.backgroundColor = Color.grayF(0.8)
-        lb.align(.center)
-        lb.textColor = Color.white
-        lb.shadow(offset: 6)
-
-        lb.text = msg
-
-        let sz = lb.sizeThatFits(Size.zero)
-        let L = lb.layout
-        L.centerParent()
-        L.width.ge(150).active()
-        L.height.ge(60).active()
-        L.width.le(300).active()
-        L.height.le(100).active()
-        L.width.eq(sz.width + 30).priorityHigh.active()
-        L.height.eq(sz.height + 24).priorityHigh.active()
-
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            self?.lb.alpha = 1
-        }
-        lb.clickView { [weak self] v in
-            self?.closeView()
-        }
-
-        scheduleItem = Task.foreSchedule(DELAY) { [weak self] in
-            self?.closeView()
-        }
+        msgList.append(msg)
+        next()
     }
 
-    private func closeView() {
-        scheduleItem?.cancel()
-        if msgList.isEmpty {
-            if lb.superview != nil {
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.lb.alpha = 0
-                }, completion: { b in
-                    self.lb.constraintRemoveAll()
-                    self.lb.removeFromSuperview()
-                })
+    private func closeMe() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.labelView.alpha = 0
+        }, completion: { [weak self] b in
+            self?.labelView.constraintRemoveAll()
+            self?.labelView.removeFromSuperview()
+            let emp = self?.msgList.isEmpty ?? true
+            if !emp {
+                self?.next()
             }
-            return
-        } else {
-            let s = msgList.removeFirst()
-            lb.text = s
-            let sz = lb.sizeThatFits(Size.zero)
-            let L = lb.layout
-            L.width.eq(sz.width + 30).update()
-            L.height.eq(sz.height + 24).update()
-            scheduleItem = Task.foreSchedule(DELAY) { [weak self] in
-                self?.closeView()
-            }
-        }
+        })
     }
-
 }

@@ -32,13 +32,12 @@ class ViewController: UIViewController {
             lb.textAlignment = .center
         }
 
-       label.clickView{ v in
-           self.toast.show("Hello Yang")
-       }
+
+        label.clickView { v in
+            self.toast.show("Hello \(IDGen()) ")
+        }
 
     }
-
-
 
 
 }
