@@ -59,18 +59,21 @@ public extension UILabel {
     @discardableResult
     func lines(_ n: Int) -> Self {
         self.numberOfLines = n
+        self.superview?.setNeedsLayout()
         return self
     }
 
     @discardableResult
     func text(_ s: String?) -> Self {
         self.text = s
+        self.superview?.setNeedsLayout()
         return self
     }
 
     @discardableResult
     func font(_ f: UIFont) -> Self {
         self.font = f
+        self.superview?.setNeedsLayout()
         return self
     }
 

@@ -34,7 +34,7 @@ class ViewController: UIViewController, MsgListener {
 
         label.propChanged("text", fire: .labelTextChanged)
 //        for i in 0...5 {
-        Task.foreDelay(seconds: Double(0)) {
+        Task.foreDelay(seconds: Double(1)) {
             self.label.text = "hahahahha \(0)"
         }
 //        }

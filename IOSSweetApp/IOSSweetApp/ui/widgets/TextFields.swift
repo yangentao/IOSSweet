@@ -6,6 +6,7 @@
 import Foundation
 import UIKit
 import SwiftSweet
+
 public typealias EditBlock = (UITextField) -> Void
 
 public extension UITextField {
@@ -90,6 +91,11 @@ public extension UITextField {
         set {
             placeholder = newValue
         }
+    }
+
+    func text(_ tx: String?) {
+        self.text = tx
+        self.superview?.setNeedsLayout()
     }
 
     @discardableResult
