@@ -1,0 +1,6 @@
+framework module IOSSweet {
+  umbrella header "IOSSweet-umbrella.h"
+
+  export *
+  module * { export * }
+}
