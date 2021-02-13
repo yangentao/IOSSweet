@@ -13,7 +13,7 @@ extension MsgID {
     static let labelTextChanged = MsgID("label.text.changed")
 }
 
-class ViewController: UIViewController, MsgListener {
+class ViewController: UIViewController {
     lazy var label: UILabel = UILabel(frame: .zero)
 
     override func viewDidLoad() {
@@ -32,31 +32,13 @@ class ViewController: UIViewController, MsgListener {
             lb.textAlignment = .center
         }
 
-        label.propChanged("text", fire: .labelTextChanged)
-//        for i in 0...5 {
-        Task.foreDelay(seconds: Double(1)) {
-            self.label.text = "hahahahha \(0)"
-        }
-//        }
-        MsgCenter.listenAll(self)
-        label.propChanged("text", target: self, selector: #selector(Self.onTextChanged))
-        label.propChangedInfo("text", target: self, selector: #selector(Self.onTextChangedInfo(_:)))
+       label.clickView{ v in
+           self.toast.show("Hello Yang")
+       }
 
     }
 
-    @objc
-    func onTextChanged() {
-        logd("onTextChanged: ")
-    }
 
-    @objc
-    func onTextChangedInfo(_ info: PropChangedInfo) {
-        logd("onTextChanged: ", info.keyPath, info.oldValue, info.newValue, info.obj)
-    }
-
-    func onMsg(msg: Msg) {
-        logd("onMsg: ", msg.msg, msg["oldValue"], msg["newValue"], msg.sender)
-    }
 
 
 }
