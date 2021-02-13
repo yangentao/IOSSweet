@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   prjName = 'IOSSweet'
   s.name             = prjName
-  s.version          = '1.0.0'
+  s.version          = '0.1.0'
   s.summary          = "#{prjName} is an iOS  library writen by swift."
   s.description      = "#{prjName} is an iOS library writen by swift. OK"
  

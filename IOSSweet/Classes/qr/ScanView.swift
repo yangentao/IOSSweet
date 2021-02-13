@@ -6,6 +6,7 @@
 import Foundation
 import UIKit
 import AVFoundation
+import SwiftSweet
 
 public typealias ScanResultBlock = (String) -> Void
 

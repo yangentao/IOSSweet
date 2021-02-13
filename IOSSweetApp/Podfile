@@ -3,7 +3,7 @@ use_frameworks!
 platform :ios, '12.0'
 
 target 'IOSSweetApp' do
-  pod 'SwiftSweet', '0.1.6'
+  # pod 'SwiftSweet', '0.1.6'
   # pod 'SwiftSweet', :path => '../../SwiftSweet/'
   pod 'IOSSweet', :path => '../'
 end

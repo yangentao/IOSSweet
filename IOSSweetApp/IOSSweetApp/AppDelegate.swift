@@ -7,21 +7,21 @@
 //
 
 import UIKit
+import IOSSweet
 
-private var gWindow: UIWindow? = nil
-
-@discardableResult
-func WindowRootController(_ c: UIViewController) -> UIWindow {
-    if #available(iOS 11.0, *) {
-        UINavigationBar.appearance().prefersLargeTitles = false
-    }
-    let w = UIWindow()
-    w.frame = UIScreen.main.bounds
-    w.rootViewController = c
-    w.makeKeyAndVisible()
-    gWindow = w
-    return w
-}
+//private var gWindow: UIWindow? = nil
+//@discardableResult
+//func WindowRootController(_ c: UIViewController) -> UIWindow {
+//    if #available(iOS 11.0, *) {
+//        UINavigationBar.appearance().prefersLargeTitles = false
+//    }
+//    let w = UIWindow()
+//    w.frame = UIScreen.main.bounds
+//    w.rootViewController = c
+//    w.makeKeyAndVisible()
+//    gWindow = w
+//    return w
+//}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

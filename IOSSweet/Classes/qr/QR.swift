@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 public class QRResult {
 	public var text: String = ""
 

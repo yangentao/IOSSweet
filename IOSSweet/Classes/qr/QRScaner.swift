@@ -1,6 +1,6 @@
 import UIKit
 import AVFoundation
-
+import SwiftSweet
 public class QRScaner: NSObject, AVCaptureMetadataOutputObjectsDelegate {
 	private let device: AVCaptureDevice
 	private lazy var session = AVCaptureSession()
