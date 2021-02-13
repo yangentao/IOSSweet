@@ -8,20 +8,20 @@
 
 import UIKit
 
-//private var gWindow: UIWindow? = nil
-//
-//func WindowRootController(_ c: UIViewController) -> UIWindow {
-//    if #available(iOS 11.0, *) {
-//        UINavigationBar.appearance().prefersLargeTitles = false
-//    }
-//    let w = UIWindow()
-//    gWindow = w
-//    w.frame = UIScreen.main.bounds
-////    w.backgroundColor = UIColor.white
-//    w.rootViewController = c
-//    w.makeKeyAndVisible()
-//    return w
-//}
+private var gWindow: UIWindow? = nil
+
+@discardableResult
+func WindowRootController(_ c: UIViewController) -> UIWindow {
+    if #available(iOS 11.0, *) {
+        UINavigationBar.appearance().prefersLargeTitles = false
+    }
+    let w = UIWindow()
+    w.frame = UIScreen.main.bounds
+    w.rootViewController = c
+    w.makeKeyAndVisible()
+    gWindow = w
+    return w
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

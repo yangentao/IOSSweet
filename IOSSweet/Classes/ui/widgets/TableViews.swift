@@ -11,8 +11,8 @@ public extension UITableView {
 		return UITableView.Plain
 	}
 	static var Plain: UITableView {
-		let t = UITableView(frame: Rect.zero, style: .plain)
-		t.tableFooterView = UIView(frame: Rect.zero)
+		let t = UITableView(frame: .zero, style: .plain)
+		t.tableFooterView = UIView(frame: .zero)
 		return t
 	}
 }

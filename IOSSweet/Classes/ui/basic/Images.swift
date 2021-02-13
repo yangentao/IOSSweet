@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 public typealias Image = UIImage
 
 public extension UIImage {

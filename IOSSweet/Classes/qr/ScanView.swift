@@ -42,20 +42,20 @@ open class ScanView: UIView {
 		c.setFillColor(color)
 		let A: CGFloat = 4
 		let B: CGFloat = 4
-		let topLeft1 = Rect(x: rect.origin.x, y: rect.origin.y, width: A, height: B * A)
-		let topLeft2 = Rect(x: rect.origin.x, y: rect.origin.y, width: B * A, height: A)
+		let topLeft1 = CGRect(x: rect.origin.x, y: rect.origin.y, width: A, height: B * A)
+		let topLeft2 = CGRect(x: rect.origin.x, y: rect.origin.y, width: B * A, height: A)
 		c.fill([topLeft1, topLeft2])
 
-		let topRight1 = Rect(x: rect.maxX - A, y: rect.origin.y, width: A, height: B * A)
-		let topRight2 = Rect(x: rect.maxX - B * A, y: rect.origin.y, width: B * A, height: A)
+		let topRight1 = CGRect(x: rect.maxX - A, y: rect.origin.y, width: A, height: B * A)
+		let topRight2 = CGRect(x: rect.maxX - B * A, y: rect.origin.y, width: B * A, height: A)
 		c.fill([topRight1, topRight2])
 
-		let leftBottom1 = Rect(x: rect.minX, y: rect.maxY - B * A, width: A, height: B * A)
-		let leftBottom2 = Rect(x: rect.minX, y: rect.maxY - A, width: B * A, height: A)
+		let leftBottom1 = CGRect(x: rect.minX, y: rect.maxY - B * A, width: A, height: B * A)
+		let leftBottom2 = CGRect(x: rect.minX, y: rect.maxY - A, width: B * A, height: A)
 		c.fill([leftBottom1, leftBottom2])
 
-		let rightBottom1 = Rect(x: rect.maxX - A, y: rect.maxY - B * A, width: A, height: B * A)
-		let rightBottom2 = Rect(x: rect.maxX - B * A, y: rect.maxY - A, width: B * A, height: A)
+		let rightBottom1 = CGRect(x: rect.maxX - A, y: rect.maxY - B * A, width: A, height: B * A)
+		let rightBottom2 = CGRect(x: rect.maxX - B * A, y: rect.maxY - A, width: B * A, height: A)
 		c.fill([rightBottom1, rightBottom2])
 
 		c.setStrokeColor(color)
@@ -98,7 +98,7 @@ open class ScanView: UIView {
 
 		UIView.animate(withDuration: 1.5, delay: 0.1, options: [.autoreverse, .repeat, .curveLinear], animations: {
 			let rect = self.animView.frame
-			self.animView.frame = Rect(x: rect.minX + 50, y: rect.minY, width: rect.width - 100, height: rect.height)
+			self.animView.frame = CGRect(x: rect.minX + 50, y: rect.minY, width: rect.width - 100, height: rect.height)
 		})
 
 	}

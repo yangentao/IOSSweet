@@ -51,7 +51,7 @@ open class GridItemView: UIView {
 
 		labelView.textColor = Theme.Text.minorColor
 		labelView.font = Font.sys(12)
-		labelView.alignCenter()
+		labelView.align(.center)
 		self.roundLayer(6)
 		self.setupFeedback()
 	}
@@ -67,6 +67,6 @@ open class GridItemView: UIView {
 	}
 
 	public static var Default: GridItemView {
-		return GridItemView(frame: Rect.zero)
+		return GridItemView(frame: .zero)
 	}
 }

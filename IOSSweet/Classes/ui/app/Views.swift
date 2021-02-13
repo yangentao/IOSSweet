@@ -5,42 +5,12 @@
 
 import Foundation
 import UIKit
+import SwiftSweet
 
-public typealias ViewClickBlock = (UIView) -> Void
 
-//lazy var label: UILabel = NamedView("hello", self)
-public func NamedView<T: UIView>(_ page: UIViewController, _ key: String) -> T {
-    page.view.findByName(key) as! T
-}
 
-public extension UIView {
-    var name: String? {
-        get {
-            self.getAttr("__view_name__") as? String
-        }
-        set {
-            self.setAttr("__view_name__", newValue)
-        }
-    }
 
-    @discardableResult
-    func named(_ name: String) -> Self {
-        self.name = name
-        return self
-    }
 
-    func findByName(_ name: String) -> UIView? {
-        if name == self.name {
-            return self
-        }
-        for v in self.subviews {
-            if let a = v.findByName(name) {
-                return a
-            }
-        }
-        return nil
-    }
-}
 
 public extension UIView {
 
@@ -80,11 +50,6 @@ public extension UIView {
         return self
     }
 
-    @discardableResult
-    func contentMode(_ m: UIView.ContentMode) -> Self {
-        self.contentMode = m
-        return self
-    }
 
     @discardableResult
     func tintColor(_ c: UIColor) -> Self {
@@ -99,8 +64,14 @@ public extension UIView {
     }
 
     @discardableResult
-    func translatesAutoresizingMaskIntoConstraints(_ b: Bool) -> Self {
+    func translatesAutoresizeIntoConstraints(_ b: Bool) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = b
+        return self
+    }
+
+    @discardableResult
+    func contMode(_ m: UIView.ContentMode) -> Self {
+        self.contentMode = m
         return self
     }
 
@@ -111,26 +82,14 @@ public extension UIView {
 
     static var SepratorLine: UIView {
         let v = UIView(frame: Rect.zero)
-        v.backgroundColor = Colors.seprator
+        v.backgroundColor = Colors.separator
         return v
     }
 
 
-    func findChildView(_ block: (UIView) -> Bool) -> UIView? {
-        for v in self.subviews {
-            if block(v) {
-                return v
-            }
-            if let vv = v.findChildView(block) {
-                return vv
-            }
-        }
-        return nil
-    }
-
     func addSepratorLine(_ leftOffset: CGFloat = 0, _ rightOffset: CGFloat = 0) -> UIView {
         let line = UIView(frame: Rect.zero)
-        line.backgroundColor = Colors.seprator
+        line.backgroundColor = Colors.separator
         self.addSubview(line)
         line.layout.height(1).fillX(leftOffset, rightOffset)
         return line
@@ -138,7 +97,7 @@ public extension UIView {
 
     func addLineBottom() {
         let line = UIView(frame: Rect.zero)
-        line.backgroundColor = Colors.seprator
+        line.backgroundColor = Colors.separator
         self.addSubview(line)
         line.layout.height(1).fillX().bottomParent(0)
     }
@@ -197,7 +156,7 @@ public extension UIView {
     }
 
     var screenFrame: CGRect {
-        let w = UIApplication.shared.keyWindow
+        let w = UIApplication.shared.keyWindowFirst
         return self.convert(self.bounds, to: w)
     }
 
@@ -208,24 +167,29 @@ public extension UIView {
         }
     }
 
-    func roundLayer(_ cornerRadius: CGFloat) {
+    @discardableResult
+    func roundLayer(_ cornerRadius: CGFloat) -> Self {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = cornerRadius
-    }
-
-    func borderLayer(_ borderWidth: CGFloat, color: UIColor) {
-        self.layer.borderWidth = borderWidth
-        self.layer.borderColor = color.cgColor
-    }
-
-    func roundBorder(_ corner: CGFloat, _ border: CGFloat, _ borderColor: UIColor) -> UIView {
-        self.roundLayer(corner)
-        self.borderLayer(border, color: borderColor)
         return self
     }
 
-    func roundBorder() {
-        _ = roundBorder(4, 1, Theme.grayBackColor)
+    @discardableResult
+    func borderLayer(_ borderWidth: CGFloat, color: UIColor) -> Self {
+        self.layer.borderWidth = borderWidth
+        self.layer.borderColor = color.cgColor
+        return self
+    }
+
+    @discardableResult
+    func roundBorder(_ corner: CGFloat, _ border: CGFloat, _ borderColor: UIColor) -> Self {
+        self.roundLayer(corner)
+        return self.borderLayer(border, color: borderColor)
+    }
+
+    @discardableResult
+    func roundBorder() -> Self {
+        roundBorder(4, 1, Theme.grayBackColor)
     }
 
     func dotBorder(_ corner: CGFloat, _ color: Color, _ pattern: [NSNumber]) {
@@ -244,7 +208,8 @@ public extension UIView {
         logd(v.bounds)
     }
 
-    func shadow(_ color: UIColor, _ offset: CGSize, _ opacity: Float, _ radius: CGFloat) -> UIView {
+    @discardableResult
+    func shadow(_ color: UIColor, _ offset: CGSize, _ opacity: Float, _ radius: CGFloat) -> Self {
         let lay: CALayer = self.layer
         lay.shadowColor = color.cgColor
         lay.shadowOffset = offset
@@ -254,9 +219,11 @@ public extension UIView {
         return self
     }
 
-    func shadow(offset: CGFloat) {
-        _ = shadow(UIColor.black, Size.sized(offset, offset), 0.6, offset)
+    @discardableResult
+    func shadow(offset: CGFloat) -> Self {
+        shadow(UIColor.black, Size.sized(offset, offset), 0.6, offset)
     }
 
 
 }
+

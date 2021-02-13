@@ -1,6 +1,6 @@
 import UIKit
 import ObjectiveC
-
+import SwiftSweet
 public extension UIScrollView {
 
 	var pullView: PullToRefreshView? {

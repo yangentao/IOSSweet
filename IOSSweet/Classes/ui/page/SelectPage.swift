@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 open class SelectPage: TablePage {
 	public var checkedItem: Any? = nil
 

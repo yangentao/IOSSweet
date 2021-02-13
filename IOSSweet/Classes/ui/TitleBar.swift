@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 public class TitleBar {
 	public unowned var controller: UIViewController
 

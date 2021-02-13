@@ -11,7 +11,7 @@ public class TextDetailView: UIView {
 	public let detailView: UILabel = UILabel.Minor
 
 	public init() {
-		super.init(frame: Rect.zero)
+		super.init(frame: .zero)
 		self.backgroundColor = .white
 		self.addSubview(textView)
 		self.addSubview(detailView)
@@ -20,10 +20,10 @@ public class TextDetailView: UIView {
 		let L = detailView.layout.centerYParent().heightEdit().rightParent(0)
 		L.toRightOf(textView)
 
-		textView.layoutStretch(.horizontal)
-		detailView.layoutKeepContent(.horizontal)
+		textView.stretchContent(.horizontal)
+		detailView.keepContent(.horizontal)
 
-		detailView.alignRight()
+		detailView.align(.right)
 		self.itemStyle(Dim.itemHeightNormal)
 	}
 

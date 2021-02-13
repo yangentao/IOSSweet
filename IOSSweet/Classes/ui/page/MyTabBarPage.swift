@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 open class MyTabBarPage: UITabBarController, UITabBarControllerDelegate, MsgListener {
 
 	public var onSelectPage: (UIViewController) -> Void = { _ in

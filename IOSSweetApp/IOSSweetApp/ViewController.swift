@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftSweet
+import IOSSweet
 
 extension MsgID {
     static let labelTextChanged = MsgID("label.text.changed")

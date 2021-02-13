@@ -5,60 +5,88 @@
 
 import Foundation
 import UIKit
+import SwiftSweet
+//itemView不复用! 适合小量数据
+open class GridPage<T>: BasePage {
 
-//itemView不复用!
-open class GridPage<T>: ScrollPage {
+    public let scrollView: UIScrollView = UIScrollView(frame: .zero)
+    public let gridView: GridLayout = GridLayout(frame: .zero)
+    public var binder: (T, ImageLabelView) -> Void = { item, v in
+        v.labelView.text = "\(item)"
+        v.imageView.image = UIImage.namedImage("a.png")
+    }
+    public var itemClickCallback: (T) -> Void = { _ in
+    }
 
-	open override func onCreateContent() {
-		super.onCreateContent()
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.addView(self.scrollView).constraints { c in
+            c.edgeXParent()
+        }.topAnchorParentSafeArea().bottomAnchorParentSafeArea()
 
-	}
+        scrollView.addView(gridView).constraints { c in
+            c.edgesParent()
+            c.widthParent()
+        }.spaces(2, 8)
 
-	open func setItems(_ ls: [T]) {
-		let oldChildren = self.scrollView.contentVertical.subviews
-		for v in oldChildren {
-			if v is GridItemView {
-				v.removeFromSuperview()
-			}
-		}
-		self.scrollView.layoutScrollGrid { L in
-			L.edge(l: 20, t: 10, r: 20, b: 20)
-			self.onConfigGrid(L)
-			for b in ls {
-				let v = GridItemView()
-				self.onBind(b, v)
-				v.data = b
-				v.clickView { [weak self] vv in
-					self?.onItemClick((vv as! GridItemView).data as! T)
-				}
-				L.add(v)
-			}
-		}
-	}
+        if nil != self.tabBarController {
+            titleBar.title = self.tabItemText
+        }
+        if let nv = self.navigationController {
+            if nv.viewControllers.count > 1 && nv.topViewController === self {
+                self.titleBar.back()
+            }
+        }
+        self.preCreateContent()
+        onCreateContent()
+        afterCreateContent()
+    }
 
-	open func requestItems() {
-		Task.back { [weak self] in
-			if let ls = self?.onRequestItems() {
-				Task.fore {
-					self?.setItems(ls)
-				}
-			}
-		}
-	}
+    open func preCreateContent() {
 
-	open func onItemClick(_ item: T) {
+    }
 
-	}
+    open func onCreateContent() {
 
-	open func onConfigGrid(_ L: GridLayout) {
+    }
 
-	}
+    open func afterCreateContent() {
 
-	open func onBind(_ item: T, _ view: GridItemView) {
+    }
 
-	}
 
-	open func onRequestItems() -> [T] {
-		return []
-	}
+    open func setItems(_ ls: [T]) {
+        self.gridView.removeAllChildView()
+        for item in ls {
+            let v = ImageLabelView(frame: .zero).vertical()
+            self.gridView.addSubview(v)
+            onBind(item, v)
+            v.clickView { [weak self] v in
+                self?.onItemClick(item)
+            }
+        }
+    }
+
+    open func requestItems() {
+        Task.back { [weak self] in
+            if let ls = self?.onRequestItems() {
+                Task.fore {
+                    self?.setItems(ls)
+                }
+            }
+        }
+    }
+
+    open func onItemClick(_ item: T) {
+        itemClickCallback(item)
+    }
+
+
+    open func onBind(_ item: T, _ view: ImageLabelView) {
+        binder(item, view)
+    }
+
+    open func onRequestItems() -> [T] {
+        return []
+    }
 }

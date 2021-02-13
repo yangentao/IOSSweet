@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 //TODO use button
 open class SheetAction: UIView {
 	public var textView: UILabel = UILabel.Primary

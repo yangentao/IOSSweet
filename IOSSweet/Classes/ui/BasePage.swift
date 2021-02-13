@@ -5,66 +5,76 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 open class BasePage: UIViewController, MsgListener {
 
-	private(set) public lazy var titleBar: TitleBar = TitleBar(self)
+    private(set) public lazy var titleBar: TitleBar = TitleBar(self)
 
-	open override func viewDidLoad() {
-		super.viewDidLoad()
-		self.view.backgroundColor = .white
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        self.modalPresentationStyle = .fullScreen
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+
 //		self.automaticallyAdjustsScrollViewInsets = false
-		MsgCenter.listenAll(self)
-	}
+        self.view.backColor(Colors.background)
+        MsgCenter.listenAll(self)
+    }
 
-	open func onTitleBarAction(sender: UIBarButtonItem, tags: String) {
+    open func onTitleBarAction(sender: UIBarButtonItem, tags: String) {
 
-	}
+    }
 
-	open func onSlideBack() {
-		self.close(false)
-	}
+    open func onSlideBack() {
+        self.close(false)
+    }
 
-	open func onTitleBarBack() {
-		self.close()
-	}
+    open func onTitleBarBack() {
+        self.close()
+    }
 
-	private func makeEdgeGestureFirst() {
-		guard let sv = self.view.findChildView({
-			$0 is UIScrollView
-		}) as? UIScrollView else {
-			return
-		}
-		if let gs = self.view!.gestureRecognizers {
-			for g in gs {
-				if g is UIScreenEdgePanGestureRecognizer {
-					sv.panGestureRecognizer.require(toFail: g)
-					return
-				}
-			}
-		}
-	}
+    private func makeEdgeGestureFirst() {
+        guard let sv = self.view.firstView({
+            $0 is UIScrollView
+        }) as? UIScrollView else {
+            return
+        }
+        if let gs = self.view!.gestureRecognizers {
+            for g in gs {
+                if g is UIScreenEdgePanGestureRecognizer {
+                    sv.panGestureRecognizer.require(toFail: g)
+                    return
+                }
+            }
+        }
+    }
 
-	open func hideKeyboardOnClick() {
-		self.view.hideKeyboardOnTap()
-	}
+    open func hideKeyboardOnClick() {
+        self.view.hideKeyboardOnTap()
+    }
 
-	open override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
 //		let c = NotificationCenter.default
 //		c.addObserver(self, selector: #selector(keyboardWillShow(n:)), name: UIResponder.keyboardWillShowNotification, object: nil)
 //		c.addObserver(self, selector: #selector(keyboardWillHide(n:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-		makeEdgeGestureFirst()
+        makeEdgeGestureFirst()
 
-	}
+    }
 
-	open override func viewDidDisappear(_ animated: Bool) {
-		super.viewDidDisappear(animated)
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
 //		let c = NotificationCenter.default
 //		c.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
 //		c.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-	}
+    }
 
 //	@objc
 //	func keyboardWillShow(n: Notification) {
@@ -92,8 +102,8 @@ open class BasePage: UIViewController, MsgListener {
 //		}
 //	}
 
-	open func onMsg(msg: Msg) {
+    open func onMsg(msg: Msg) {
 
-	}
+    }
 
 }

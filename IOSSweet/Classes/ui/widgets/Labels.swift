@@ -16,12 +16,12 @@ public extension UILabel {
     }
 
     static var Primary: UILabel {
-        let a = UILabel(frame: Rect.zero)
+        let a = UILabel(frame: .zero)
         a.stylePrimary()
         return a
     }
     static var Minor: UILabel {
-        let a = UILabel(frame: Rect.zero)
+        let a = UILabel(frame: .zero)
         a.styleMinor()
         return a
     }
@@ -35,38 +35,20 @@ public extension UILabel {
 
     @discardableResult
     func stylePrimary() -> Self {
-        self.backgroundColor = Colors.fill
         self.textColor = Theme.Text.primaryColor
         self.font = Theme.Text.primaryFont
         return self
     }
 
     var heightThatFit: CGFloat {
-        let sz = self.sizeThatFits(Size.zero)
+        let sz = self.sizeThatFits(.zero)
         return sz.height
     }
     var widthThatFit: CGFloat {
-        let sz = self.sizeThatFits(Size.zero)
+        let sz = self.sizeThatFits(.zero)
         return sz.width
     }
 
-    @discardableResult
-    func alignRight() -> Self {
-        self.textAlignment = .right
-        return self
-    }
-
-    @discardableResult
-    func alignCenter() -> Self {
-        self.textAlignment = .center
-        return self
-    }
-
-    @discardableResult
-    func alignLeft() -> Self {
-        self.textAlignment = .left
-        return self
-    }
 
     @discardableResult
     func align(_ a: NSTextAlignment) -> Self {
@@ -74,16 +56,24 @@ public extension UILabel {
         return self
     }
 
+    @discardableResult
+    func lines(_ n: Int) -> Self {
+        self.numberOfLines = n
+        self.superview?.setNeedsLayout()
+        return self
+    }
 
     @discardableResult
     func text(_ s: String?) -> Self {
         self.text = s
+        self.superview?.setNeedsLayout()
         return self
     }
 
     @discardableResult
     func font(_ f: UIFont) -> Self {
         self.font = f
+        self.superview?.setNeedsLayout()
         return self
     }
 

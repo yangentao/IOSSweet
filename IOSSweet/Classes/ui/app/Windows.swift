@@ -9,7 +9,7 @@ import UIKit
 public extension UIWindow {
 
 	static var topController: UIViewController? {
-		let rc = UIApplication.shared.keyWindow?.rootViewController ?? UIApplication.shared.delegate?.window??.rootViewController
+		let rc = UIApplication.shared.keyWindowFirst?.rootViewController ?? UIApplication.shared.delegate?.window??.rootViewController
 		if rc != nil {
 			return topOf(rc!)
 		}
@@ -40,7 +40,7 @@ public extension UIWindow {
 	}
 
 	static var main: UIWindow {
-		return UIApplication.shared.keyWindow!
+		return UIApplication.shared.keyWindowFirst!
 	}
 
 }

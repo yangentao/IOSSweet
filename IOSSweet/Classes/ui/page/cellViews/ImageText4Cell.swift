@@ -13,10 +13,10 @@ import UIKit
 
 public class ImageText4Cell: UITableViewCell {
 	public var iconView = UIImageView.Default
-	public var textView = UILabel(frame: Rect.zero)
-	public var timeView = UILabel(frame: Rect.zero)
-	public var msgView = UILabel(frame: Rect.zero)
-	public var statusView = UILabel(frame: Rect.zero)
+	public var textView = UILabel(frame: .zero)
+	public var timeView = UILabel(frame: .zero)
+	public var msgView = UILabel(frame: .zero)
+	public var statusView = UILabel(frame: .zero)
 
 	public var iconSize: CGFloat = 36 {
 		didSet {
@@ -53,8 +53,8 @@ public class ImageText4Cell: UITableViewCell {
 		}
 
 		timeView.layout.toRightOf(textView)
-		textView.layoutStretch(.horizontal)
-		timeView.layoutKeepContent(.horizontal)
+		textView.stretchContent(.horizontal)
+		timeView.keepContent(.horizontal)
 
 		msgView.layout { L in
 			L.toRightOf(self.iconView, 10)
@@ -68,13 +68,13 @@ public class ImageText4Cell: UITableViewCell {
 		}
 
 		statusView.layout.toRightOf(msgView)
-		msgView.layoutStretch(.horizontal)
-		statusView.layoutKeepContent(.horizontal)
+		msgView.stretchContent(.horizontal)
+		statusView.keepContent(.horizontal)
 
 		textView.stylePrimary()
 		msgView.styleMinor()
-		timeView.alignRight().styleMinor()
-		statusView.alignRight().styleMinor()
+		timeView.align(.right).styleMinor()
+		statusView.align(.right).styleMinor()
 
 	}
 

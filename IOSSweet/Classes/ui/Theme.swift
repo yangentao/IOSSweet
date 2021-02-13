@@ -19,7 +19,7 @@ public func makeColor(_ normalColor: UIColor, darkColor: UIColor) -> UIColor {
 }
 
 public class Colors {
-    public static var seprator: UIColor = {
+    public static var separator: UIColor = {
         if #available(iOS 13.0, *) {
             return UIColor.separator
         }
@@ -129,16 +129,25 @@ public class Dim {
 }
 
 public class Theme {
+    //强调色
+    public static var accent: UIColor = Colors.link
+
     public static var imagePostfix = "-light"
     public static var fadeColor: UIColor = UIColor.whiteF(0.8)
     public static var dangerColor: UIColor = 0xd81e06.rgb
     public static var safeColor: UIColor = 0x36ab60.rgb
     public static var grayBackColor: UIColor = Color.whiteF(0.85)
+    public static var dialogBack: UIColor = {
+        if #available(iOS 13.0, *) {
+            return makeColor(.white, darkColor: Color.whiteF(0.3))
+        }
+        return .white
+    }()
 
 
     public static var themeColor: UIColor = {
         if #available(iOS 13.0, *) {
-            return Colors.background
+            return makeColor(0x4FB29D.rgb, darkColor: Colors.fill)
         }
         return 0x4FB29D.rgb
     }()
@@ -152,7 +161,7 @@ public class Theme {
         public static var disabledColor: UIColor = Color.rgb(135, 154, 168)
 
         public static var primaryFont: UIFont = Font.sys(16)  // Font.sys(UIFont.labelFontSize) //
-        public static var minorFont: UIFont = Font.sys(14)
+        public static var minorFont: UIFont = Font.sys(13)
         public static var height: CGFloat = 25
         public static var height2: CGFloat = 30
         public static var heightMinor: CGFloat = 20

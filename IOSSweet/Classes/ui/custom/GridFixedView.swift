@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 public class GridData {
 	public var label: String = ""
 	public var image: UIImage?

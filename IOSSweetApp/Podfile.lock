@@ -1,16 +1,24 @@
 PODS:
-  - SwiftSweet (0.1.7)
+  - IOSSweet (1.0.0):
+    - SwiftSweet (= 0.1.6)
+  - SwiftSweet (0.1.6)
 
 DEPENDENCIES:
-  - SwiftSweet (from `../../SwiftSweet/`)
+  - IOSSweet (from `../`)
+  - SwiftSweet (= 0.1.6)
+
+SPEC REPOS:
+  trunk:
+    - SwiftSweet
 
 EXTERNAL SOURCES:
-  SwiftSweet:
-    :path: "../../SwiftSweet/"
+  IOSSweet:
+    :path: "../"
 
 SPEC CHECKSUMS:
-  SwiftSweet: 028a7bb71d6c916cfc55167aee95915b24a1a86b
+  IOSSweet: 6241725f08e5077deda14c1cab6c91b20a0ec8f6
+  SwiftSweet: 04c4450a1a48cd62af18331871e577edd792651e
 
-PODFILE CHECKSUM: eb778d7698dbe5a677dcbc598ac1b043bde9aecb
+PODFILE CHECKSUM: 539feee5ef570a0e816479f14c57aa4458d3e467
 
 COCOAPODS: 1.10.1

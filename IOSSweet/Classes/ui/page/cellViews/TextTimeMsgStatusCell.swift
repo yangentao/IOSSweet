@@ -12,10 +12,10 @@ import UIKit
 //最小高度 60
 
 public class TextTimeMsgStatusCell: UITableViewCell {
-	public var textView = UILabel(frame: Rect.zero)
-	public var timeView = UILabel(frame: Rect.zero)
-	public var msgView = UILabel(frame: Rect.zero)
-	public var statusView = UILabel(frame: Rect.zero)
+	public var textView = UILabel(frame: .zero)
+	public var timeView = UILabel(frame: .zero)
+	public var msgView = UILabel(frame: .zero)
+	public var statusView = UILabel(frame: .zero)
 	public var keyPos: Int = 0
 	public var keyN: Int = 0
 	public var keyS: String = ""
@@ -41,8 +41,8 @@ public class TextTimeMsgStatusCell: UITableViewCell {
 			L.height(Theme.Text.heightMinor)
 		}
 		timeView.layout.toRightOf(textView)
-		textView.layoutStretch(.horizontal)
-		timeView.layoutKeepContent(.horizontal)
+		textView.stretchContent(.horizontal)
+		timeView.keepContent(.horizontal)
 
 		msgView.layout { L in
 			L.leftParent(10)
@@ -56,13 +56,13 @@ public class TextTimeMsgStatusCell: UITableViewCell {
 		}
 
 		statusView.layout.toRightOf(msgView)
-		statusView.layoutKeepContent(.horizontal)
-		msgView.layoutStretch(.horizontal)
+		statusView.keepContent(.horizontal)
+		msgView.stretchContent(.horizontal)
 
 		textView.stylePrimary()
 		msgView.styleMinor()
-		timeView.alignRight().styleMinor()
-		statusView.alignRight().styleMinor()
+		timeView.align(.right).styleMinor()
+		statusView.align(.right).styleMinor()
 
 	}
 

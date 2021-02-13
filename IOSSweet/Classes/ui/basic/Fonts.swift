@@ -16,7 +16,7 @@ public extension Font {
 
 public class Fonts {
 
-	public static var title: Font = semibold(16)
+	public static var title: Font = semibold(18)
 	public static var heading1: Font = semibold(20)
 	public static var heading2: Font = medium(17)
 	public static var body: Font = regular(13)

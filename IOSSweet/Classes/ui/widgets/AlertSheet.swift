@@ -5,6 +5,7 @@
 
 import Foundation
 import UIKit
+import SwiftSweet
 
 public extension UIAlertAction {
 

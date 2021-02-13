@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 open class ListPage<T>: TitlePage, UITableViewDataSource, UITableViewDelegate {
 	public var tableView: UITableView = UITableView(frame: .zero, style: .plain)
 

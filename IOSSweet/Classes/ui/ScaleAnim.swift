@@ -17,7 +17,7 @@ public class ScaleInAnim: NSObject, UIViewControllerAnimatedTransitioning {
 			return
 		}
 		let finalFrame = transitionContext.finalFrame(for: toC)
-		var r = Rect()
+		var r = CGRect()
 		let wDh = finalFrame.width / finalFrame.height
 		r.size.width = 40
 		r.size.height = r.size.width / wDh
@@ -49,7 +49,7 @@ public class ScaleOutAnim: NSObject, UIViewControllerAnimatedTransitioning {
 			return
 		}
 		let finalFrame = transitionContext.finalFrame(for: toC)
-		var r = Rect()
+		var r = CGRect()
 		let wDh = finalFrame.width / finalFrame.height
 		r.size.width = 40
 		r.size.height = r.size.width / wDh

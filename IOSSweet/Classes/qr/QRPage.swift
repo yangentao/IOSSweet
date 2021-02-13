@@ -5,6 +5,7 @@
 
 import Foundation
 import UIKit
+import SwiftSweet
 
 open class QRPage: TitlePage {
 	private let btnSize: CGFloat = 64

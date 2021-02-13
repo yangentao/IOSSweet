@@ -11,7 +11,7 @@ public class InputView: UIView {
 	public let editView: UITextField = UITextField.Round
 
 	public init() {
-		super.init(frame: Rect.zero)
+		super.init(frame: .zero)
 		self.backgroundColor = .white
 		self.addSubview(editView)
 		editView.layout.centerYParent().heightEdit().leftParent(0).rightParent(0)

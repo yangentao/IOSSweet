@@ -9,7 +9,7 @@ import WebKit
 
 open class WebViewPage: TitlePage {
 
-	public let webView: WKWebView = WKWebView(frame: Rect.zero)
+	public let webView: WKWebView = WKWebView(frame: .zero)
 
 	open override func onCreateContent() {
 		super.onCreateContent()

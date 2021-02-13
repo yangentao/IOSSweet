@@ -9,12 +9,12 @@ import UIKit
 
 public class UserView: UIView {
 	public let iconView: UIImageView = UIImageView.Default
-	public let textView: UILabel = UILabel(frame: Rect.zero)
-	public let statusView: UILabel = UILabel(frame: Rect.zero)
+	public let textView: UILabel = UILabel(frame: .zero)
+	public let statusView: UILabel = UILabel(frame: .zero)
 
 
 	public init() {
-		super.init(frame: Rect.zero)
+		super.init(frame: .zero)
 		self.backgroundColor = .white
 		self.addSubview(iconView)
 		self.addSubview(textView)

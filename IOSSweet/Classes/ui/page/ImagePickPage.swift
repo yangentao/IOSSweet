@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-
+import SwiftSweet
 public typealias ImagePickBlock = (UIImage) -> Void
 
 open class ImagePickPage: UIImagePickerController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
