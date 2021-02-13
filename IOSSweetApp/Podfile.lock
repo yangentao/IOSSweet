@@ -1,5 +1,5 @@
 PODS:
-  - IOSSweet (0.1.0):
+  - IOSSweet (0.1.1):
     - SwiftSweet (= 0.1.6)
   - SwiftSweet (0.1.6)
 
@@ -15,7 +15,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  IOSSweet: 4a34d2608602db7eb38e6a08234db8d37f137384
+  IOSSweet: c1aaa695910651b549b3f576d0ec5f4b407f7852
   SwiftSweet: 04c4450a1a48cd62af18331871e577edd792651e
 
 PODFILE CHECKSUM: 75675f0caf6eee7662d3224d63749339d7390803
