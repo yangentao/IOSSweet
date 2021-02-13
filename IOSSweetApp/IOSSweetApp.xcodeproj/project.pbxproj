@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0237667E0D9411E26318BE94 /* Pods_IOSSweetApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FE7F28DBC1DB3B039A90F98 /* Pods_IOSSweetApp.framework */; };
 		E11E100775505CA25BE70862 /* TextImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FE9133157683A5BD2F3 /* TextImageView.swift */; };
-		E11E102B39DF9137368B6DB6 /* WatchCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E115FECBAB9C892DA70A6 /* WatchCenter.swift */; };
 		E11E107F08A91E30CCD274FB /* ProtoResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E13607660EB11B7072F9B /* ProtoResult.swift */; };
 		E11E108B31F53C2EAFFA0795 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E1FF4910E7BC208A907EB /* AppDelegate.swift */; };
 		E11E109C1830FD60A1FB94A8 /* ImagePickPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11E135B94F75DAC0300288A /* ImagePickPage.swift */; };
@@ -94,7 +93,6 @@
 		E11E10D4BB946D4988F3DD50 /* TableViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViews.swift; sourceTree = "<group>"; };
 		E11E1111A84A171FE2096672 /* TapGesture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapGesture.swift; sourceTree = "<group>"; };
 		E11E113B7F4F91099C9C52C1 /* MyNavPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNavPage.swift; sourceTree = "<group>"; };
-		E11E115FECBAB9C892DA70A6 /* WatchCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchCenter.swift; sourceTree = "<group>"; };
 		E11E1172335C99D02F9E894C /* StringUIEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUIEx.swift; sourceTree = "<group>"; };
 		E11E11D0B2EC177C2E42EE71 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		E11E11FE4BE375B59989B705 /* IOSSweetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IOSSweetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,7 +225,6 @@
 				E11E16E521D8906C9858A448 /* ScaleAnim.swift */,
 				E11E13A4C9A284C068EBE4CD /* ActionBlock.swift */,
 				E11E1A11CD278AC469DCCD3E /* ViewBuilder.swift */,
-				E11E115FECBAB9C892DA70A6 /* WatchCenter.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -567,7 +564,6 @@
 				E11E1A02B8F2D99D4B1B2112 /* ScaleAnim.swift in Sources */,
 				E11E16F0746AD714EF23B602 /* ActionBlock.swift in Sources */,
 				E11E14A002178EBF22355785 /* ViewBuilder.swift in Sources */,
-				E11E102B39DF9137368B6DB6 /* WatchCenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
