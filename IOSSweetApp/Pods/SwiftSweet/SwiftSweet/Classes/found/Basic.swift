@@ -32,7 +32,7 @@ infix operator >>: ComparisonPrecedence
 //pair, NOT allow nil
 infix operator =>: ComparisonPrecedence
 
-public protocol Applyable: class {
+public protocol Applyable: AnyObject {
 
 }
 

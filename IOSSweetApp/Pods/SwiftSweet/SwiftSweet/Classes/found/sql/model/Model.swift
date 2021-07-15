@@ -72,7 +72,7 @@ private func getClassNameOnly(_ t: AnyObject.Type) -> String {
     }
 }
 
-public protocol IModel: class {
+public protocol IModel: AnyObject {
 
 }
 

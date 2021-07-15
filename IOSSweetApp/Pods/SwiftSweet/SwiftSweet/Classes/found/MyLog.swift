@@ -317,11 +317,11 @@ public func loge(tag: String, _ ss: Any?...) {
     Log.logItems(level: .error, tag: tag, items: ss)
 }
 
-public protocol LogListener: class {
+public protocol LogListener: AnyObject {
     func onLog(item: LogItem)
 }
 
-public protocol LogPrinter: class {
+public protocol LogPrinter: AnyObject {
     func logWrite(item: LogItem)
     func logFlush()
     func logUninstall()

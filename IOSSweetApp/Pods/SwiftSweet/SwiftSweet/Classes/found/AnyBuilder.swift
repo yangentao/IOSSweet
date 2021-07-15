@@ -49,7 +49,7 @@ public extension AnyGroup {
 }
 
 
-@_functionBuilder
+@resultBuilder
 public struct AnyBuilder {
 
     public static func buildBlock(_ cs: Any...) -> AnyGroup {

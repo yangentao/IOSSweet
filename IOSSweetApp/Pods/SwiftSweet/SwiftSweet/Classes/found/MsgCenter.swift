@@ -75,7 +75,7 @@ public extension Msg {
     }
 }
 
-public protocol MsgListener: class {
+public protocol MsgListener: AnyObject {
     func onMsg(msg: Msg)
 }
 
